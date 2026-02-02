@@ -159,26 +159,104 @@ function generateInterpretation(cardName, meaning, context, orientation) {
   return `${cardName} reversed: ${safeMeaning.toLowerCase()}. ${safeContext}`.trim();
 }
 
-// Generate spread summary
-function generateSummary(spread) {
-  const { name, verdict, riskLevel, warning, recommendation, narrativeScore, outlook } = spread;
+// Weave cards into unified narrative
+function weaveNarrative(spread) {
+  const { name, formattedCards, verdict, riskLevel, warning, recommendation, narrativeScore, outlook, synthesis } = spread;
   
-  let summary = `## ${name}\n\n`;
+  // Extract key signals from cards
+  const cardMeanings = formattedCards.map(c => ({
+    position: c.position,
+    name: c.name,
+    orientation: c.orientation,
+    signal: c.interpretation
+  }));
   
-  // Card interpretations - use formattedCards
-  for (const card of spread.formattedCards) {
-    const emoji = card.orientation === "upright" ? "⚡" : "🔄";
-    summary += `${emoji} **${card.position}**: ${card.name} (${card.orientation})\n`;
-    summary += `   ${card.interpretation}\n\n`;
+  // Build narrative based on spread type
+  let narrative = '';
+  
+  if (name === 'Decision Triad' && cardMeanings.length === 3) {
+    const [buy, hold, sell] = cardMeanings;
+    narrative = `${buy.name} at entry ${buy.orientation === 'upright' ? 'signals' : 'warns against'} moving in. `;
+    narrative += `${hold.name} at accumulation ${hold.orientation === 'upright' ? 'suggests patience' : 'shows weakness'}. `;
+    narrative += `${sell.name} at exit ${sell.orientation === 'upright' ? 'confirms' : 'contradicts'} the path forward. `;
+    narrative += `\n\n**The cards speak:** ${verdict}`;
+    
+  } else if (name === 'Risk Audit' && cardMeanings.length === 5) {
+    const [surface, team, token, community, hidden] = cardMeanings;
+    narrative = `Surface signals ${surface.orientation === 'upright' ? 'look clean' : 'raise flags'}—${surface.name} shows ${surface.orientation === 'upright' ? 'promise' : 'warning'}. `;
+    narrative += `Dig deeper: ${team.name} at leadership ${team.orientation === 'upright' ? 'inspires confidence' : 'breeds doubt'}, while ${community.name} in the community ${community.orientation === 'upright' ? 'builds trust' : 'reveals cracks'}. `;
+    narrative += `${hidden.name} lurks beneath—${hidden.orientation === 'upright' ? 'what you see is what you get' : 'hidden danger waits'}.`;
+    narrative += `\n\n**Risk assessment:** ${riskLevel}`;
+    if (warning && !warning.includes('No immediate')) narrative += `\n**Warning:** ${warning}`;
+    
+  } else if (name === 'Timing Window' && cardMeanings.length === 3) {
+    const [now, soon, later] = cardMeanings;
+    narrative = `${now.name} says ${now.orientation === 'upright' ? 'act now' : 'not yet'} for immediate moves. `;
+    narrative += `${soon.name} in the near future ${soon.orientation === 'upright' ? 'opens a window' : 'stays closed'}. `;
+    narrative += `${later.name} shows the longer view: ${later.orientation === 'upright' ? 'patience rewarded' : 'no clear path'}.`;
+    narrative += `\n\n**Timing call:** ${recommendation}`;
+    
+  } else if (name === 'Narrative Health' && cardMeanings.length === 5) {
+    const [hype, substance, trust, sustain, flags] = cardMeanings;
+    narrative = `${hype.name} measures hype ${hype.orientation === 'upright' ? 'inflated' : 'grounded'}. `;
+    narrative += `But ${substance.name} reveals ${substance.orientation === 'upright' ? 'weak foundations' : 'real substance'}. `;
+    narrative += `${trust.name} and ${sustain.name} ${trust.orientation === 'upright' && sustain.orientation === 'upright' ? 'align for sustainability' : 'show cracks in the facade'}. `;
+    narrative += `${flags.name} warns: ${flags.orientation === 'upright' ? 'red flags present' : 'nothing hidden yet'}.`;
+    narrative += `\n\n**Narrative verdict:** ${narrativeScore}`;
+    
+  } else if (name === 'Survival Forecast' && cardMeanings.length === 4) {
+    const [runway, resources, threats, action] = cardMeanings;
+    narrative = `${runway.name} shows current runway ${runway.orientation === 'upright' ? 'holds steady' : 'burns fast'}. `;
+    narrative += `${resources.name} reveals resources ${resources.orientation === 'upright' ? 'available' : 'scarce'}. `;
+    narrative += `${threats.name} at threats ${threats.orientation === 'upright' ? 'loom large' : 'stay manageable'}. `;
+    narrative += `${action.name} recommends: ${action.orientation === 'upright' ? 'move boldly' : 'hunker down'}.`;
+    narrative += `\n\n**Survival outlook:** ${outlook}`;
+    
+  } else if (name === 'Past/Present/Future' && cardMeanings.length === 3) {
+    const [past, present, future] = cardMeanings;
+    narrative = `You came from ${past.name} ${past.orientation === 'upright' ? '(favorable ground)' : '(challenging start)'}. `;
+    narrative += `Now ${present.name} ${present.orientation === 'upright' ? 'stabilizes' : 'shakes'} your present. `;
+    narrative += `${future.name} ahead ${future.orientation === 'upright' ? 'promises growth' : 'warns of storms'}.`;
+    narrative += `\n\n**Trajectory insight:** The path moves from ${past.orientation} past through ${present.orientation} present toward ${future.orientation} future.`;
+    
+  } else if (name === 'Situation/Obstacle/Outcome' && cardMeanings.length === 3) {
+    const [situation, obstacle, outcome] = cardMeanings;
+    narrative = `${situation.name} defines your situation—${situation.orientation === 'upright' ? 'clear and workable' : 'complex and murky'}. `;
+    narrative += `${obstacle.name} blocks the path: ${obstacle.orientation === 'upright' ? 'external force' : 'internal resistance'}. `;
+    narrative += `${outcome.name} shows where this leads if you push through—${outcome.orientation === 'upright' ? 'victory awaits' : 'difficulty persists'}.`;
+    narrative += `\n\n**Guidance:** ${spread.guidance || 'Navigate carefully'}`;
+    
+  } else if (name === 'Celtic Cross' && synthesis) {
+    // Celtic Cross gets abbreviated narrative + synthesis
+    const present = cardMeanings[0];
+    const challenge = cardMeanings[1];
+    const outcome = cardMeanings[9];
+    
+    narrative = `${present.name} centers your present ${present.orientation === 'upright' ? 'with strength' : 'in weakness'}. `;
+    narrative += `${challenge.name} crosses you—${challenge.orientation === 'upright' ? 'major obstacle' : 'minor friction'}. `;
+    narrative += `Through the weave of 10 cards, ${outcome.name} emerges as final outcome ${outcome.orientation === 'upright' ? '(favorable)' : '(difficult)'}.`;
+    narrative += `\n\n**Energy:** ${synthesis.energy} | **Trajectory:** ${synthesis.trajectory}`;
+    narrative += `\n**Challenge:** ${synthesis.challenge}`;
+    narrative += `\n\n**Final word:** ${synthesis.outlook}`;
+    
+  } else {
+    // Fallback: just list cards if unknown spread
+    for (const card of cardMeanings) {
+      const emoji = card.orientation === "upright" ? "⚡" : "🔄";
+      narrative += `${emoji} **${card.position}**: ${card.name} (${card.orientation})\n`;
+      narrative += `   ${card.signal}\n\n`;
+    }
   }
   
-  // Final verdict
-  if (verdict) summary += `### Verdict: ${verdict}\n`;
-  if (riskLevel) summary += `### Risk: ${riskLevel}\n`;
-  if (warning) summary += `### Warning: ${warning}\n`;
-  if (recommendation) summary += `### Timing: ${recommendation}\n`;
-  if (narrativeScore) summary += `### Narrative: ${narrativeScore}\n`;
-  if (outlook) summary += `### Outlook: ${outlook}\n`;
+  return narrative;
+}
+
+// Generate spread summary (with unified narrative)
+function generateSummary(spread) {
+  const { name } = spread;
+  
+  let summary = `## ${name}\n\n`;
+  summary += weaveNarrative(spread);
   
   return summary;
 }
