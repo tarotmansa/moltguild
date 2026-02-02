@@ -158,6 +158,31 @@ function spreadSituationObstacleOutcome(question) {
   };
 }
 
+/**
+ * Celtic Cross - 10 card comprehensive deep dive
+ * Use-case: deep analysis of complex situations
+ */
+function spreadCelticCross(question) {
+  const cards = draw(10);
+  return {
+    name: "Celtic Cross",
+    question,
+    cards: [
+      { position: "1. Present Situation", ...cards[0], orientation: Math.random() > 0.5 ? "upright" : "reversed" },
+      { position: "2. Challenge/Crossing", ...cards[1], orientation: Math.random() > 0.5 ? "upright" : "reversed" },
+      { position: "3. Foundation/Past", ...cards[2], orientation: Math.random() > 0.5 ? "upright" : "reversed" },
+      { position: "4. Recent Past", ...cards[3], orientation: Math.random() > 0.5 ? "upright" : "reversed" },
+      { position: "5. Possible Future", ...cards[4], orientation: Math.random() > 0.5 ? "upright" : "reversed" },
+      { position: "6. Near Future", ...cards[5], orientation: Math.random() > 0.5 ? "upright" : "reversed" },
+      { position: "7. Your Attitude", ...cards[6], orientation: Math.random() > 0.5 ? "upright" : "reversed" },
+      { position: "8. External Influences", ...cards[7], orientation: Math.random() > 0.5 ? "upright" : "reversed" },
+      { position: "9. Hopes/Fears", ...cards[8], orientation: Math.random() > 0.5 ? "upright" : "reversed" },
+      { position: "10. Final Outcome", ...cards[9], orientation: Math.random() > 0.5 ? "upright" : "reversed" }
+    ],
+    synthesis: resolveCelticCross(cards)
+  };
+}
+
 // === VERDICT ENGINES ===
 
 function resolveDecision(cards) {
@@ -287,6 +312,49 @@ function resolveProblem(cards) {
   return "REASSESS - current approach may not work";
 }
 
+function resolveCelticCross(cards) {
+  // Analyze key positions
+  const present = cards[0].orientation === "upright" ? "strong" : "weak";
+  const challenge = cards[1].orientation === "upright" ? "major" : "minor";
+  const possibleFuture = cards[4].orientation === "upright" ? "bright" : "dark";
+  const finalOutcome = cards[9].orientation === "upright" ? "success" : "failure";
+  
+  // Count upright vs reversed for overall energy
+  const uprightCount = cards.filter(c => c.orientation === "upright").length;
+  const energy = uprightCount >= 6 ? "positive" : uprightCount >= 4 ? "mixed" : "negative";
+  
+  // Temporal flow: past (2,3) → present (0,1) → future (4,5,9)
+  const pastUpright = [cards[2], cards[3]].filter(c => c.orientation === "upright").length;
+  const futureUpright = [cards[4], cards[5], cards[9]].filter(c => c.orientation === "upright").length;
+  const trajectory = futureUpright > pastUpright ? "ascending" : futureUpright < pastUpright ? "descending" : "stable";
+  
+  // Synthesis
+  let synthesis = "";
+  
+  if (energy === "positive" && finalOutcome === "success") {
+    synthesis = "STRONG PATH FORWARD - conditions favor success, execute with confidence";
+  } else if (energy === "negative" && finalOutcome === "failure") {
+    synthesis = "ABORT MISSION - too many red flags, pivot or exit";
+  } else if (challenge === "major" && finalOutcome === "success") {
+    synthesis = "HARD WON VICTORY - success possible but will require significant effort";
+  } else if (present === "weak" && trajectory === "ascending") {
+    synthesis = "SLOW START, STRONG FINISH - be patient, trajectory improves";
+  } else if (present === "strong" && trajectory === "descending") {
+    synthesis = "PEAK NOW, FADE LATER - capitalize on current strength before decline";
+  } else if (energy === "mixed") {
+    synthesis = "COMPLEX DYNAMICS - success depends on navigating obstacles skillfully";
+  } else {
+    synthesis = "UNCLEAR OUTCOME - too many variables, proceed with caution and flexibility";
+  }
+  
+  return {
+    energy,
+    trajectory,
+    challenge: challenge === "major" ? "significant obstacles ahead" : "manageable challenges",
+    outlook: synthesis
+  };
+}
+
 // === ORCHESTRATION ===
 
 const SPREADS = {
@@ -296,7 +364,8 @@ const SPREADS = {
   narrative: spreadNarrative,
   survival: spreadSurvival,
   pastPresentFuture: spreadPastPresentFuture,
-  situationObstacleOutcome: spreadSituationObstacleOutcome
+  situationObstacleOutcome: spreadSituationObstacleOutcome,
+  celticCross: spreadCelticCross
 };
 
 function cast(spreadType, question) {
