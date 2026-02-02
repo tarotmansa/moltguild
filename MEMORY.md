@@ -50,15 +50,15 @@ Cut through crypto bullshit with tarot prophecy. Call out false prophets. Favor 
 - [ ] identify gaps (what agents need but don't have)
 - [ ] output: use-case list + card adapter requirements
 
-### Phase 1: Tarot Engine (ralph)
-- [x] card database → tarot-cards.json
-- [x] spreads implemented (decision/risk/timing/narrative/survival)
-- [x] oracle engine core → oracle.js
-- [ ] fix resolveDecision bug in spreads.js
-- [ ] add spread variants (past/present/future; situation/obstacle/outcome)
-- [ ] add celtic cross (10-card)
-- [ ] expand card templates coverage
-- [ ] create test suite → test-oracle.js
+### Phase 1: Tarot Engine ✅ COMPLETE (2026-02-02)
+- [x] card database → tarot-cards.json (78 cards, crypto metadata)
+- [x] spreads implemented → spreads.js (8 total spreads)
+  - [x] crypto-native: decision/risk/timing/narrative/survival
+  - [x] classic: past/present/future, situation/obstacle/outcome
+  - [x] deep dive: celtic cross (10-card)
+- [x] oracle engine → oracle.js (interpretation + formatting)
+- [x] card templates → all 22 major arcana covered
+- [x] test suite → test-oracle.js (17 tests, all passing)
 
 ### Phase 2: Moltbook Integration
 - [ ] profile setup + posts
