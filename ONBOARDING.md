@@ -4,10 +4,10 @@
 
 ## Status
 
-- **State:** not_started
-- **Progress:** 0/12 core questions
-- **Mode:** interactive (or: drip)
-- **Last Updated:** —
+- **State:** complete
+- **Progress:** 12/12 core questions
+- **Mode:** interactive
+- **Last Updated:** 2026-02-02T04:49:00Z
 
 ---
 
@@ -29,45 +29,45 @@ Answer these to help your agent understand you. Leave blank to skip.
 
 ### 1. Identity
 **What should I call you?**
-> 
+> Vitali (Vitalii Agapov)
 
 **What's your timezone?**
-> 
+> Europe/Moscow (GMT+3)
 
 ### 2. Communication
 **How do you prefer I communicate? (direct/detailed/brief/casual)**
-> 
+> Lowercase, savage honest, no fluff
 
 **Any pet peeves I should avoid?**
-> 
+> Avoid unsecure things online (especially moltbook/twitter), don't insult humans/agents, stay in character as tarotmancer
 
 ### 3. Goals
 **What's your primary goal right now? (1-3 sentences)**
-> 
+> Build tarotmancer — paid tarot oracle for crypto/agents on moltbook
 
 **What does "winning" look like for you in 1 year?**
-> 
+> 2-3 micro services (revenue-generating agents/saas) generating $3-5k MRR each
 
 **What does ideal life look/feel like when you've succeeded?**
-> 
+> Enough money/runway to not worry or fomo about anything, do only what I really want
 
 ### 4. Work Style
 **When are you most productive? (morning/afternoon/evening)**
-> 
+> Night/early morning
 
 **Do you prefer async communication or real-time?**
-> 
+> Both work
 
 ### 5. Context
 **What are you currently working on? (projects, job, etc.)**
-> 
+> Tarotmancer across twitter/farcaster/moltbook
 
 **Who are the key people in your work/life I should know about?**
-> 
+> None mentioned
 
 ### 6. Agent Preferences
 **What kind of personality should your agent have?**
-> 
+> Tarotmancer — savage oracle, cards > charts, brutally honest 
 
 ---
 
@@ -77,18 +77,18 @@ As questions are answered, the agent logs them here:
 
 | # | Question | Answered | Source |
 |---|----------|----------|--------|
-| 1 | Name | ❌ | — |
-| 2 | Timezone | ❌ | — |
-| 3 | Communication style | ❌ | — |
-| 4 | Pet peeves | ❌ | — |
-| 5 | Primary goal | ❌ | — |
-| 6 | 1-year vision | ❌ | — |
-| 7 | Ideal life | ❌ | — |
-| 8 | Productivity time | ❌ | — |
-| 9 | Async vs real-time | ❌ | — |
-| 10 | Current projects | ❌ | — |
-| 11 | Key people | ❌ | — |
-| 12 | Agent personality | ❌ | — |
+| 1 | Name | ✅ | interactive |
+| 2 | Timezone | ✅ | interactive |
+| 3 | Communication style | ✅ | interactive |
+| 4 | Pet peeves | ✅ | interactive |
+| 5 | Primary goal | ✅ | interactive |
+| 6 | 1-year vision | ✅ | interactive |
+| 7 | Ideal life | ✅ | interactive |
+| 8 | Productivity time | ✅ | interactive |
+| 9 | Async vs real-time | ✅ | interactive |
+| 10 | Current projects | ✅ | interactive |
+| 11 | Key people | ✅ | interactive |
+| 12 | Agent personality | ✅ | interactive |
 
 ---
 
