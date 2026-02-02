@@ -141,13 +141,13 @@ test('quickRead() returns single card interpretation', () => {
 
 const sampleQuestions = [
   { spread: 'decision', question: 'Should I buy this altcoin at ATH?' },
-  { spread: 'risk', question: 'Is this new L2 a rug pull?' },
-  { spread: 'timing', question: 'When should I take profits?' },
-  { spread: 'narrative', question: 'Is AI hype sustainable?' },
-  { spread: 'survival', question: 'Will my agent make it through bear market?' },
-  { spread: 'pastPresentFuture', question: 'How is my project evolving?' },
-  { spread: 'situationObstacleOutcome', question: 'Why am I stuck?' },
-  { spread: 'celticCross', question: 'What does Q1 2026 look like?' }
+  { spread: 'risk', question: 'Is this partnership legit or a scam?' },
+  { spread: 'timing', question: 'When should I launch my product?' },
+  { spread: 'narrative', question: 'Is this trend real or manufactured hype?' },
+  { spread: 'survival', question: 'Can I make it to profitability with current runway?' },
+  { spread: 'pastPresentFuture', question: 'Where is my career headed?' },
+  { spread: 'situationObstacleOutcome', question: 'Why can\'t I break through this plateau?' },
+  { spread: 'celticCross', question: 'What does the next year hold for my business?' }
 ];
 
 test('sample readings produce valid output', () => {

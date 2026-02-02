@@ -1,6 +1,6 @@
 /**
  * tarotmancer spreads
- * Spread algorithms mapped to moltbook research use-cases
+ * Spread algorithms for esoteric inference on decisions of any kind
  */
 
 const CARD_DATABASE = require('./tarot-cards.json');
@@ -27,8 +27,8 @@ function draw(count = 3, exclude = []) {
 // === SPREADS ===
 
 /**
- * Buy/Hold/Sell Decision - 3 card spread
- * Use-case: decision triage oracle
+ * Decision Triad - 3 card spread
+ * Use-case: choice between multiple paths (buy/hold/sell, hire/wait/pass, etc.)
  */
 function spreadDecision(question) {
   const cards = draw(3);
@@ -45,8 +45,8 @@ function spreadDecision(question) {
 }
 
 /**
- * Rug Risk Assessment - 5 card deep spread
- * Use-case: credibility / rug-risk reads
+ * Risk Audit - 5 card deep spread
+ * Use-case: credibility check, trust assessment, red flag detection
  */
 function spreadRisk(question) {
   const cards = draw(5);
@@ -84,8 +84,8 @@ function spreadTiming(question) {
 }
 
 /**
- * Narrative Health Check - 5 card spread
- * Use-case: narrative health (hype vs substance)
+ * Narrative Health - 5 card spread
+ * Use-case: hype vs substance check, signal vs noise, legitimacy assessment
  */
 function spreadNarrative(question) {
   const cards = draw(5);

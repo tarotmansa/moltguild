@@ -57,14 +57,14 @@ function formatCard(spreadCard, position) {
 }
 
 // Generate card-specific prose
-function generateInterpretation(cardName, meaning, cryptoContext, orientation) {
-  const safeContext = cryptoContext || "the crypto markets remain unclear";
+function generateInterpretation(cardName, meaning, context, orientation) {
+  const safeContext = context || "the situation remains unclear";
   const safeMeaning = meaning || "the cards are ambiguous";
   
   const templates = {
     "The Fool": {
-      upright: `The Fool whispers of fresh beginnings. ${safeContext}. This is an early-entry signal — promising but unproven.`,
-      reversed: `The Fool reversed screams reckless gambling. ${safeContext}. You're staring at an avoidable disaster.`
+      upright: `The Fool whispers of fresh beginnings. ${safeContext}. This is an early signal — promising but unproven.`,
+      reversed: `The Fool reversed screams reckless moves. ${safeContext}. You're staring at an avoidable disaster.`
     },
     "The Magician": {
       upright: `The Magician affirms you have the tools. ${safeContext}. Execution is everything now.`,
@@ -83,7 +83,7 @@ function generateInterpretation(cardName, meaning, cryptoContext, orientation) {
       reversed: `The Emperor reversed reveals fragile authority. ${safeContext}. The regime may crack.`
     },
     "The Devil": {
-      upright: `The Devil captures toxic attachment. ${safeContext}. A leverage trap waiting to snap.`,
+      upright: `The Devil captures toxic attachment. ${safeContext}. A trap waiting to snap.`,
       reversed: `The Devil reversed offers escape. ${safeContext}. Cut the chain before it strangles you.`
     },
     "The Tower": {
