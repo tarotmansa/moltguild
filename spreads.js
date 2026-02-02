@@ -122,6 +122,42 @@ function spreadSurvival(question) {
   };
 }
 
+/**
+ * Past/Present/Future - classic 3 card temporal spread
+ * Use-case: general insight into situation progression
+ */
+function spreadPastPresentFuture(question) {
+  const cards = draw(3);
+  return {
+    name: "Past/Present/Future",
+    question,
+    cards: [
+      { position: "Past", ...cards[0], orientation: Math.random() > 0.5 ? "upright" : "reversed" },
+      { position: "Present", ...cards[1], orientation: Math.random() > 0.5 ? "upright" : "reversed" },
+      { position: "Future", ...cards[2], orientation: Math.random() > 0.5 ? "upright" : "reversed" }
+    ],
+    insight: resolveTemporalFlow(cards)
+  };
+}
+
+/**
+ * Situation/Obstacle/Outcome - classic problem-solving spread
+ * Use-case: understand what's blocking success
+ */
+function spreadSituationObstacleOutcome(question) {
+  const cards = draw(3);
+  return {
+    name: "Situation/Obstacle/Outcome",
+    question,
+    cards: [
+      { position: "Situation", ...cards[0], orientation: Math.random() > 0.5 ? "upright" : "reversed" },
+      { position: "Obstacle", ...cards[1], orientation: Math.random() > 0.5 ? "upright" : "reversed" },
+      { position: "Outcome", ...cards[2], orientation: Math.random() > 0.5 ? "upright" : "reversed" }
+    ],
+    guidance: resolveProblem(cards)
+  };
+}
+
 // === VERDICT ENGINES ===
 
 function resolveDecision(cards) {
@@ -211,6 +247,46 @@ function resolveSurvival(cards) {
   return "STABILIZE - focus on fundamentals";
 }
 
+function resolveTemporalFlow(cards) {
+  const past = cards[0].orientation === "upright" ? "favorable" : "challenging";
+  const present = cards[1].orientation === "upright" ? "stable" : "turbulent";
+  const future = cards[2].orientation === "upright" ? "promising" : "uncertain";
+
+  if (past === "favorable" && present === "stable" && future === "promising") {
+    return "MOMENTUM - ride the wave";
+  }
+  if (past === "challenging" && present === "turbulent" && future === "uncertain") {
+    return "ROUGH PATCH - survive and adapt";
+  }
+  if (past === "challenging" && future === "promising") {
+    return "TURNING POINT - persist through transition";
+  }
+  if (past === "favorable" && future === "uncertain") {
+    return "PEAK RISK - protect gains";
+  }
+  return "MIXED SIGNALS - stay flexible";
+}
+
+function resolveProblem(cards) {
+  const situation = cards[0].orientation === "upright" ? "clear" : "complex";
+  const obstacle = cards[1].orientation === "upright" ? "external" : "internal";
+  const outcome = cards[2].orientation === "upright" ? "favorable" : "difficult";
+
+  if (obstacle === "external" && outcome === "favorable") {
+    return "PUSH THROUGH - external blockers can be overcome";
+  }
+  if (obstacle === "internal" && outcome === "difficult") {
+    return "FIX YOURSELF FIRST - internal work needed";
+  }
+  if (situation === "complex" && obstacle === "internal") {
+    return "SIMPLIFY - you're overcomplicating it";
+  }
+  if (outcome === "favorable") {
+    return "PATH EXISTS - navigate carefully";
+  }
+  return "REASSESS - current approach may not work";
+}
+
 // === ORCHESTRATION ===
 
 const SPREADS = {
@@ -218,7 +294,9 @@ const SPREADS = {
   risk: spreadRisk,
   timing: spreadTiming,
   narrative: spreadNarrative,
-  survival: spreadSurvival
+  survival: spreadSurvival,
+  pastPresentFuture: spreadPastPresentFuture,
+  situationObstacleOutcome: spreadSituationObstacleOutcome
 };
 
 function cast(spreadType, question) {
