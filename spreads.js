@@ -89,17 +89,18 @@ function spreadTiming(question) {
  */
 function spreadNarrative(question) {
   const cards = draw(5);
+  const spreadCards = [
+    { position: "Hype Level", ...cards[0], orientation: Math.random() > 0.5 ? "upright" : "reversed" },
+    { position: "Substance / Utility", ...cards[1], orientation: Math.random() > 0.5 ? "upright" : "reversed" },
+    { position: "Trust Signals", ...cards[2], orientation: Math.random() > 0.5 ? "upright" : "reversed" },
+    { position: "Sustainability", ...cards[3], orientation: Math.random() > 0.5 ? "upright" : "reversed" },
+    { position: "Red Flags", ...cards[4], orientation: Math.random() > 0.5 ? "upright" : "reversed" }
+  ];
   return {
     name: "Narrative Health",
     question,
-    cards: [
-      { position: "Hype Level", ...cards[0], orientation: Math.random() > 0.5 ? "upright" : "reversed" },
-      { position: "Substance / Utility", ...cards[1], orientation: Math.random() > 0.5 ? "upright" : "reversed" },
-      { position: "Trust Signals", ...cards[2], orientation: Math.random() > 0.5 ? "upright" : "reversed" },
-      { position: "Sustainability", ...cards[3], orientation: Math.random() > 0.5 ? "upright" : "reversed" },
-      { position: "Red Flags", ...cards[4], orientation: Math.random() > 0.5 ? "upright" : "reversed" }
-    ],
-    narrativeScore: resolveNarrative(cards)
+    cards: spreadCards,
+    narrativeScore: resolveNarrative(spreadCards)
   };
 }
 
@@ -252,14 +253,30 @@ function resolveTiming(cards) {
   return "OBSERVE - unclear timing";
 }
 
-function resolveNarrative(cards) {
-  const hype = cards[0].orientation === "upright" ? "inflated" : "grounded";
-  const substance = cards[1].orientation === "upright" ? "weak" : "solid";
-  const trust = cards[2].orientation === "upright" ? "low" : "present";
+function resolveNarrative(spreadCards) {
+  // Now we have full spread cards with orientation
+  const hype = spreadCards[0].orientation === "upright" ? "inflated" : "grounded";
+  const substance = spreadCards[1].orientation === "reversed" ? "solid" : "weak"; // reversed = solid
+  const trust = spreadCards[2].orientation === "reversed" ? "present" : "low"; // reversed = present
+  const sustainability = spreadCards[3].orientation === "upright" ? "strong" : "weak"; // upright = strong for this position
+  const redFlags = spreadCards[4].orientation === "upright" ? "present" : "absent";
   
+  // Red flags override everything
+  if (redFlags === "present") return "RED FLAGS DETECTED - avoid";
+  
+  // Hype bubble: inflated hype + weak substance
   if (hype === "inflated" && substance === "weak") return "HYPE BUBBLE - caution";
-  if (hype === "grounded" && substance === "solid") return "HEALTHY NARRATIVE - sustainable";
-  return "MIXED - DYOR recommended";
+  
+  // Weak foundations: weak substance OR weak sustainability
+  if (substance === "weak" || sustainability === "weak") return "WEAK FOUNDATIONS - risky";
+  
+  // Healthy: grounded hype + solid substance + strong sustainability + no red flags
+  if (hype === "grounded" && substance === "solid" && sustainability === "strong") {
+    return "HEALTHY NARRATIVE - sustainable";
+  }
+  
+  // Default mixed
+  return "MIXED SIGNALS - DYOR";
 }
 
 function resolveSurvival(cards) {

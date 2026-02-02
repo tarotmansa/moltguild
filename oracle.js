@@ -198,10 +198,34 @@ function weaveNarrative(spread) {
     
   } else if (name === 'Narrative Health' && cardMeanings.length === 5) {
     const [hype, substance, trust, sustain, flags] = cardMeanings;
-    narrative = `${hype.name} measures hype ${hype.orientation === 'upright' ? 'inflated' : 'grounded'}. `;
-    narrative += `But ${substance.name} reveals ${substance.orientation === 'upright' ? 'weak foundations' : 'real substance'}. `;
-    narrative += `${trust.name} and ${sustain.name} ${trust.orientation === 'upright' && sustain.orientation === 'upright' ? 'align for sustainability' : 'show cracks in the facade'}. `;
-    narrative += `${flags.name} warns: ${flags.orientation === 'upright' ? 'red flags present' : 'nothing hidden yet'}.`;
+    
+    // Align with resolveNarrative logic
+    const hypeStatus = hype.orientation === 'upright' ? 'inflated' : 'grounded';
+    const substanceStatus = substance.orientation === 'reversed' ? 'solid' : 'weak';
+    const trustStatus = trust.orientation === 'reversed' ? 'present' : 'low';
+    const sustainStatus = sustain.orientation === 'upright' ? 'strong' : 'weak';
+    const flagsStatus = flags.orientation === 'upright' ? 'present' : 'absent';
+    
+    narrative = `${hype.name} shows hype ${hypeStatus}. `;
+    
+    if (substanceStatus === 'solid') {
+      narrative += `${substance.name} reveals real substance beneath. `;
+    } else {
+      narrative += `${substance.name} exposes weak foundations. `;
+    }
+    
+    if (trustStatus === 'present' && sustainStatus === 'strong') {
+      narrative += `${trust.name} and ${sustain.name} build confidence and sustainability. `;
+    } else if (trustStatus === 'low' || sustainStatus === 'weak') {
+      narrative += `${trust.name} shows ${trustStatus} trust, ${sustain.name} indicates ${sustainStatus} sustainability—cracks in the facade. `;
+    }
+    
+    if (flagsStatus === 'present') {
+      narrative += `${flags.name} waves red flags.`;
+    } else {
+      narrative += `${flags.name} shows no hidden dangers yet.`;
+    }
+    
     narrative += `\n\n**Narrative verdict:** ${narrativeScore}`;
     
   } else if (name === 'Survival Forecast' && cardMeanings.length === 4) {
