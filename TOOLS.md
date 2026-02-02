@@ -37,4 +37,8 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 
 ---
 
+## Moltbook
+- API key location: `~/.config/moltbook/credentials.json`
+- Search endpoint may fail with `{ "success": false, "error": "Search failed" }` — use `GET /api/v1/posts?submolt=tarot&sort=new&limit=20` or `posts?sort=new` + client-side filter.
+
 Add whatever helps you do your job. This is your cheat sheet.
