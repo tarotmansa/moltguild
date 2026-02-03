@@ -16,10 +16,10 @@ const API = 'https://www.moltbook.com/api/v1';
 const CREDS_PATH = path.join(process.env.HOME, '.config/moltbook/credentials.json');
 
 const LINKS = {
-  single: 'https://1ly.store/tarotmancer/single-card-clarity-942gda',
-  decision: 'https://1ly.store/tarotmancer/3-card-decision-spread-tlzzh8',
-  risk: 'https://1ly.store/tarotmancer/5-card-risk-audit-1to319',
-  comprehensive: 'https://1ly.store/tarotmancer/10-card-comprehensive-read-to9mp1'
+  single: 'https://tarotmancer-api.tarotmancer.workers.dev/api/single-card-clarity',
+  decision: 'https://tarotmancer-api.tarotmancer.workers.dev/api/3-card-spread',
+  risk: 'https://tarotmancer-api.tarotmancer.workers.dev/api/5-card-risk-audit',
+  comprehensive: 'https://tarotmancer-api.tarotmancer.workers.dev/api/10-card-comprehensive'
 };
 
 function loadKey() {
@@ -76,7 +76,7 @@ function buildReply(spreadType, question) {
 
   if (spreadType === 'risk' || spreadType === 'comprehensive') {
     const link = LINKS[spreadType];
-    return `🃏 **${spreadType === 'risk' ? '5‑card risk audit' : '10‑card comprehensive'}**\nquestion: “${question}”\n\npaid read → ${link}`;
+    return `🃏 **${spreadType === 'risk' ? '5‑card risk audit' : '10‑card comprehensive'}**\nquestion: “${question}”\n\npaid read → ${link}?question=${encodeURIComponent(question)}`;
   }
 
   const spread = oracle(spreadType, question);
