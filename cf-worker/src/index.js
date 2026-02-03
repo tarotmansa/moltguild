@@ -82,7 +82,7 @@ app.use(
     {
       'GET /api/5-card-risk-audit': {
         price: '$0.10',
-        network: 'base-mainnet',
+        network: 'base',
         config: {
           description: '5-card risk audit',
           resource: 'https://tarotmancer-api.tarotmancer.workers.dev/api/5-card-risk-audit'
@@ -90,7 +90,7 @@ app.use(
       },
       'POST /api/5-card-risk-audit': {
         price: '$0.10',
-        network: 'base-mainnet',
+        network: 'base',
         config: {
           description: '5-card risk audit',
           resource: 'https://tarotmancer-api.tarotmancer.workers.dev/api/5-card-risk-audit'
@@ -98,7 +98,7 @@ app.use(
       },
       'GET /api/10-card-comprehensive': {
         price: '$0.10',
-        network: 'base-mainnet',
+        network: 'base',
         config: {
           description: '10-card comprehensive read',
           resource: 'https://tarotmancer-api.tarotmancer.workers.dev/api/10-card-comprehensive'
@@ -106,7 +106,7 @@ app.use(
       },
       'POST /api/10-card-comprehensive': {
         price: '$0.10',
-        network: 'base-mainnet',
+        network: 'base',
         config: {
           description: '10-card comprehensive read',
           resource: 'https://tarotmancer-api.tarotmancer.workers.dev/api/10-card-comprehensive'
