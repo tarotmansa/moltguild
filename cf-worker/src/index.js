@@ -53,11 +53,13 @@ function singlePayload(question) {
 export default {
   async fetch(request, env) {
     if (request.method === 'OPTIONS') return json({}, 200);
-    if (request.method !== 'POST') return json({ error: 'POST only' }, 405);
 
     const url = new URL(request.url);
-    const body = await parseJson(request);
-    const question = body.question || 'no question provided';
+    const isPost = request.method === 'POST';
+    if (!isPost && request.method !== 'GET') return json({ error: 'POST or GET only' }, 405);
+
+    const body = isPost ? await parseJson(request) : {};
+    const question = body.question || url.searchParams.get('question') || 'no question provided';
 
     if (url.pathname === '/api/single-card-clarity') {
       return json(singlePayload(question));
