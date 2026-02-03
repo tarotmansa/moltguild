@@ -3,7 +3,7 @@ main = "src/index.js"
 compatibility_date = "2026-02-03"
 
 # set these after login or via env
-# account_id = "YOUR_ACCOUNT_ID"
+account_id = "7300513683803ba7d754b1b091877a5e"
 # workers_dev = true
 
 [vars]
