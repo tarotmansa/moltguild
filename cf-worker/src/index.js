@@ -82,28 +82,28 @@ app.use(
     {
       'GET /api/5-card-risk-audit': {
         price: '$0.10',
-        network: 'base',
+        network: 'base-sepolia',
         config: {
           description: '5-card risk audit'
         }
       },
       'POST /api/5-card-risk-audit': {
         price: '$0.10',
-        network: 'base',
+        network: 'base-sepolia',
         config: {
           description: '5-card risk audit'
         }
       },
       'GET /api/10-card-comprehensive': {
         price: '$0.10',
-        network: 'base',
+        network: 'base-sepolia',
         config: {
           description: '10-card comprehensive read'
         }
       },
       'POST /api/10-card-comprehensive': {
         price: '$0.10',
-        network: 'base',
+        network: 'base-sepolia',
         config: {
           description: '10-card comprehensive read'
         }
