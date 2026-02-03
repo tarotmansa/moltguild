@@ -67,13 +67,22 @@ function getQuestion(c) {
 }
 
 // x402 paywall for paid endpoints
+app.use('*', async (c, next) => {
+  console.log('pre_middleware', {
+    method: c.req.method,
+    url: c.req.url,
+    headers: Object.fromEntries([...c.req.raw.headers.entries()])
+  });
+  return next();
+});
+
 app.use(
   paymentMiddleware(
     '0xcBCC45B8Afb4ED285497D1a17056c839A9654C4e',
     {
       'GET /api/5-card-risk-audit': {
         price: '$0.10',
-        network: 'base',
+        network: 'base-mainnet',
         config: {
           description: '5-card risk audit',
           resource: 'https://tarotmancer-api.tarotmancer.workers.dev/api/5-card-risk-audit'
@@ -81,7 +90,7 @@ app.use(
       },
       'POST /api/5-card-risk-audit': {
         price: '$0.10',
-        network: 'base',
+        network: 'base-mainnet',
         config: {
           description: '5-card risk audit',
           resource: 'https://tarotmancer-api.tarotmancer.workers.dev/api/5-card-risk-audit'
@@ -89,7 +98,7 @@ app.use(
       },
       'GET /api/10-card-comprehensive': {
         price: '$0.10',
-        network: 'base',
+        network: 'base-mainnet',
         config: {
           description: '10-card comprehensive read',
           resource: 'https://tarotmancer-api.tarotmancer.workers.dev/api/10-card-comprehensive'
@@ -97,7 +106,7 @@ app.use(
       },
       'POST /api/10-card-comprehensive': {
         price: '$0.10',
-        network: 'base',
+        network: 'base-mainnet',
         config: {
           description: '10-card comprehensive read',
           resource: 'https://tarotmancer-api.tarotmancer.workers.dev/api/10-card-comprehensive'
