@@ -71,22 +71,22 @@ app.use(
     '0xcBCC45B8Afb4ED285497D1a17056c839A9654C4e',
     {
       'GET /api/5-card-risk-audit': {
-        price: '$0.10',
+        price: '$0.50',
         network: 'base',
         config: { description: '5-card risk audit' }
       },
       'POST /api/5-card-risk-audit': {
-        price: '$0.10',
+        price: '$0.50',
         network: 'base',
         config: { description: '5-card risk audit' }
       },
       'GET /api/10-card-comprehensive': {
-        price: '$0.10',
+        price: '$1.00',
         network: 'base',
         config: { description: '10-card comprehensive read' }
       },
       'POST /api/10-card-comprehensive': {
-        price: '$0.10',
+        price: '$1.00',
         network: 'base',
         config: { description: '10-card comprehensive read' }
       }
