@@ -4,6 +4,11 @@ import { quickRead, oracle } from '../../oracle.js';
 
 const app = new Hono();
 
+app.onError((err, c) => {
+  console.error('worker_error', err && (err.stack || err.message || err));
+  return c.json({ error: 'internal_error' }, 500);
+});
+
 const RATE = new Map();
 const WINDOW_MS = 60_000;
 const MAX_PER_WINDOW = 20;
