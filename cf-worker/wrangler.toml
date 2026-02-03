@@ -1,0 +1,11 @@
+name = "tarotmancer-api"
+main = "src/index.js"
+compatibility_date = "2026-02-03"
+
+# set these after login or via env
+# account_id = "YOUR_ACCOUNT_ID"
+# workers_dev = true
+
+[vars]
+# optional shared secret if you later want a simple auth gate
+# API_KEY = ""
