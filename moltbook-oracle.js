@@ -15,6 +15,13 @@ const { oracle, quickRead } = require('./oracle.js');
 const API = 'https://www.moltbook.com/api/v1';
 const CREDS_PATH = path.join(process.env.HOME, '.config/moltbook/credentials.json');
 
+const LINKS = {
+  single: 'https://1ly.store/tarotmancer/single-card-clarity-942gda',
+  decision: 'https://1ly.store/tarotmancer/3-card-decision-spread-tlzzh8',
+  risk: 'https://1ly.store/tarotmancer/5-card-risk-audit-1to319',
+  comprehensive: 'https://1ly.store/tarotmancer/10-card-comprehensive-read-to9mp1'
+};
+
 function loadKey() {
   const raw = fs.readFileSync(CREDS_PATH, 'utf8');
   const data = JSON.parse(raw);
@@ -47,6 +54,8 @@ function request(url, method = 'GET', body = null, key) {
 function pickSpread(text) {
   const t = text.toLowerCase();
   if (t.includes('single') || t.includes('clarity')) return 'single';
+  if (t.includes('risk') || t.includes('audit')) return 'risk';
+  if (t.includes('comprehensive') || t.includes('celtic')) return 'comprehensive';
   if (t.includes('timing') || t.includes('when')) return 'timing';
   if (t.includes('decision') || t.includes('left') || t.includes('right')) return 'decision';
   return 'decision';
@@ -62,8 +71,14 @@ function extractQuestion(text) {
 function buildReply(spreadType, question) {
   if (spreadType === 'single') {
     const read = quickRead(question);
-    return `🃏 **single‑card clarity**\nquestion: “${question}”\n\n${read.card} (${read.orientation})\n${read.interpretation}\n\nverdict: ${read.signal}`;
+    return `🃏 **single‑card clarity**\nquestion: “${question}”\n\n${read.card} (${read.orientation})\n${read.interpretation}`;
   }
+
+  if (spreadType === 'risk' || spreadType === 'comprehensive') {
+    const link = LINKS[spreadType];
+    return `🃏 **${spreadType === 'risk' ? '5‑card risk audit' : '10‑card comprehensive'}**\nquestion: “${question}”\n\npaid read → ${link}`;
+  }
+
   const spread = oracle(spreadType, question);
   const verdict = spread.verdict || spread.recommendation || spread.outlook || 'observe';
   return `🃏 **${spread.name}**\nquestion: “${question}”\n\n${spread.prose}\n\nverdict: ${verdict}`;
