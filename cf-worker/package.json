@@ -4,7 +4,6 @@
   "type": "module",
   "dependencies": {
     "hono": "^4.6.8",
-    "x402": "^0.6.6",
-    "viem": "^2.21.26"
+    "x402-hono": "^0.6.0"
   }
 }
