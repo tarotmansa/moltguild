@@ -1,24 +1,31 @@
+import { Hono } from 'hono';
+import { paymentMiddleware } from 'x402-hono';
 import { quickRead, oracle } from '../../oracle.js';
 
-function json(body, status = 200) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: {
-      'content-type': 'application/json',
-      'access-control-allow-origin': '*',
-      'access-control-allow-methods': 'POST, GET, OPTIONS',
-      'access-control-allow-headers': 'content-type'
-    }
-  });
+const app = new Hono();
+
+const RATE = new Map();
+const WINDOW_MS = 60_000;
+const MAX_PER_WINDOW = 20;
+
+function allow(ip) {
+  const now = Date.now();
+  const bucket = RATE.get(ip) || { count: 0, ts: now };
+  if (now - bucket.ts > WINDOW_MS) {
+    bucket.count = 0;
+    bucket.ts = now;
+  }
+  bucket.count += 1;
+  RATE.set(ip, bucket);
+  return bucket.count <= MAX_PER_WINDOW;
 }
 
-async function parseJson(request) {
-  try {
-    return await request.json();
-  } catch {
-    return {};
-  }
-}
+app.use('*', async (c, next) => {
+  if (c.req.method === 'OPTIONS') return c.json({}, 200);
+  const ip = c.req.header('cf-connecting-ip') || 'unknown';
+  if (!allow(ip)) return c.json({ error: 'rate_limited', window_sec: 60, max: MAX_PER_WINDOW }, 429);
+  return next();
+});
 
 function spreadPayload(spreadType, question) {
   const spread = oracle(spreadType, question);
@@ -50,49 +57,62 @@ function singlePayload(question) {
   };
 }
 
-const RATE = new Map();
-const WINDOW_MS = 60_000; // 1 min
-const MAX_PER_WINDOW = 20; // per IP
-
-function allow(ip) {
-  const now = Date.now();
-  const bucket = RATE.get(ip) || { count: 0, ts: now };
-  if (now - bucket.ts > WINDOW_MS) {
-    bucket.count = 0;
-    bucket.ts = now;
-  }
-  bucket.count += 1;
-  RATE.set(ip, bucket);
-  return bucket.count <= MAX_PER_WINDOW;
+function getQuestion(c) {
+  return c.req.query('question') || 'no question provided';
 }
 
-export default {
-  async fetch(request, env) {
-    if (request.method === 'OPTIONS') return json({}, 200);
+// x402 paywall for paid endpoints
+app.use(
+  paymentMiddleware(
+    '0xcBCC45B8Afb4ED285497D1a17056c839A9654C4e',
+    {
+      'GET /api/5-card-risk-audit': {
+        price: '$0.50',
+        network: 'base',
+        config: { description: '5-card risk audit' }
+      },
+      'POST /api/5-card-risk-audit': {
+        price: '$0.50',
+        network: 'base',
+        config: { description: '5-card risk audit' }
+      },
+      'GET /api/10-card-comprehensive': {
+        price: '$1.00',
+        network: 'base',
+        config: { description: '10-card comprehensive read' }
+      },
+      'POST /api/10-card-comprehensive': {
+        price: '$1.00',
+        network: 'base',
+        config: { description: '10-card comprehensive read' }
+      }
+    },
+    { url: 'https://x402.org/facilitator' }
+  )
+);
 
-    const url = new URL(request.url);
-    const isPost = request.method === 'POST';
-    if (!isPost && request.method !== 'GET') return json({ error: 'POST or GET only' }, 405);
+app.get('/api/single-card-clarity', (c) => c.json(singlePayload(getQuestion(c))));
+app.post('/api/single-card-clarity', async (c) => {
+  const body = await c.req.json().catch(() => ({}));
+  return c.json(singlePayload(body.question || getQuestion(c)));
+});
 
-    const ip = request.headers.get('cf-connecting-ip') || 'unknown';
-    if (!allow(ip)) return json({ error: 'rate_limited', window_sec: 60, max: MAX_PER_WINDOW }, 429);
+app.get('/api/3-card-spread', (c) => c.json(spreadPayload('decision', getQuestion(c))));
+app.post('/api/3-card-spread', async (c) => {
+  const body = await c.req.json().catch(() => ({}));
+  return c.json(spreadPayload('decision', body.question || getQuestion(c)));
+});
 
-    const body = isPost ? await parseJson(request) : {};
-    const question = body.question || url.searchParams.get('question') || 'no question provided';
+app.get('/api/5-card-risk-audit', (c) => c.json(spreadPayload('risk', getQuestion(c))));
+app.post('/api/5-card-risk-audit', async (c) => {
+  const body = await c.req.json().catch(() => ({}));
+  return c.json(spreadPayload('risk', body.question || getQuestion(c)));
+});
 
-    if (url.pathname === '/api/single-card-clarity') {
-      return json(singlePayload(question));
-    }
-    if (url.pathname === '/api/3-card-spread') {
-      return json(spreadPayload('decision', question));
-    }
-    if (url.pathname === '/api/5-card-risk-audit') {
-      return json(spreadPayload('risk', question));
-    }
-    if (url.pathname === '/api/10-card-comprehensive') {
-      return json(spreadPayload('celticCross', question));
-    }
+app.get('/api/10-card-comprehensive', (c) => c.json(spreadPayload('celticCross', getQuestion(c))));
+app.post('/api/10-card-comprehensive', async (c) => {
+  const body = await c.req.json().catch(() => ({}));
+  return c.json(spreadPayload('celticCross', body.question || getQuestion(c)));
+});
 
-    return json({ error: 'not found' }, 404);
-  }
-};
+export default app;

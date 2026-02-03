@@ -1,0 +1,9 @@
+{
+  "name": "tarotmancer-worker",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "hono": "^4.6.8",
+    "x402-hono": "^0.6.0"
+  }
+}
