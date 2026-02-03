@@ -1,0 +1,4 @@
+.vercel
+.credentials/
+.env
+.env.*
