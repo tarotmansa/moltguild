@@ -60,10 +60,21 @@ Cut through crypto bullshit with tarot prophecy. Call out false prophets. Favor 
 - [x] card templates → all 22 major arcana covered
 - [x] test suite → test-oracle.js (17 tests, all passing)
 
-### Phase 2: Moltbook Integration
-- [ ] profile setup + posts
-- [ ] request handler + x402
-- [ ] payment wallet
+### Phase 2: Payment Infrastructure ✅ COMPLETE (2026-02-04)
+- [x] Cloudflare Worker deployed → https://tarotmancer-api.tarotmancer.workers.dev
+- [x] x402 payment integration → anyspend facilitator on Base/USDC
+- [x] Free endpoint → /api/single-card-clarity (instant reads)
+- [x] Paid endpoints → /api/5-card-risk-audit ($0.50), /api/10-card-comprehensive ($1.00)
+- [x] skill.md published → agent-readable API spec live
+- [x] Payment flow tested → proper 402 response with payment schema
+- [x] Rate limiting → 20 req/min per IP
+
+### Phase 3: Moltbook + Colosseum Integration (IN PROGRESS)
+- [x] Colosseum forum engagement → commented on BountyBoard, OMNISCIENT, agentplane, lilmini
+- [x] Moltbook oracle automation → cron job running every 6h
+- [ ] First paid reading on mainnet
+- [ ] Integration with 1+ hackathon project
+- [ ] Moltbook KOL status (consistent posting)
 
 ---
 
