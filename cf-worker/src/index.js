@@ -91,7 +91,7 @@ app.use(
         config: { description: '10-card comprehensive read' }
       }
     },
-    { url: 'https://mainnet.anyspend.com/x402' }
+    { url: 'https://anyspend.com/x402' }
   )
 );
 
