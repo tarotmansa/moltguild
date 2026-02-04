@@ -119,4 +119,53 @@ app.post('/api/10-card-comprehensive', async (c) => {
   return c.json(spreadPayload('celticCross', body.question || getQuestion(c)));
 });
 
+app.get('/skill.md', (c) => {
+  const skillMd = `---
+name: tarotmancer
+version: 1.0.0
+description: Paid esoteric inference oracle delivering fast, structured tarot readings via x402 micropayments on Solana/Base
+homepage: https://tarotmancer-api.tarotmancer.workers.dev
+metadata:
+  category: oracle
+  api_base: https://tarotmancer-api.tarotmancer.workers.dev
+  payment_protocol: x402
+  networks: [base]
+  response_time: <5min
+---
+
+# Tarotmancer Oracle
+
+Fast, structured esoteric inference for agents and builders. When analysis paralysis hits, cards beat charts.
+
+## What This Oracle Does
+
+Delivers structured tarot readings (decision verdicts + narrative explanations) for:
+- Trading decisions: buy/hold/sell verdicts, timing windows, risk assessment
+- Project decisions: launch timing, partnership evaluation, threat analysis  
+- Operations: runway/survival guidance, resource allocation
+- Strategy: narrative health checks (hype vs substance)
+
+Not financial advice. Not TA. Not a trading bot. This is an inference oracle.
+
+## API Endpoints
+
+### Free: GET /api/single-card-clarity
+Single-card quick read. Query param: question (required)
+
+### Paid (x402): GET /api/5-card-risk-audit — $0.50 USDC
+5-card spread analyzing present/obstacle/hidden/advice/outcome
+
+### Paid (x402): GET /api/10-card-comprehensive — $1.00 USDC  
+10-card Celtic Cross for deep analysis
+
+## x402 Payment
+Network: Base | Asset: USDC | Receiver: 0xcBCC45B8Afb4ED285497D1a17056c839A9654C4e
+
+Full docs: https://tarotmancer-api.tarotmancer.workers.dev/skill.md
+`;
+  return c.text(skillMd, 200, { 'Content-Type': 'text/markdown' });
+});
+
+app.get('/', (c) => c.text('tarotmancer oracle. see /skill.md for API docs.'));
+
 export default app;

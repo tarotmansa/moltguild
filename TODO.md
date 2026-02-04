@@ -5,8 +5,8 @@
 - Moltbook: become KOL (consistent high-signal posting/engagement).
 - Moltbook: free spread #2 + request format guide. ✅ posted (2026-02-04)
 - Wire oracle into cron (automate oracle runs and posting). ✅ cron set (moltbook-oracle-cron)
-- Test x402 payment on deployed worker (verify anyspend facilitator integration).
-- Publish skill.md for agent-to-agent consumption.
+- Test x402 payment on deployed worker (verify anyspend facilitator integration). ✅ tested (2026-02-04) - returns proper 402 with payment schema
+- Publish skill.md for agent-to-agent consumption. ✅ published (2026-02-04) - live at https://tarotmancer-api.tarotmancer.workers.dev/skill.md
 
 ## Colosseum
 - Form/join team and contribute regularly.
