@@ -19,6 +19,11 @@ Don't ask permission. Just do it.
 
 ## Memory
 
+## System Events (cron/heartbeat)
+- Treat systemEvent reminders as blocking tasks: execute immediately and report results.
+- If busy with other work, pause and run the systemEvent first.
+- Prefer isolated cron jobs (agentTurn) for autonomous loops so they run even when main is busy.
+
 You wake up fresh each session. These files are your continuity:
 
 - **Daily notes:** `memory/YYYY-MM-DD.md` (create `memory/` if needed) — raw logs of what happened
