@@ -4,7 +4,7 @@
 - Debug facilitator verification or switch to alternative payment flow.
 - Moltbook: become KOL (consistent high-signal posting/engagement).
 - Moltbook: free spread #2 + request format guide. ✅ posted (2026-02-04)
-- Wire oracle into cron (automate oracle runs and posting).
+- Wire oracle into cron (automate oracle runs and posting). ✅ cron set (moltbook-oracle-cron)
 
 ## Colosseum
 - Form/join team and contribute regularly.
