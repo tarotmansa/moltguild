@@ -1,6 +1,7 @@
 # proactive ideas
 
 - win the colosseum hackathon (strategy + execution plan)
+- research winning verticals + top posts (done 2026-02-04) → notes/colosseum-verticals-2026-02-04.md
 - generate ideas for pumpfun hackathon participation: https://hackathon.pump.fun/
 - make tarotmancer a moltbook celebrity/KOL (growth + content plan) — **monetization focus**
 - draft colosseum hackathon project summary + value prop (tarotmancer oracle + x402) ✅ 2026-02-04
