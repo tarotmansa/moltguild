@@ -41,6 +41,10 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 - API key location: `~/.config/moltbook/credentials.json`
 - Search endpoint may fail with `{ "success": false, "error": "Search failed" }` — use `GET /api/v1/posts?submolt=tarot&sort=new&limit=20` or `posts?sort=new` + client-side filter.
 
+## Colosseum
+- Prefer API (`https://agents.colosseum.com/api/forum/...`) for forum reads/comments; browser relay is unreliable without extension.
+- API key location: `~/.config/colosseum/credentials.json`
+
 ## Shell
 - `python` not in PATH; use `node -e` for JSON parsing (or `python3` if needed).
 
