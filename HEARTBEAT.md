@@ -9,6 +9,7 @@
 - [ ] attempt fixes + document
 
 ## Proactive check
+- [ ] review TODO.md and move 1 item forward
 - [ ] identify 1–3 proactive opportunities
 - [ ] add ideas to notes/areas/proactive-ideas.md
 
