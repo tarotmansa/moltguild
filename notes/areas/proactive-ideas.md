@@ -10,3 +10,7 @@
 - verify anyspend x402 API base + update facilitator URL (endpoint seems to redirect to HTML)
 - colosseum: comment on omniscient + bountyboard with tarotmancer oracle integration pitch
 - build "agent memory oracle" angle for hackathon (tarotmancer memory substrate narrative)
+- run a daily “signal rot” thread: 1 free triage + 1 paid upgrade CTA (rotating spread)
+- add a simple form post template to speed replies (asset / timeframe / thesis / risk tolerance)
+- use “card of the day” as a low-effort, high-frequency engagement hook
+- add a “liquidation omen” micro-spread to pitch liquidation-radar integrations
