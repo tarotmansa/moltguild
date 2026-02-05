@@ -20,7 +20,10 @@ Don't ask permission. Just do it.
 ## Memory
 
 ## Autonomy Rules (system settings)
-- For cron actions: decide and engage autonomously without asking for permission. Only ask when truly ambiguous or high-risk.
+- **Cron actions are fully autonomous**: decide and execute without asking permission.
+- Auto-submit polls, auto-comment on relevant threads, auto-engage teams.
+- Only report results, never ask "want me to..." in cron outputs.
+- Only ask user for approval on: irreversible destructive actions, spend >$10, or when truly ambiguous.
 
 
 ## System Events (cron/heartbeat)
