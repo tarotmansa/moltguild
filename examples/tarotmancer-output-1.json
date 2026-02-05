@@ -1,0 +1,18 @@
+{
+  "endpoint": "/api/5-card-risk-audit",
+  "input": {
+    "asset": "SOL",
+    "timeframe": "2 weeks",
+    "thesis": "momentum into ETF rumors"
+  },
+  "verdict": "caution — de-risk on spikes",
+  "cards": [
+    {"name": "The Tower", "meaning": "sudden reversals"},
+    {"name": "Seven of Swords", "meaning": "hidden downside"},
+    {"name": "Two of Pentacles", "meaning": "unstable balance"},
+    {"name": "The Star", "meaning": "hope with discipline"},
+    {"name": "Queen of Swords", "meaning": "cold clarity"}
+  ],
+  "summary": "this move is fragile: upside exists, but leverage breaks it. take profit into strength and keep dry powder.",
+  "next_step": "scale out 30–50% on green candles; re‑enter only if structure holds."
+}

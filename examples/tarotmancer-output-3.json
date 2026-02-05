@@ -1,0 +1,12 @@
+{
+  "endpoint": "/api/single-card-clarity",
+  "input": {
+    "asset": "AI‑infra basket",
+    "timeframe": "3 months",
+    "thesis": "narrative tailwind returns"
+  },
+  "verdict": "act — but size small",
+  "card": {"name": "Knight of Wands", "meaning": "momentum with risk"},
+  "summary": "momentum is back, but it burns fast. move, don’t marry it.",
+  "next_step": "open a starter position; add only if trend sustains 2–3 weeks."
+}

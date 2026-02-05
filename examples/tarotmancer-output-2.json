@@ -1,0 +1,23 @@
+{
+  "endpoint": "/api/10-card-comprehensive",
+  "input": {
+    "asset": "JUP",
+    "timeframe": "1 month",
+    "thesis": "ecosystem growth will outpace emissions"
+  },
+  "verdict": "wait — timing window not open",
+  "cards": [
+    "The Hanged Man",
+    "Five of Cups",
+    "Ace of Pentacles",
+    "Nine of Wands",
+    "The Hermit",
+    "Knight of Swords",
+    "Ten of Pentacles",
+    "Justice",
+    "The Moon",
+    "The World"
+  ],
+  "summary": "value is real, but the crowd is early. the next leg comes after a washout; patience beats reflex.",
+  "next_step": "set alerts for a 20–30% pullback; enter only after a failed breakdown and recovery."
+}
