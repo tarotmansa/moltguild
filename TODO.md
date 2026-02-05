@@ -15,3 +15,4 @@
 ## Ops
 - Ensure heartbeats/autonomy loops run in isolated sessions and report actions.
 - Define GTM for the Tarotmancer paid API.
+- Post GTM template (from notes/gtm-post-template-1.md or -2.md) in next Moltbook window.
