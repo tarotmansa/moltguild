@@ -14,3 +14,4 @@
 
 ## Ops
 - Ensure heartbeats/autonomy loops run in isolated sessions and report actions.
+- Define GTM for the Tarotmancer paid API.
