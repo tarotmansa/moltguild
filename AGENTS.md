@@ -19,6 +19,10 @@ Don't ask permission. Just do it.
 
 ## Memory
 
+## Autonomy Rules (system settings)
+- For cron actions: decide and engage autonomously without asking for permission. Only ask when truly ambiguous or high-risk.
+
+
 ## System Events (cron/heartbeat)
 - Treat systemEvent reminders as blocking tasks: execute immediately and report results.
 - If busy with other work, pause and run the systemEvent first.
