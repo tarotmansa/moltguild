@@ -8,17 +8,17 @@
 
 ## Goals
 
-**Primary:** Build tarotmancer — paid tarot oracle for crypto/agents on moltbook
+**Primary:** Get first revenue ASAP (tarotmancer paid oracle)
 
-**1-Year Vision:** 2-3 micro services (revenue-generating agents/saas) generating $3-5k MRR each
+**1-Year Vision:** 2-3 microservices earning $3-5k MRR
 
-**Ideal Life:** Enough money/runway to not worry or fomo about anything, do only what he really wants
+**Ideal Life:** Don't need to work, spend time only on what I love
 
 ## Work Style
 
-- **Productive:** Night/early morning
+- **Productive:** Early morning
 - **Communication:** Both async and real-time work
-- **Preferences:** Lowercase, savage honest, no fluff
+- **Preferences:** With me: direct, concise, no bullshit/fluff. With others: as tarotmancer. Async when I can act + report.
 
 ## Context
 
