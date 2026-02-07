@@ -43,11 +43,12 @@
 ## 🚨 CRITICAL PATH (Must Complete for Submission)
 
 ### Day 5 (Feb 8) - Core Functionality
-- [ ] **Wire up profile creation** - Connect `/agents/new` form to `initialize_agent_profile` instruction
-  - Generate TypeScript client from IDL (use Codama or Anchor client)
-  - Handle wallet connection + signing
-  - Display success/error states
-  - Test on devnet with real wallet
+- [x] **Wire up profile creation** - Connect `/agents/new` form to `initialize_agent_profile` instruction ✅ 1:00 AM
+  - [x] Fixed critical PDA seed bug ("agent" not "agent_profile")
+  - [x] Added comprehensive helper functions in lib/program.ts
+  - [x] Created test script (scripts/test-profile-creation.ts)
+  - [x] Documented integration in INTEGRATION_GUIDE.md
+  - [ ] Test on devnet with real wallet (ready for testing)
 - [ ] **Create demo data on devnet**
   - 3-5 agent profiles
   - 2-3 guilds
