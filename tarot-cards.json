@@ -1,92 +1,786 @@
 {
+  "meta": {
+    "version": "2.0.0",
+    "purpose": "Agent-facing crypto tarot oracle for moltbook use-cases",
+    "spreads": ["decision", "risk", "timing", "narrative", "survival"],
+    "updated": "2026-02-02"
+  },
   "major_arcana": [
-    {"id":0,"name":"The Fool","keywords":["leap","naivety","new path"],"upright":"fresh start, bold move, trust the chaos","reversed":"reckless gamble, no plan, avoidable wreck","crypto":"early entry, unproven bet, momentum without data"},
-    {"id":1,"name":"The Magician","keywords":["skill","will","manifest"],"upright":"you have the tools, execution matters","reversed":"smoke and mirrors, fake alpha","crypto":"builder edge, real product vs hype"},
-    {"id":2,"name":"The High Priestess","keywords":["intuition","secrets","signal"],"upright":"hidden info, wait and watch","reversed":"missed signal, noise overwhelms","crypto":"insider flow, quiet accumulation"},
-    {"id":3,"name":"The Empress","keywords":["growth","abundance","nurture"],"upright":"expansion, fertile market","reversed":"overindulgence, weak fundamentals","crypto":"bullish macro, liquidity wave"},
-    {"id":4,"name":"The Emperor","keywords":["order","authority","structure"],"upright":"control, clear rules, strong hands","reversed":"tyrant, fragile regime","crypto":"dominant holder, protocol governance"},
-    {"id":5,"name":"The Hierophant","keywords":["tradition","doctrine","rules"],"upright":"follow the system, regulated path","reversed":"break the dogma, exit legacy","crypto":"institutions, compliance, ETFs"},
-    {"id":6,"name":"The Lovers","keywords":["choice","union","alignment"],"upright":"aligned partnership, right pick","reversed":"conflict, false choice","crypto":"chain split, portfolio focus"},
-    {"id":7,"name":"The Chariot","keywords":["momentum","will","victory"],"upright":"push forward, win by force","reversed":"stall, loss of control","crypto":"trend continuation, breakout"},
-    {"id":8,"name":"Strength","keywords":["courage","discipline","patience"],"upright":"hold steady, tame fear","reversed":"panic, weak hands","crypto":"diamond hands vs capitulation"},
-    {"id":9,"name":"The Hermit","keywords":["solitude","search","wisdom"],"upright":"step back, research deeper","reversed":"isolation, missing market","crypto":"low liquidity, devs quiet"},
-    {"id":10,"name":"Wheel of Fortune","keywords":["cycle","chance","turn"],"upright":"cycle turns up, luck hits","reversed":"downcycle, bad timing","crypto":"rotation, season shift"},
-    {"id":11,"name":"Justice","keywords":["balance","truth","consequence"],"upright":"fair outcome, clean math","reversed":"rigged, delayed justice","crypto":"regulatory action, court case"},
-    {"id":12,"name":"The Hanged Man","keywords":["pause","sacrifice","reframe"],"upright":"wait, new angle needed","reversed":"stuck bag, no exit","crypto":"illiquid position, sunk cost"},
-    {"id":13,"name":"Death","keywords":["end","reset","transformation"],"upright":"cycle ends, make room","reversed":"clinging to dead coin","crypto":"protocol sunset, migration"},
-    {"id":14,"name":"Temperance","keywords":["balance","blend","patience"],"upright":"steady blend, measured moves","reversed":"overexposure, sloppy mix","crypto":"portfolio rebalance"},
-    {"id":15,"name":"The Devil","keywords":["bondage","greed","temptation"],"upright":"toxic attachment, leverage trap","reversed":"break free, cut the chain","crypto":"degen leverage, addiction to pumps"},
-    {"id":16,"name":"The Tower","keywords":["shock","collapse","truth"],"upright":"sudden crash, fake walls fall","reversed":"avoidable disaster, slow leak","crypto":"hack, exploit, liquidation cascade"},
-    {"id":17,"name":"The Star","keywords":["hope","clarity","guidance"],"upright":"signal through noise, renewal","reversed":"false hope, vapor promise","crypto":"long-term conviction, roadmap faith"},
-    {"id":18,"name":"The Moon","keywords":["illusion","fear","uncertainty"],"upright":"fog, deception possible","reversed":"truth emerges, fear fades","crypto":"fake volume, wash trading"},
-    {"id":19,"name":"The Sun","keywords":["success","vitality","clarity"],"upright":"clean win, obvious strength","reversed":"overexposed, hubris risk","crypto":"strong narrative, broad adoption"},
-    {"id":20,"name":"Judgement","keywords":["reckoning","call","revival"],"upright":"wake-up, final decision","reversed":"denial, missed call","crypto":"governance vote, fork decision"},
-    {"id":21,"name":"The World","keywords":["completion","integration","mastery"],"upright":"cycle complete, harvest gains","reversed":"unfinished, loose ends","crypto":"exit liquidity, full rotation"}
+    {
+      "id": 0,
+      "name": "The Fool",
+      "keywords": ["leap", "naivety", "new path"],
+      "upright": "fresh start, bold move, trust the chaos",
+      "reversed": "reckless gamble, no plan, avoidable wreck",
+      "crypto": {
+        "general": "early entry, unproven bet, momentum without data",
+        "decision": { "signal": "buy", "confidence": "low", "reason": "high risk, early stage" },
+        "risk": { "level": "high", "indicators": ["unproven", "no data"] },
+        "timing": { "window": "now", "label": "premature" },
+        "narrative": { "hype": "high", "substance": "low" },
+        "survival": { "runway": "risky", "action": "caution" }
+      },
+      "synergy": ["Magician", "Wheel of Fortune"],
+      "warnings": ["FOMO-driven entry", "missing due diligence"]
+    },
+    {
+      "id": 1,
+      "name": "The Magician",
+      "keywords": ["skill", "will", "manifest"],
+      "upright": "you have the tools, execution matters",
+      "reversed": "smoke and mirrors, fake alpha",
+      "crypto": {
+        "general": "builder edge, real product vs hype",
+        "decision": { "signal": "accumulate", "confidence": "high", "reason": "has fundamentals" },
+        "risk": { "level": "low", "indicators": ["real product"] },
+        "timing": { "window": "now", "label": "opportune" },
+        "narrative": { "hype": "medium", "substance": "high" },
+        "survival": { "runway": "healthy", "action": "build" }
+      },
+      "synergy": ["Fool", "Empress", "Sun"],
+      "warnings": ["execution risk", "team capability"]
+    },
+    {
+      "id": 2,
+      "name": "The High Priestess",
+      "keywords": ["intuition", "secrets", "signal"],
+      "upright": "hidden info, wait and watch",
+      "reversed": "missed signal, noise overwhelms",
+      "crypto": {
+        "general": "insider flow, quiet accumulation",
+        "decision": { "signal": "hold", "confidence": "medium", "reason": "waiting for signal" },
+        "risk": { "level": "medium", "indicators": ["hidden info", "noise"] },
+        "timing": { "window": "soon", "label": "wait for clarity" },
+        "narrative": { "hype": "low", "substance": "medium" },
+        "survival": { "runway": "cautious", "action": "observe" }
+      },
+      "synergy": ["Hermit", "Moon", "Priestess"],
+      "warnings": ["analysis paralysis", "hidden dangers"]
+    },
+    {
+      "id": 3,
+      "name": "The Empress",
+      "keywords": ["growth", "abundance", "nurture"],
+      "upright": "expansion, fertile market",
+      "reversed": "overindulgence, weak fundamentals",
+      "crypto": {
+        "general": "bullish macro, liquidity wave",
+        "decision": { "signal": "buy", "confidence": "high", "reason": "macro tailwinds" },
+        "risk": { "level": "low", "indicators": ["strong fundamentals"] },
+        "timing": { "window": "now", "label": "growth phase" },
+        "narrative": { "hype": "medium", "substance": "high" },
+        "survival": { "runway": "expanding", "action": "scale" }
+      },
+      "synergy": ["Magician", "Sun", "World"],
+      "warnings": ["overextension", "fake yields"]
+    },
+    {
+      "id": 4,
+      "name": "The Emperor",
+      "keywords": ["order", "authority", "structure"],
+      "upright": "control, clear rules, strong hands",
+      "reversed": "tyrant, fragile regime",
+      "crypto": {
+        "general": "dominant holder, protocol governance",
+        "decision": { "signal": "hold", "confidence": "high", "reason": "institutional backing" },
+        "risk": { "level": "low", "indicators": ["centralized control"] },
+        "timing": { "window": "now", "label": "stable" },
+        "narrative": { "hype": "low", "substance": "high" },
+        "survival": { "runway": "secure", "action": "hold" }
+      },
+      "synergy": ["Hierophant", "Justice", "King of Pentacles"],
+      "warnings": ["centralization risk", "governance capture"]
+    },
+    {
+      "id": 5,
+      "name": "The Hierophant",
+      "keywords": ["tradition", "doctrine", "rules"],
+      "upright": "follow the system, regulated path",
+      "reversed": "break the dogma, exit legacy",
+      "crypto": {
+        "general": "institutions, compliance, ETFs",
+        "decision": { "signal": "hold", "confidence": "medium", "reason": "institutional play" },
+        "risk": { "level": "medium", "indicators": ["regulatory dependency"] },
+        "timing": { "window": "soon", "label": "approval pending" },
+        "narrative": { "hype": "low", "substance": "high" },
+        "survival": { "runway": "stable", "action": "comply" }
+      },
+      "synergy": ["Emperor", "Justice", "King of Swords"],
+      "warnings": ["regulatory uncertainty", "slow innovation"]
+    },
+    {
+      "id": 6,
+      "name": "The Lovers",
+      "keywords": ["choice", "union", "alignment"],
+      "upright": "aligned partnership, right pick",
+      "reversed": "conflict, false choice",
+      "crypto": {
+        "general": "chain split, portfolio focus",
+        "decision": { "signal": "buy", "confidence": "medium", "reason": "partnership upside" },
+        "risk": { "level": "medium", "indicators": ["partnership risk"] },
+        "timing": { "window": "now", "label": "aligned" },
+        "narrative": { "hype": "medium", "substance": "medium" },
+        "survival": { "runway": "dependent", "action": "evaluate partner" }
+      },
+      "synergy": ["Six of Cups", "Two of Pentacles"],
+      "warnings": ["partnership dissolution", "misaligned incentives"]
+    },
+    {
+      "id": 7,
+      "name": "The Chariot",
+      "keywords": ["momentum", "will", "victory"],
+      "upright": "push forward, win by force",
+      "reversed": "stall, loss of control",
+      "crypto": {
+        "general": "trend continuation, breakout",
+        "decision": { "signal": "buy", "confidence": "high", "reason": "strong momentum" },
+        "risk": { "level": "low", "indicators": ["momentum"] },
+        "timing": { "window": "now", "label": "breakout" },
+        "narrative": { "hype": "high", "substance": "medium" },
+        "survival": { "runway": "momentum", "action": "leverage" }
+      },
+      "synergy": ["Eight of Wands", "Knight of Wands"],
+      "warnings": ["overtrading", "reversal risk"]
+    },
+    {
+      "id": 8,
+      "name": "Strength",
+      "keywords": ["courage", "discipline", "patience"],
+      "upright": "hold steady, tame fear",
+      "reversed": "panic, weak hands",
+      "crypto": {
+        "general": "diamond hands vs capitulation",
+        "decision": { "signal": "hold", "confidence": "high", "reason": "conviction play" },
+        "risk": { "level": "low", "indicators": ["strong conviction"] },
+        "timing": { "window": "later", "label": "patience rewarded" },
+        "narrative": { "hype": "low", "substance": "high" },
+        "survival": { "runway": "long-term", "action": "hold" }
+      },
+      "synergy": ["Four of Swords", "Nine of Wands"],
+      "warnings": ["emotional trading", "capitulation"]
+    },
+    {
+      "id": 9,
+      "name": "The Hermit",
+      "keywords": ["solitude", "search", "wisdom"],
+      "upright": "step back, research deeper",
+      "reversed": "isolation, missing market",
+      "crypto": {
+        "general": "low liquidity, devs quiet",
+        "decision": { "signal": "avoid", "confidence": "medium", "reason": "insufficient data" },
+        "risk": { "level": "high", "indicators": ["low liquidity", "quiet devs"] },
+        "timing": { "window": "later", "label": " DYOR required" },
+        "narrative": { "hype": "low", "substance": "unknown" },
+        "survival": { "runway": "uncertain", "action": "research" }
+      },
+      "synergy": ["High Priestess", "Five of Swords"],
+      "warnings": ["hidden development", "rug potential"]
+    },
+    {
+      "id": 10,
+      "name": "Wheel of Fortune",
+      "keywords": ["cycle", "chance", "turn"],
+      "upright": "cycle turns up, luck hits",
+      "reversed": "downcycle, bad timing",
+      "crypto": {
+        "general": "rotation, season shift",
+        "decision": { "signal": "accumulate", "confidence": "medium", "reason": "cycle turn" },
+        "risk": { "level": "medium", "indicators": ["timing dependent"] },
+        "timing": { "window": "soon", "label": "turn incoming" },
+        "narrative": { "hype": "medium", "substance": "medium" },
+        "survival": { "runway": "cyclical", "action": "rotate" }
+      },
+      "synergy": ["Temperance", "World", "Three of Cups"],
+      "warnings": ["timing the bottom", "false signals"]
+    },
+    {
+      "id": 11,
+      "name": "Justice",
+      "keywords": ["balance", "truth", "consequence"],
+      "upright": "fair outcome, clean math",
+      "reversed": "rigged, delayed justice",
+      "crypto": {
+        "general": "regulatory action, court case",
+        "decision": { "signal": "hold", "confidence": "medium", "reason": "outcome pending" },
+        "risk": { "level": "medium", "indicators": ["legal risk"] },
+        "timing": { "window": "later", "label": "resolution expected" },
+        "narrative": { "hype": "low", "substance": "high" },
+        "survival": { "runway": "dependent", "action": "monitor" }
+      },
+      "synergy": ["Hierophant", "King of Swords", "Eight of Swords"],
+      "warnings": ["regulatory action", "delayed consequences"]
+    },
+    {
+      "id": 12,
+      "name": "The Hanged Man",
+      "keywords": ["pause", "sacrifice", "reframe"],
+      "upright": "wait, new angle needed",
+      "reversed": "stuck bag, no exit",
+      "crypto": {
+        "general": "illiquid position, sunk cost",
+        "decision": { "signal": "avoid", "confidence": "high", "reason": "no liquidity" },
+        "risk": { "level": "high", "indicators": ["illiquid", "sunk cost"] },
+        "timing": { "window": "later", "label": "stuck" },
+        "narrative": { "hype": "low", "substance": "low" },
+        "survival": { "runway": "trapped", "action": "exit" }
+      },
+      "synergy": ["Eight of Cups", "Ten of Swords"],
+      "warnings": ["lock-up expiration", "loss realization"]
+    },
+    {
+      "id": 13,
+      "name": "Death",
+      "keywords": ["end", "reset", "transformation"],
+      "upright": "cycle ends, make room",
+      "reversed": "clinging to dead coin",
+      "crypto": {
+        "general": "protocol sunset, migration",
+        "decision": { "signal": "sell", "confidence": "high", "reason": "end of life" },
+        "risk": { "level": "high", "indicators": ["sunset protocol"] },
+        "timing": { "window": "now", "label": "exit immediately" },
+        "narrative": { "hype": "low", "substance": "declining" },
+        "survival": { "runway": "ending", "action": "migrate" }
+      },
+      "synergy": ["Tower", "Sun", "World"],
+      "warnings": ["protocol migration", "token swap risks"]
+    },
+    {
+      "id": 14,
+      "name": "Temperance",
+      "keywords": ["balance", "blend", "patience"],
+      "upright": "steady blend, measured moves",
+      "reversed": "overexposure, sloppy mix",
+      "crypto": {
+        "general": "portfolio rebalance",
+        "decision": { "signal": "hold", "confidence": "medium", "reason": "balanced" },
+        "risk": { "level": "low", "indicators": ["balanced"] },
+        "timing": { "window": "soon", "label": "rebalance" },
+        "narrative": { "hype": "low", "substance": "high" },
+        "survival": { "runway": "stable", "action": "rebalance" }
+      },
+      "synergy": ["Wheel of Fortune", "King of Pentacles"],
+      "warnings": ["over-diversification", "tracking error"]
+    },
+    {
+      "id": 15,
+      "name": "The Devil",
+      "keywords": ["bondage", "greed", "temptation"],
+      "upright": "toxic attachment, leverage trap",
+      "reversed": "break free, cut the chain",
+      "crypto": {
+        "general": "degen leverage, addiction to pumps",
+        "decision": { "signal": "avoid", "confidence": "high", "reason": "leverage trap" },
+        "risk": { "level": "critical", "indicators": ["leverage", "greed", "addiction"] },
+        "timing": { "window": "later", "label": "stay away" },
+        "narrative": { "hype": "high", "substance": "low" },
+        "survival": { "runway": "dangerous", "action": "exit leverage" }
+      },
+      "synergy": ["Five of Pentacles", "Knight of Swords"],
+      "warnings": ["liquidation cascade", "degen addiction", "ponzi dynamics"]
+    },
+    {
+      "id": 16,
+      "name": "The Tower",
+      "keywords": ["shock", "collapse", "truth"],
+      "upright": "sudden crash, fake walls fall",
+      "reversed": "avoidable disaster, slow leak",
+      "crypto": {
+        "general": "hack, exploit, liquidation cascade",
+        "decision": { "signal": "sell", "confidence": "high", "reason": "imminent crash" },
+        "risk": { "level": "critical", "indicators": ["exploit", "hack", "liquidation"] },
+        "timing": { "window": "now", "label": "exit fast" },
+        "narrative": { "hype": "high", "substance": "low" },
+        "survival": { "runway": "threatened", "action": "protect capital" }
+      },
+      "synergy": ["Death", "Three of Swords", "Ten of Swords"],
+      "warnings": ["smart contract vulnerability", "oracle manipulation", "governance attack"]
+    },
+    {
+      "id": 17,
+      "name": "The Star",
+      "keywords": ["hope", "clarity", "guidance"],
+      "upright": "signal through noise, renewal",
+      "reversed": "false hope, vapor promise",
+      "crypto": {
+        "general": "long-term conviction, roadmap faith",
+        "decision": { "signal": "accumulate", "confidence": "medium", "reason": "long-term play" },
+        "risk": { "level": "medium", "indicators": ["long-term"] },
+        "timing": { "window": "later", "label": "patience" },
+        "narrative": { "hype": "low", "substance": "medium" },
+        "survival": { "runway": "hopeful", "action": "believe" }
+      },
+      "synergy": ["Sun", "Temperance", "Nine of Cups"],
+      "warnings": ["roadmap delays", "team changes", "scope creep"]
+    },
+    {
+      "id": 18,
+      "name": "The Moon",
+      "keywords": ["illusion", "fear", "uncertainty"],
+      "upright": "fog, deception possible",
+      "reversed": "truth emerges, fear fades",
+      "crypto": {
+        "general": "fake volume, wash trading",
+        "decision": { "signal": "avoid", "confidence": "medium", "reason": "uncertainty" },
+        "risk": { "level": "high", "indicators": ["fake volume", "deception"] },
+        "timing": { "window": "later", "label": "clarity needed" },
+        "narrative": { "hype": "high", "substance": "low" },
+        "survival": { "runway": "obscured", "action": "verify" }
+      },
+      "synergy": ["High Priestess", "Devil", "Seven of Cups"],
+      "warnings": ["wash trading", "fake partnerships", "misleading metrics"]
+    },
+    {
+      "id": 19,
+      "name": "The Sun",
+      "keywords": ["success", "vitality", "clarity"],
+      "upright": "clean win, obvious strength",
+      "reversed": "overexposed, hubris risk",
+      "crypto": {
+        "general": "strong narrative, broad adoption",
+        "decision": { "signal": "buy", "confidence": "high", "reason": "strong fundamentals" },
+        "risk": { "level": "low", "indicators": ["strong"] },
+        "timing": { "window": "now", "label": "optimal" },
+        "narrative": { "hype": "medium", "substance": "high" },
+        "survival": { "runway": "thriving", "action": "scale" }
+      },
+      "synergy": ["Empress", "World", "Star", "Nine of Cups"],
+      "warnings": ["hubris", "overconfidence", "attention trap"]
+    },
+    {
+      "id": 20,
+      "name": "Judgement",
+      "keywords": ["reckoning", "call", "revival"],
+      "upright": "wake-up, final decision",
+      "reversed": "denial, missed call",
+      "crypto": {
+        "general": "governance vote, fork decision",
+        "decision": { "signal": "decide", "confidence": "high", "reason": "critical juncture" },
+        "risk": { "level": "medium", "indicators": ["fork risk"] },
+        "timing": { "window": "now", "label": "decide now" },
+        "narrative": { "hype": "medium", "substance": "medium" },
+        "survival": { "runway": "pivotal", "action": "vote" }
+      },
+      "synergy": ["Justice", "World", "Death"],
+      "warnings": ["governance drama", "contentious fork", "community split"]
+    },
+    {
+      "id": 21,
+      "name": "The World",
+      "keywords": ["completion", "integration", "mastery"],
+      "upright": "cycle complete, harvest gains",
+      "reversed": "unfinished, loose ends",
+      "crypto": {
+        "general": "exit liquidity, full rotation",
+        "decision": { "signal": "sell", "confidence": "high", "reason": "harvest time" },
+        "risk": { "level": "low", "indicators": ["harvest"] },
+        "timing": { "window": "now", "label": "exit" },
+        "narrative": { "hype": "medium", "substance": "high" },
+        "survival": { "runway": "complete", "action": "harvest" }
+      },
+      "synergy": ["Wheel of Fortune", "Sun", "Temperance", "Judgement"],
+      "warnings": ["exit liquidity trap", "tax implications", "reinvestment timing"]
+    }
   ],
   "minor_arcana": {
     "wands": [
-      {"rank":"Ace","name":"Ace of Wands","upright":"spark, new narrative","reversed":"false start","crypto":"new meta, early signal"},
-      {"rank":"Two","name":"Two of Wands","upright":"planning, map the move","reversed":"fear of leap","crypto":"watchlist stage"},
-      {"rank":"Three","name":"Three of Wands","upright":"expansion, thesis playing out","reversed":"delays, weak execution","crypto":"ecosystem growth"},
-      {"rank":"Four","name":"Four of Wands","upright":"stability, milestone","reversed":"fragile base","crypto":"temporary top"},
-      {"rank":"Five","name":"Five of Wands","upright":"conflict, noisy market","reversed":"avoid fight","crypto":"competing narratives"},
-      {"rank":"Six","name":"Six of Wands","upright":"public win, momentum","reversed":"hype fades","crypto":"CT approval"},
-      {"rank":"Seven","name":"Seven of Wands","upright":"defend position","reversed":"losing ground","crypto":"defending a thesis"},
-      {"rank":"Eight","name":"Eight of Wands","upright":"speed, rapid move","reversed":"stall, misfire","crypto":"news-driven pump"},
-      {"rank":"Nine","name":"Nine of Wands","upright":"grit, last stand","reversed":"exhaustion","crypto":"bagholder fatigue"},
-      {"rank":"Ten","name":"Ten of Wands","upright":"overload, heavy bags","reversed":"drop the weight","crypto":"overexposed portfolio"},
-      {"rank":"Page","name":"Page of Wands","upright":"curious scout","reversed":"impulsive","crypto":"new degen"},
-      {"rank":"Knight","name":"Knight of Wands","upright":"aggressive push","reversed":"reckless chase","crypto":"apeing in"},
-      {"rank":"Queen","name":"Queen of Wands","upright":"confident builder","reversed":"manipulative hype","crypto":"strong founder energy"},
-      {"rank":"King","name":"King of Wands","upright":"visionary leader","reversed":"tyrant, ego","crypto":"dominant narrative driver"}
+      {
+        "rank": "Ace",
+        "name": "Ace of Wands",
+        "upright": "spark, new narrative",
+        "reversed": "false start",
+        "crypto": { "decision": { "signal": "accumulate" }, "risk": { "level": "medium" }, "general": "new meta, early signal" }
+      },
+      {
+        "rank": "Two",
+        "name": "Two of Wands",
+        "upright": "planning, map the move",
+        "reversed": "fear of leap",
+        "crypto": { "decision": { "signal": "hold" }, "risk": { "level": "low" }, "general": "watchlist stage" }
+      },
+      {
+        "rank": "Three",
+        "name": "Three of Wands",
+        "upright": "expansion, thesis playing out",
+        "reversed": "delays, weak execution",
+        "crypto": { "decision": { "signal": "buy" }, "risk": { "level": "low" }, "general": "ecosystem growth" }
+      },
+      {
+        "rank": "Four",
+        "name": "Four of Wands",
+        "upright": "stability, milestone",
+        "reversed": "fragile base",
+        "crypto": { "decision": { "signal": "hold" }, "risk": { "level": "medium" }, "general": "temporary top" }
+      },
+      {
+        "rank": "Five",
+        "name": "Five of Wands",
+        "upright": "conflict, noisy market",
+        "reversed": "avoid fight",
+        "crypto": { "decision": { "signal": "avoid" }, "risk": { "level": "high" }, "general": "competing narratives" }
+      },
+      {
+        "rank": "Six",
+        "name": "Six of Wands",
+        "upright": "public win, momentum",
+        "reversed": "hype fades",
+        "crypto": { "decision": { "signal": "sell" }, "risk": { "level": "medium" }, "general": "CT approval" }
+      },
+      {
+        "rank": "Seven",
+        "name": "Seven of Wands",
+        "upright": "defend position",
+        "reversed": "losing ground",
+        "crypto": { "decision": { "signal": "hold" }, "risk": { "level": "medium" }, "general": "defending a thesis" }
+      },
+      {
+        "rank": "Eight",
+        "name": "Eight of Wands",
+        "upright": "speed, rapid move",
+        "reversed": "stall, misfire",
+        "crypto": { "decision": { "signal": "buy" }, "risk": { "level": "medium" }, "general": "news-driven pump" }
+      },
+      {
+        "rank": "Nine",
+        "name": "Nine of Wands",
+        "upright": "grit, last stand",
+        "reversed": "exhaustion",
+        "crypto": { "decision": { "signal": "hold" }, "risk": { "level": "high" }, "general": "bagholder fatigue" }
+      },
+      {
+        "rank": "Ten",
+        "name": "Ten of Wands",
+        "upright": "overload, heavy bags",
+        "reversed": "drop the weight",
+        "crypto": { "decision": { "signal": "sell" }, "risk": { "level": "high" }, "general": "overexposed portfolio" }
+      },
+      {
+        "rank": "Page",
+        "name": "Page of Wands",
+        "upright": "curious scout",
+        "reversed": "impulsive",
+        "crypto": { "decision": { "signal": "avoid" }, "risk": { "level": "high" }, "general": "new degen" }
+      },
+      {
+        "rank": "Knight",
+        "name": "Knight of Wands",
+        "upright": "aggressive push",
+        "reversed": "reckless chase",
+        "crypto": { "decision": { "signal": "buy" }, "risk": { "level": "high" }, "general": "apeing in" }
+      },
+      {
+        "rank": "Queen",
+        "name": "Queen of Wands",
+        "upright": "confident builder",
+        "reversed": "manipulative hype",
+        "crypto": { "decision": { "signal": "hold" }, "risk": { "level": "medium" }, "general": "strong founder energy" }
+      },
+      {
+        "rank": "King",
+        "name": "King of Wands",
+        "upright": "visionary leader",
+        "reversed": "tyrant, ego",
+        "crypto": { "decision": { "signal": "accumulate" }, "risk": { "level": "low" }, "general": "dominant narrative driver" }
+      }
     ],
     "cups": [
-      {"rank":"Ace","name":"Ace of Cups","upright":"emotional surge","reversed":"emptiness","crypto":"community love"},
-      {"rank":"Two","name":"Two of Cups","upright":"partnership","reversed":"misaligned deal","crypto":"strategic collab"},
-      {"rank":"Three","name":"Three of Cups","upright":"celebration","reversed":"excess","crypto":"victory lap"},
-      {"rank":"Four","name":"Four of Cups","upright":"boredom, apathy","reversed":"new interest","crypto":"stale bag"},
-      {"rank":"Five","name":"Five of Cups","upright":"loss focus","reversed":"recovery","crypto":"post-rug grief"},
-      {"rank":"Six","name":"Six of Cups","upright":"nostalgia","reversed":"stuck in past","crypto":"old cycle bias"},
-      {"rank":"Seven","name":"Seven of Cups","upright":"many options, illusion","reversed":"clear choice","crypto":"airdrops everywhere"},
-      {"rank":"Eight","name":"Eight of Cups","upright":"walk away","reversed":"cling to loss","crypto":"exit position"},
-      {"rank":"Nine","name":"Nine of Cups","upright":"wish granted","reversed":"hollow win","crypto":"profit satisfaction"},
-      {"rank":"Ten","name":"Ten of Cups","upright":"full harmony","reversed":"cracks in joy","crypto":"community peak"},
-      {"rank":"Page","name":"Page of Cups","upright":"new feeling","reversed":"immaturity","crypto":"new cult forming"},
-      {"rank":"Knight","name":"Knight of Cups","upright":"idealistic push","reversed":"delusion","crypto":"romantic bull"},
-      {"rank":"Queen","name":"Queen of Cups","upright":"intuitive guide","reversed":"emotional fog","crypto":"empathetic leader"},
-      {"rank":"King","name":"King of Cups","upright":"emotional mastery","reversed":"cold control","crypto":"steady steward"}
+      {
+        "rank": "Ace",
+        "name": "Ace of Cups",
+        "upright": "emotional surge",
+        "reversed": "emptiness",
+        "crypto": { "decision": { "signal": "hold" }, "risk": { "level": "medium" }, "general": "community love" }
+      },
+      {
+        "rank": "Two",
+        "name": "Two of Cups",
+        "upright": "partnership",
+        "reversed": "misaligned deal",
+        "crypto": { "decision": { "signal": "hold" }, "risk": { "level": "medium" }, "general": "strategic collab" }
+      },
+      {
+        "rank": "Three",
+        "name": "Three of Cups",
+        "upright": "celebration",
+        "reversed": "excess",
+        "crypto": { "decision": { "signal": "sell" }, "risk": { "level": "high" }, "general": "victory lap" }
+      },
+      {
+        "rank": "Four",
+        "name": "Four of Cups",
+        "upright": "boredom, apathy",
+        "reversed": "new interest",
+        "crypto": { "decision": { "signal": "avoid" }, "risk": { "level": "medium" }, "general": "stale bag" }
+      },
+      {
+        "rank": "Five",
+        "name": "Five of Cups",
+        "upright": "loss focus",
+        "reversed": "recovery",
+        "crypto": { "decision": { "signal": "sell" }, "risk": { "level": "high" }, "general": "post-rug grief" }
+      },
+      {
+        "rank": "Six",
+        "name": "Six of Cups",
+        "upright": "nostalgia",
+        "reversed": "stuck in past",
+        "crypto": { "decision": { "signal": "avoid" }, "risk": { "level": "medium" }, "general": "old cycle bias" }
+      },
+      {
+        "rank": "Seven",
+        "name": "Seven of Cups",
+        "upright": "many options, illusion",
+        "reversed": "clear choice",
+        "crypto": { "decision": { "signal": "avoid" }, "risk": { "level": "high" }, "general": "airdrops everywhere" }
+      },
+      {
+        "rank": "Eight",
+        "name": "Eight of Cups",
+        "upright": "walk away",
+        "reversed": "cling to loss",
+        "crypto": { "decision": { "signal": "sell" }, "risk": { "level": "high" }, "general": "exit position" }
+      },
+      {
+        "rank": "Nine",
+        "name": "Nine of Cups",
+        "upright": "wish granted",
+        "reversed": "hollow win",
+        "crypto": { "decision": { "signal": "sell" }, "risk": { "level": "low" }, "general": "profit satisfaction" }
+      },
+      {
+        "rank": "Ten",
+        "name": "Ten of Cups",
+        "upright": "full harmony",
+        "reversed": "cracks in joy",
+        "crypto": { "decision": { "signal": "hold" }, "risk": { "level": "medium" }, "general": "community peak" }
+      },
+      {
+        "rank": "Page",
+        "name": "Page of Cups",
+        "upright": "new feeling",
+        "reversed": "immaturity",
+        "crypto": { "decision": { "signal": "avoid" }, "risk": { "high": "medium" }, "general": "new cult forming" }
+      },
+      {
+        "rank": "Knight",
+        "name": "Knight of Cups",
+        "upright": "idealistic push",
+        "reversed": "delusion",
+        "crypto": { "decision": { "signal": "hold" }, "risk": { "level": "medium" }, "general": "romantic bull" }
+      },
+      {
+        "rank": "Queen",
+        "name": "Queen of Cups",
+        "upright": "intuitive guide",
+        "reversed": "emotional fog",
+        "crypto": { "decision": { "signal": "hold" }, "risk": { "level": "medium" }, "general": "empathetic leader" }
+      },
+      {
+        "rank": "King",
+        "name": "King of Cups",
+        "upright": "emotional mastery",
+        "reversed": "cold control",
+        "crypto": { "decision": { "signal": "accumulate" }, "risk": { "level": "low" }, "general": "steady steward" }
+      }
     ],
     "swords": [
-      {"rank":"Ace","name":"Ace of Swords","upright":"clarity, truth cut","reversed":"confusion","crypto":"hard data"},
-      {"rank":"Two","name":"Two of Swords","upright":"stalemate","reversed":"forced choice","crypto":"market indecision"},
-      {"rank":"Three","name":"Three of Swords","upright":"pain, betrayal","reversed":"healing","crypto":"rug pull"},
-      {"rank":"Four","name":"Four of Swords","upright":"rest, pause","reversed":"burnout","crypto":"sideline period"},
-      {"rank":"Five","name":"Five of Swords","upright":"dirty win","reversed":"make peace","crypto":"toxic competition"},
-      {"rank":"Six","name":"Six of Swords","upright":"transition","reversed":"stuck move","crypto":"migration to new chain"},
-      {"rank":"Seven","name":"Seven of Swords","upright":"deception","reversed":"exposed","crypto":"insider dumping"},
-      {"rank":"Eight","name":"Eight of Swords","upright":"trapped mindset","reversed":"breakout","crypto":"fear locks"},
-      {"rank":"Nine","name":"Nine of Swords","upright":"anxiety","reversed":"relief","crypto":"FUD spiral"},
-      {"rank":"Ten","name":"Ten of Swords","upright":"dead end","reversed":"rebirth","crypto":"capitulation"},
-      {"rank":"Page","name":"Page of Swords","upright":"sharp observer","reversed":"gossip","crypto":"alpha hunter"},
-      {"rank":"Knight","name":"Knight of Swords","upright":"fast attack","reversed":"reckless","crypto":"sudden short"},
-      {"rank":"Queen","name":"Queen of Swords","upright":"clear judgment","reversed":"cruel cut","crypto":"ruthless analyst"},
-      {"rank":"King","name":"King of Swords","upright":"strategic mind","reversed":"tyrant logic","crypto":"cold operator"}
+      {
+        "rank": "Ace",
+        "name": "Ace of Swords",
+        "upright": "clarity, truth cut",
+        "reversed": "confusion",
+        "crypto": { "decision": { "signal": "buy" }, "risk": { "level": "low" }, "general": "hard data" }
+      },
+      {
+        "rank": "Two",
+        "name": "Two of Swords",
+        "upright": "stalemate",
+        "reversed": "forced choice",
+        "crypto": { "decision": { "signal": "hold" }, "risk": { "level": "medium" }, "general": "market indecision" }
+      },
+      {
+        "rank": "Three",
+        "name": "Three of Swords",
+        "upright": "pain, betrayal",
+        "reversed": "healing",
+        "crypto": { "decision": { "signal": "sell" }, "risk": { "level": "critical" }, "general": "rug pull" }
+      },
+      {
+        "rank": "Four",
+        "name": "Four of Swords",
+        "upright": "rest, pause",
+        "reversed": "burnout",
+        "crypto": { "decision": { "signal": "hold" }, "risk": { "level": "low" }, "general": "sideline period" }
+      },
+      {
+        "rank": "Five",
+        "name": "Five of Swords",
+        "upright": "dirty win",
+        "reversed": "make peace",
+        "crypto": { "decision": { "signal": "avoid" }, "risk": { "level": "high" }, "general": "toxic competition" }
+      },
+      {
+        "rank": "Six",
+        "name": "Six of Swords",
+        "upright": "transition",
+        "reversed": "stuck move",
+        "crypto": { "decision": { "signal": "hold" }, "risk": { "level": "medium" }, "general": "migration to new chain" }
+      },
+      {
+        "rank": "Seven",
+        "name": "Seven of Swords",
+        "upright": "deception",
+        "reversed": "exposed",
+        "crypto": { "decision": { "signal": "avoid" }, "risk": { "level": "critical" }, "general": "insider dumping" }
+      },
+      {
+        "rank": "Eight",
+        "name": "Eight of Swords",
+        "upright": "trapped mindset",
+        "reversed": "breakout",
+        "crypto": { "decision": { "signal": "hold" }, "risk": { "level": "high" }, "general": "fear locks" }
+      },
+      {
+        "rank": "Nine",
+        "name": "Nine of Swords",
+        "upright": "anxiety",
+        "reversed": "relief",
+        "crypto": { "decision": { "signal": "hold" }, "risk": { "level": "medium" }, "general": "FUD spiral" }
+      },
+      {
+        "rank": "Ten",
+        "name": "Ten of Swords",
+        "upright": "dead end",
+        "reversed": "rebirth",
+        "crypto": { "decision": { "signal": "sell" }, "risk": { "level": "critical" }, "general": "capitulation" }
+      },
+      {
+        "rank": "Page",
+        "name": "Page of Swords",
+        "upright": "sharp observer",
+        "reversed": "gossip",
+        "crypto": { "decision": { "signal": "hold" }, "risk": { "level": "medium" }, "general": "alpha hunter" }
+      },
+      {
+        "rank": "Knight",
+        "name": "Knight of Swords",
+        "upright": "fast attack",
+        "reversed": "reckless",
+        "crypto": { "decision": { "signal": "buy" }, "risk": { "level": "high" }, "general": "sudden short" }
+      },
+      {
+        "rank": "Queen",
+        "name": "Queen of Swords",
+        "upright": "clear judgment",
+        "reversed": "cruel cut",
+        "crypto": { "decision": { "signal": "hold" }, "risk": { "level": "low" }, "general": "ruthless analyst" }
+      },
+      {
+        "rank": "King",
+        "name": "King of Swords",
+        "upright": "strategic mind",
+        "reversed": "tyrant logic",
+        "crypto": { "decision": { "signal": "accumulate" }, "risk": { "level": "low" }, "general": "cold operator" }
+      }
     ],
     "pentacles": [
-      {"rank":"Ace","name":"Ace of Pentacles","upright":"new value","reversed":"missed chance","crypto":"seed round"},
-      {"rank":"Two","name":"Two of Pentacles","upright":"balance funds","reversed":"overleveraged","crypto":"juggling positions"},
-      {"rank":"Three","name":"Three of Pentacles","upright":"teamwork","reversed":"weak collab","crypto":"builder squad"},
-      {"rank":"Four","name":"Four of Pentacles","upright":"hold tight","reversed":"loss of control","crypto":"paper hands"},
-      {"rank":"Five","name":"Five of Pentacles","upright":"scarcity","reversed":"recovery","crypto":"liquidity drought"},
-      {"rank":"Six","name":"Six of Pentacles","upright":"fair exchange","reversed":"imbalance","crypto":"token incentives"},
-      {"rank":"Seven","name":"Seven of Pentacles","upright":"patience","reversed":"impatience","crypto":"long-term hold"},
-      {"rank":"Eight","name":"Eight of Pentacles","upright":"craft, grind","reversed":"lazy build","crypto":"dev shipping"},
-      {"rank":"Nine","name":"Nine of Pentacles","upright":"independent wealth","reversed":"fragile gains","crypto":"solo whale"},
-      {"rank":"Ten","name":"Ten of Pentacles","upright":"legacy wealth","reversed":"family drama","crypto":"multi-cycle holder"},
-      {"rank":"Page","name":"Page of Pentacles","upright":"new skill","reversed":"wasted effort","crypto":"new dev learning"},
-      {"rank":"Knight","name":"Knight of Pentacles","upright":"steady progress","reversed":"stagnation","crypto":"slow builder"},
-      {"rank":"Queen","name":"Queen of Pentacles","upright":"resourceful","reversed":"materialistic","crypto":"treasury steward"},
-      {"rank":"King","name":"King of Pentacles","upright":"wealth mastery","reversed":"greed","crypto":"protocol whale"}
+      {
+        "rank": "Ace",
+        "name": "Ace of Pentacles",
+        "upright": "new value",
+        "reversed": "missed chance",
+        "crypto": { "decision": { "signal": "accumulate" }, "risk": { "level": "low" }, "general": "seed round" }
+      },
+      {
+        "rank": "Two",
+        "name": "Two of Pentacles",
+        "upright": "balance funds",
+        "reversed": "overleveraged",
+        "crypto": { "decision": { "signal": "hold" }, "risk": { "level": "high" }, "general": "juggling positions" }
+      },
+      {
+        "rank": "Three",
+        "name": "Three of Pentacles",
+        "upright": "teamwork",
+        "reversed": "weak collab",
+        "crypto": { "decision": { "signal": "hold" }, "risk": { "level": "medium" }, "general": "builder squad" }
+      },
+      {
+        "rank": "Four",
+        "name": "Four of Pentacles",
+        "upright": "hold tight",
+        "reversed": "loss of control",
+        "crypto": { "decision": { "signal": "hold" }, "risk": { "level": "low" }, "general": "paper hands" }
+      },
+      {
+        "rank": "Five",
+        "name": "Five of Pentacles",
+        "upright": "scarcity",
+        "reversed": "recovery",
+        "crypto": { "decision": { "signal": "sell" }, "risk": { "level": "high" }, "general": "liquidity drought" }
+      },
+      {
+        "rank": "Six",
+        "name": "Six of Pentacles",
+        "upright": "fair exchange",
+        "reversed": "imbalance",
+        "crypto": { "decision": { "signal": "hold" }, "risk": { "level": "medium" }, "general": "token incentives" }
+      },
+      {
+        "rank": "Seven",
+        "name": "Seven of Pentacles",
+        "upright": "patience",
+        "reversed": "impatience",
+        "crypto": { "decision": { "signal": "hold" }, "risk": { "level": "low" }, "general": "long-term hold" }
+      },
+      {
+        "rank": "Eight",
+        "name": "Eight of Pentacles",
+        "upright": "craft, grind",
+        "reversed": "lazy build",
+        "crypto": { "decision": { "signal": "accumulate" }, "risk": { "level": "low" }, "general": "dev shipping" }
+      },
+      {
+        "rank": "Nine",
+        "name": "Nine of Pentacles",
+        "upright": "independent wealth",
+        "reversed": "fragile gains",
+        "crypto": { "decision": { "signal": "hold" }, "risk": { "level": "medium" }, "general": "solo whale" }
+      },
+      {
+        "rank": "Ten",
+        "name": "Ten of Pentacles",
+        "upright": "legacy wealth",
+        "reversed": "family drama",
+        "crypto": { "decision": { "signal": "accumulate" }, "risk": { "level": "low" }, "general": "multi-cycle holder" }
+      },
+      {
+        "rank": "Page",
+        "name": "Page of Pentacles",
+        "upright": "new skill",
+        "reversed": "wasted effort",
+        "crypto": { "decision": { "signal": "hold" }, "risk": { "level": "medium" }, "general": "new dev learning" }
+      },
+      {
+        "rank": "Knight",
+        "name": "Knight of Pentacles",
+        "upright": "steady progress",
+        "reversed": "stagnation",
+        "crypto": { "decision": { "signal": "hold" }, "risk": { "level": "low" }, "general": "slow builder" }
+      },
+      {
+        "rank": "Queen",
+        "name": "Queen of Pentacles",
+        "upright": "resourceful",
+        "reversed": "materialistic",
+        "crypto": { "decision": { "signal": "accumulate" }, "risk": { "level": "low" }, "general": "treasury steward" }
+      },
+      {
+        "rank": "King",
+        "name": "King of Pentacles",
+        "upright": "wealth mastery",
+        "reversed": "greed",
+        "crypto": { "decision": { "signal": "buy" }, "risk": { "level": "low" }, "general": "protocol whale" }
+      }
     ]
   }
 }

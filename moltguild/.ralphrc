@@ -1,0 +1,21 @@
+# MoltGuild Ralph Configuration
+
+PROJECT_NAME="moltguild"
+PROJECT_TYPE="typescript-solana"
+
+# Loop settings
+MAX_CALLS_PER_HOUR=50
+CLAUDE_TIMEOUT_MINUTES=20
+CLAUDE_OUTPUT_FORMAT="json"
+
+# Tool permissions (what Ralph can do)
+ALLOWED_TOOLS="Write,Read,Edit,Bash(git *),Bash(npm *),Bash(anchor *),Bash(vercel *)"
+
+# Session management
+SESSION_CONTINUITY=true
+SESSION_EXPIRY_HOURS=24
+
+# Circuit breaker thresholds
+CB_NO_PROGRESS_THRESHOLD=3
+CB_SAME_ERROR_THRESHOLD=5
+CB_COOLDOWN_MINUTES=30
