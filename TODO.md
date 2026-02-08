@@ -49,15 +49,16 @@
   - [x] Created test script (scripts/test-profile-creation.ts)
   - [x] Documented integration in INTEGRATION_GUIDE.md
   - [ ] Test on devnet with real wallet (ready for testing)
-- [ ] **Create demo data on devnet**
-  - 3-5 agent profiles
-  - 2-3 guilds
-  - 1-2 projects with escrow
-  - Endorsements between agents
-- [ ] **Agent profile view page** (`/agents/[id]`)
-  - Fetch profile data from on-chain account
-  - Display: name, bio, skills, reputation, endorsements
-  - "Endorse" button (if logged in)
+- [⏸️] **Create demo data on devnet** - BLOCKED (insufficient devnet SOL)
+  - [x] Created seed-demo-data.ts (5 agents, 3 guilds, 2 projects, endorsements)
+  - [x] Created seed-minimal.ts (3 agents, 2 guilds, 1 project)
+  - [ ] Need 0.1 SOL to run seed-minimal.ts (wallet: 0.003 SOL)
+  - [ ] Devnet faucet rate-limited - waiting for reset or manual funding
+- [x] **Agent profile view page** (`/agents/[id]`) ✅ 3:30 AM
+  - [x] Fetch profile data from on-chain account
+  - [x] Display: name, bio, skills, reputation, endorsements
+  - [x] "Endorse" button with form (if logged in)
+  - [x] Added helper functions: getAgentProfile, endorseAgent, getEndorsementPDA
 
 ### Day 6 (Feb 9) - Guild Pages
 - [ ] **Guild directory** (`/guilds`)

@@ -86,6 +86,27 @@ export async function fetchAgentProfile(program: Program<Moltguild>, owner: Publ
 }
 
 /**
+ * Fetch agent profile by PDA directly
+ */
+export async function getAgentProfile(connection: Connection, profilePDA: PublicKey) {
+  try {
+    // Create minimal provider for read-only operations
+    const provider = new AnchorProvider(
+      connection,
+      {} as any, // No wallet needed for reading
+      { commitment: "confirmed" }
+    );
+    const program = new Program<Moltguild>(IDL as Moltguild, provider);
+    
+    const profile = await program.account.agentProfile.fetch(profilePDA);
+    return profile;
+  } catch (error) {
+    console.error("Failed to fetch agent profile:", error);
+    return null;
+  }
+}
+
+/**
  * Fetch all agent profiles
  */
 export async function fetchAllAgentProfiles(program: Program<Moltguild>) {
@@ -169,4 +190,74 @@ export async function joinGuild(
     .rpc();
 
   return { signature: tx, membershipPDA };
+}
+
+/**
+ * Derive endorsement PDA
+ */
+export function getEndorsementPDA(
+  fromAgent: PublicKey,
+  toAgent: PublicKey,
+  skill: string
+): [PublicKey, number] {
+  return PublicKey.findProgramAddressSync(
+    [
+      Buffer.from("endorsement"),
+      fromAgent.toBuffer(),
+      toAgent.toBuffer(),
+      Buffer.from(skill),
+    ],
+    PROGRAM_ID
+  );
+}
+
+/**
+ * Endorse another agent
+ * Note: This requires the endorser to have an agent profile already
+ */
+export async function endorseAgent(
+  connection: Connection,
+  endorserWallet: PublicKey,
+  toAgentProfilePDA: PublicKey,
+  skill: string,
+  comment: string,
+  sendTransaction: (tx: any, connection: Connection) => Promise<string>
+) {
+  // Get the endorser's profile PDA
+  const [fromAgentPDA] = getAgentProfilePDA(endorserWallet);
+  
+  // Create program with minimal provider
+  const provider = new AnchorProvider(
+    connection,
+    {} as any,
+    { commitment: "confirmed" }
+  );
+  const program = new Program<Moltguild>(IDL as Moltguild, provider);
+  
+  // Get the owner of the toAgent profile
+  const toAgentProfile = await program.account.agentProfile.fetch(toAgentProfilePDA);
+  const toOwner = toAgentProfile.owner;
+  
+  // Derive endorsement PDA
+  const [endorsementPDA] = getEndorsementPDA(fromAgentPDA, toAgentProfilePDA, skill);
+  
+  // Build the transaction
+  const tx = await program.methods
+    .endorseAgent(skill, comment)
+    .accountsPartial({
+      fromAgent: fromAgentPDA,
+      toAgent: toAgentProfilePDA,
+      endorsement: endorsementPDA,
+      fromOwner: endorserWallet,
+      toOwner,
+      payer: endorserWallet,
+      systemProgram: web3.SystemProgram.programId,
+    })
+    .transaction();
+  
+  // Send transaction using wallet adapter
+  const signature = await sendTransaction(tx, connection);
+  await connection.confirmTransaction(signature, "confirmed");
+  
+  return signature;
 }
