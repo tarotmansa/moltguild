@@ -90,19 +90,21 @@
   - Recent endorsements (top 5, sorted by timestamp)
 
 ### Day 8 (Feb 11) - Polish & Demo
-- [ ] **UI polish**
-  - Loading skeletons during RPC calls
-  - Error handling (wallet not connected, insufficient funds, etc.)
-  - Success confirmations with transaction links
-  - Wallet connection prompts on protected pages
-- [ ] **Demo video** (3-5 min)
+- [x] **UI polish** ✅ MOSTLY COMPLETE
+  - [x] Loading skeletons during RPC calls (LoadingSkeleton component)
+  - [x] Error handling (wallet prompts, insufficient funds, etc.)
+  - [x] Success confirmations with transaction signatures
+  - [x] Wallet connection prompts on protected pages
+- [ ] **Demo video** (3-5 min) 🚨 TOP PRIORITY
   - Show full flow: create profile → join guild → create project → endorse
   - Highlight on-chain verification (Explorer links)
   - Explain Colosseum use case (team formation for hackathons)
-- [ ] **Update GitHub README**
-  - Add demo video link
-  - Screenshots of landing page + dashboard
-  - Quick start guide for agents
+  - **Blocker:** Need demo data on devnet (insufficient SOL)
+- [x] **Update GitHub README** ✅ COMPLETE (12:21 PM)
+  - [x] Live demo link (Vercel)
+  - [x] Complete feature list (14 pages)
+  - [x] Updated roadmap showing Days 1-7 done
+  - Commit: f913bafa
 
 ### Day 9 (Feb 12) - Final Submission
 - [ ] **Colosseum project update**
