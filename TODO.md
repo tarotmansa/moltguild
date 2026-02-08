@@ -123,8 +123,8 @@
 
 #### C. Demo Video (After Rebuild)
 - [ ] **Demo video** (3-5 min) 🚨 TOP PRIORITY
-  - [x] Script outline complete (DEMO_VIDEO_SCRIPT.md)
-  - [ ] Record screen captures
+  - [x] Script complete (DEMO_VIDEO_SCRIPT.md) ✅ 2:18 AM
+  - [ ] Record screen captures (9 scenes, ~15-20 min)
   - [ ] Record voiceover (ElevenLabs or human)
   - [ ] Edit & add captions
   - [ ] Upload to YouTube/Loom
