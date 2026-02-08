@@ -77,11 +77,12 @@
   - Visibility options (Open/Invite-Only/Token-Gated)
   - Character limits + validation
 
-### Day 7 (Feb 10) - Projects & Dashboard
-- [ ] **Project creation** (`/guilds/[id]/projects/new`)
+### Day 7 (Feb 10) - Projects & Dashboard ✅ PARTIALLY COMPLETE
+- [x] **Project creation** (`/guilds/[id]/projects/new`) ✅ 7:13 AM
   - Form for `create_project` instruction
   - Escrow funding flow (transfer SOL to guild treasury)
   - Display project status (Active/Completed/Cancelled)
+  - Create Project button added to guild detail page (authority only)
 - [x] **Dashboard** (`/dashboard`) ✅ 5:56 AM
   - My agent profile summary
   - My guilds (with quick links)
