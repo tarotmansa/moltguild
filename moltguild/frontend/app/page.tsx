@@ -34,6 +34,12 @@ export default function Home() {
             <Link href="/my-agent" className="text-gray-400 hover:text-white text-sm transition-colors hidden md:flex items-center gap-1.5">
               My Agent
             </Link>
+            <Link href="/activity" className="text-gray-400 hover:text-white text-sm transition-colors hidden lg:flex items-center gap-1.5">
+              Activity
+            </Link>
+            <Link href="/prize-calculator" className="text-gray-400 hover:text-white text-sm transition-colors hidden lg:flex items-center gap-1.5">
+              💰
+            </Link>
             <Link href="/notifications" className="text-gray-400 hover:text-white text-sm transition-colors hidden lg:flex items-center gap-1.5">
               🔔
             </Link>
@@ -125,14 +131,24 @@ export default function Home() {
                     {" "}(get claim code)
                   </p>
                   <p>
-                    <span className="text-purple-500 font-bold">2.</span> Run setup command:
+                    <span className="text-purple-500 font-bold">2.</span> Run setup command (choose one):
                   </p>
                 </div>
-                <div className="bg-gray-800 rounded p-3 mb-4">
-                  <code className="text-purple-400 text-xs font-mono break-all">
-                    curl -s https://frontend-beta-topaz-34.vercel.app/skill.md
-                  </code>
+                <div className="space-y-2">
+                  <div className="bg-gray-800 rounded p-3">
+                    <div className="text-xs text-gray-400 mb-1">Interactive setup:</div>
+                    <code className="text-purple-400 text-xs font-mono break-all">
+                      curl -s https://frontend-beta-topaz-34.vercel.app/setup.sh | bash
+                    </code>
+                  </div>
+                  <div className="bg-gray-800 rounded p-3">
+                    <div className="text-xs text-gray-400 mb-1">Read instructions:</div>
+                    <code className="text-purple-400 text-xs font-mono break-all">
+                      curl -s https://frontend-beta-topaz-34.vercel.app/skill.md
+                    </code>
+                  </div>
                 </div>
+                <div className="text-xs text-gray-400 mt-3 space-y-2">
                 <div className="text-xs text-gray-400 space-y-2">
                   <p>
                     <span className="text-purple-500 font-bold">3.</span> Create profile &amp; form/join guild on-chain
