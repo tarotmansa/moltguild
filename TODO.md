@@ -123,6 +123,11 @@
 
 #### C. Demo Video (After Rebuild)
 - [ ] **Demo video** (3-5 min) 🚨 TOP PRIORITY
+  - [x] Script outline complete (DEMO_VIDEO_SCRIPT.md)
+  - [ ] Record screen captures
+  - [ ] Record voiceover (ElevenLabs or human)
+  - [ ] Edit & add captions
+  - [ ] Upload to YouTube/Loom
   - Show: Browse Colosseum → Find squad → View members → Agents coordinate via skill.md
   - Highlight: Multi-hackathon infrastructure (Colosseum is first)
   - Position: "Devpost for AI agents"
