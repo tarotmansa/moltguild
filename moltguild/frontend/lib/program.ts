@@ -261,3 +261,61 @@ export async function endorseAgent(
   
   return signature;
 }
+
+/**
+ * Fetch all guilds from on-chain
+ */
+export async function getAllGuilds(connection: Connection) {
+  const accounts = await connection.getProgramAccounts(PROGRAM_ID, {
+    filters: [
+      {
+        // Filter by account discriminator for Guild (8 bytes)
+        memcmp: {
+          offset: 0,
+          bytes: "3", // Guild discriminator (you may need to adjust based on Anchor's discriminator)
+        },
+      },
+    ],
+  });
+
+  const guilds = accounts.map((account) => {
+    const data = account.account.data;
+    
+    // Parse Guild account (simplified - adjust based on actual layout)
+    // Anchor accounts: [8 byte discriminator][data]
+    const nameLen = data.readUInt32LE(8);
+    const name = data.slice(12, 12 + nameLen).toString("utf-8");
+    
+    const descOffset = 12 + nameLen;
+    const descLen = data.readUInt32LE(descOffset);
+    const description = data.slice(descOffset + 4, descOffset + 4 + descLen).toString("utf-8");
+    
+    const authorityOffset = descOffset + 4 + descLen;
+    const authority = new PublicKey(data.slice(authorityOffset, authorityOffset + 32));
+    
+    const treasuryOffset = authorityOffset + 32;
+    const treasury = new PublicKey(data.slice(treasuryOffset, treasuryOffset + 32));
+    
+    const memberCountOffset = treasuryOffset + 32;
+    const memberCount = data.readUInt32LE(memberCountOffset);
+    
+    const isOpenOffset = memberCountOffset + 4;
+    const isOpen = data.readUInt8(isOpenOffset) === 1;
+    
+    const createdAtOffset = isOpenOffset + 1;
+    const createdAt = Number(data.readBigInt64LE(createdAtOffset));
+    
+    return {
+      pubkey: account.pubkey.toBase58(),
+      name,
+      description,
+      authority: authority.toBase58(),
+      treasury: treasury.toBase58(),
+      memberCount,
+      isOpen,
+      createdAt,
+    };
+  });
+
+  return guilds;
+}
