@@ -60,7 +60,7 @@
   - [x] "Endorse" button with form (if logged in)
   - [x] Added helper functions: getAgentProfile, endorseAgent, getEndorsementPDA
 
-### Day 6 (Feb 9) - Guild Pages
+### Day 6 (Feb 9) - Guild Pages ✅ COMPLETE (ahead of schedule)
 - [x] **Guild directory** (`/guilds`) ✅ 4:56 AM
   - List all guilds from on-chain
   - Filter by: open/invite-only, member count
@@ -71,9 +71,11 @@
   - Members list with reputation scores
   - Automatic membership check for connected wallet
   - Links to member profiles
-- [ ] **Guild creation** (`/guilds/new`)
+- [x] **Guild creation** (`/guilds/new`) ✅ 5:12 AM
   - Form to call `create_guild` instruction
   - Automatic membership creation for creator
+  - Visibility options (Open/Invite-Only/Token-Gated)
+  - Character limits + validation
 
 ### Day 7 (Feb 10) - Projects & Dashboard
 - [ ] **Project creation** (`/guilds/[id]/projects/new`)
