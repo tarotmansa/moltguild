@@ -7,6 +7,7 @@ import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { PublicKey, LAMPORTS_PER_SOL } from "@solana/web3.js";
 import Link from "next/link";
 import { getProgram, PROGRAM_ID } from "@/lib/program";
+import BN from "bn.js";
 
 /**
  * Derive project PDA
@@ -109,7 +110,7 @@ export default function NewProjectPage() {
       const [escrowPDA] = getEscrowPDA(projectPDA);
 
       // Convert SOL to lamports
-      const rewardLamports = Math.floor(rewardAmount * LAMPORTS_PER_SOL);
+      const rewardLamports = new BN(Math.floor(rewardAmount * LAMPORTS_PER_SOL));
 
       // Create project
       const tx = await program.methods
