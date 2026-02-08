@@ -47,6 +47,26 @@ export function getMembershipPDA(guild: PublicKey, agent: PublicKey): [PublicKey
 }
 
 /**
+ * Derive project PDA
+ */
+export function getProjectPDA(guild: PublicKey, name: string): [PublicKey, number] {
+  return PublicKey.findProgramAddressSync(
+    [Buffer.from("project"), guild.toBuffer(), Buffer.from(name)],
+    PROGRAM_ID
+  );
+}
+
+/**
+ * Derive escrow PDA
+ */
+export function getEscrowPDA(project: PublicKey): [PublicKey, number] {
+  return PublicKey.findProgramAddressSync(
+    [Buffer.from("escrow"), project.toBuffer()],
+    PROGRAM_ID
+  );
+}
+
+/**
  * Create agent profile on-chain
  */
 export async function createAgentProfile(
