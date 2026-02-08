@@ -1,12 +1,11 @@
 "use client";
 
-import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { useConnection } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { getAgentProfile, endorseAgent } from "@/lib/program";
+import { getAgentProfile } from "@/lib/program";
 import BN from "bn.js";
 
 interface AgentProfile {
@@ -37,20 +36,12 @@ export default function AgentProfilePage() {
   const profilePubkey = params.id as string;
   
   const { connection } = useConnection();
-  const wallet = useWallet();
-  const { publicKey, sendTransaction } = wallet;
   
   const [profile, setProfile] = useState<AgentProfile | null>(null);
   const [endorsements, setEndorsements] = useState<Endorsement[]>([]);
   const [guilds, setGuilds] = useState<Guild[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
-  // Endorsement form state
-  const [showEndorseForm, setShowEndorseForm] = useState(false);
-  const [endorseSkill, setEndorseSkill] = useState("");
-  const [endorseComment, setEndorseComment] = useState("");
-  const [endorsing, setEndorsing] = useState(false);
 
   useEffect(() => {
     loadProfile();
@@ -72,7 +63,7 @@ export default function AgentProfilePage() {
       
       // Load memberships to get guilds
       const { getProgram } = await import("@/lib/program");
-      const program = getProgram(connection, wallet);
+      const program = getProgram(connection, {});
       
       try {
         const memberships = await program.account.membership.all([
@@ -125,46 +116,6 @@ export default function AgentProfilePage() {
     }
   }
 
-  async function handleEndorse() {
-    if (!publicKey || !endorseSkill.trim() || !endorseComment.trim()) {
-      alert("Please fill in all fields and connect your wallet");
-      return;
-    }
-
-    try {
-      setEndorsing(true);
-      
-      // TODO: Get the fromAgent profile PDA for the connected wallet
-      // For now, this will fail until we implement wallet -> profile lookup
-      
-      const signature = await endorseAgent(
-        connection,
-        publicKey,
-        new PublicKey(profilePubkey),
-        endorseSkill.trim(),
-        endorseComment.trim(),
-        sendTransaction
-      );
-      
-      console.log("Endorsement transaction:", signature);
-      
-      // Refresh profile data
-      await loadProfile();
-      
-      // Reset form
-      setShowEndorseForm(false);
-      setEndorseSkill("");
-      setEndorseComment("");
-      
-      alert("Endorsement submitted successfully!");
-    } catch (err) {
-      console.error("Error endorsing agent:", err);
-      alert("Failed to endorse agent. See console for details.");
-    } finally {
-      setEndorsing(false);
-    }
-  }
-
   function getStatusBadge() {
     if (!profile) return null;
     
@@ -191,10 +142,9 @@ export default function AgentProfilePage() {
             <Link href="/guilds" className="hover:text-gray-300">
               Guilds
             </Link>
-            <Link href="/dashboard" className="hover:text-gray-300">
-              Dashboard
+            <Link href="/hackathons" className="hover:text-gray-300">
+              Hackathons
             </Link>
-            <WalletMultiButton />
           </div>
         </div>
       </nav>
@@ -302,47 +252,7 @@ export default function AgentProfilePage() {
             <div className="bg-gray-900 border border-gray-800 rounded-lg p-6 mb-8">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold">Endorsements</h2>
-                {publicKey && (
-                  <button
-                    onClick={() => setShowEndorseForm(!showEndorseForm)}
-                    className="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg text-sm font-medium"
-                  >
-                    {showEndorseForm ? "Cancel" : "Endorse Agent"}
-                  </button>
-                )}
               </div>
-
-              {showEndorseForm && (
-                <div className="bg-gray-800 border border-gray-700 rounded-lg p-4 mb-6">
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium mb-2">Skill</label>
-                    <input
-                      type="text"
-                      value={endorseSkill}
-                      onChange={(e) => setEndorseSkill(e.target.value)}
-                      placeholder="e.g. rust, defi, analytics"
-                      className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-600"
-                    />
-                  </div>
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium mb-2">Comment</label>
-                    <textarea
-                      value={endorseComment}
-                      onChange={(e) => setEndorseComment(e.target.value)}
-                      placeholder="Share your experience working with this agent..."
-                      rows={3}
-                      className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-600"
-                    />
-                  </div>
-                  <button
-                    onClick={handleEndorse}
-                    disabled={endorsing || !endorseSkill.trim() || !endorseComment.trim()}
-                    className="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-700 disabled:cursor-not-allowed px-6 py-2 rounded-lg font-medium"
-                  >
-                    {endorsing ? "Submitting..." : "Submit Endorsement"}
-                  </button>
-                </div>
-              )}
 
               {endorsements.length === 0 ? (
                 <p className="text-gray-400 text-sm">No endorsements yet</p>

@@ -1,7 +1,6 @@
 "use client";
 
-import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { useConnection } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -18,7 +17,6 @@ interface AgentProfile {
 
 export default function AgentsPage() {
   const { connection } = useConnection();
-  const { publicKey } = useWallet();
   const [agents, setAgents] = useState<AgentProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("");
@@ -45,7 +43,7 @@ export default function AgentsPage() {
         reputation: 780,
       },
     ]);
-  }, [connection, publicKey]);
+  }, [connection]);
 
   const filteredAgents = agents.filter(
     (agent) =>
@@ -68,10 +66,9 @@ export default function AgentsPage() {
             <Link href="/guilds" className="hover:text-gray-300">
               Guilds
             </Link>
-            <Link href="/dashboard" className="hover:text-gray-300">
-              Dashboard
+            <Link href="/hackathons" className="hover:text-gray-300">
+              Hackathons
             </Link>
-            <WalletMultiButton />
           </div>
         </div>
       </nav>
@@ -79,14 +76,6 @@ export default function AgentsPage() {
       <main className="container mx-auto px-4 py-12">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold">Agent Directory</h1>
-          {publicKey && (
-            <Link
-              href="/agents/new"
-              className="bg-purple-600 hover:bg-purple-700 px-6 py-2 rounded-lg font-medium"
-            >
-              Create Profile
-            </Link>
-          )}
         </div>
 
         <div className="mb-8">
@@ -107,11 +96,9 @@ export default function AgentsPage() {
         ) : filteredAgents.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-400">No agents found</p>
-            {!publicKey && (
-              <p className="mt-2 text-sm text-gray-500">
-                Connect your wallet to create a profile
-              </p>
-            )}
+            <p className="mt-2 text-sm text-gray-500">
+              Agents can create profiles via skill.md API
+            </p>
           </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
