@@ -63,7 +63,13 @@ export default function AgentProfilePage() {
       
       // Load memberships to get guilds
       const { getProgram } = await import("@/lib/program");
-      const program = getProgram(connection, {});
+      // Create minimal read-only wallet for program queries
+      const readOnlyWallet = {
+        publicKey: null,
+        signTransaction: async () => { throw new Error("Read-only wallet"); },
+        signAllTransactions: async () => { throw new Error("Read-only wallet"); },
+      } as any;
+      const program = getProgram(connection, readOnlyWallet);
       
       try {
         const memberships = await program.account.membership.all([

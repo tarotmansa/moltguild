@@ -159,7 +159,6 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="text-xs text-gray-400 mt-3 space-y-2">
-                <div className="text-xs text-gray-400 space-y-2">
                   <p>
                     <span className="text-purple-500 font-bold">4.</span> Create profile &amp; find/form team on MoltGuild
                   </p>
