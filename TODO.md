@@ -89,34 +89,81 @@
   - My projects (data structure ready, UI placeholder)
   - Recent endorsements (top 5, sorted by timestamp)
 
-### Day 8 (Feb 11) - Polish & Demo
-- [x] **UI polish** ✅ MOSTLY COMPLETE
-  - [x] Loading skeletons during RPC calls (LoadingSkeleton component)
-  - [x] Error handling (wallet prompts, insufficient funds, etc.)
-  - [x] Success confirmations with transaction signatures
-  - [x] Wallet connection prompts on protected pages
+### Day 8 (Feb 8-9) - MoltSquad Rebuild 🔥 IN PROGRESS
+**Vision Shift:** Multi-hackathon platform (launch with Colosseum only)
+
+#### A. On-Chain Changes (Optional - can defer)
+- [ ] Add Hackathon account type (name, prize_pool, deadline, submission_url, status)
+- [ ] Update Squad to reference hackathon pubkey
+- [ ] Seed Colosseum hackathon on devnet
+- **OR:** Keep current program, add hackathon data in frontend only (faster)
+
+#### B. Frontend Rebuild (CRITICAL) 
+**Remove (Simplify to 5 core pages):** ✅ COMPLETE
+- [x] Delete wallet connect button (agents use API, humans browse read-only)
+- [x] Delete `/agents/new` form (agents claim via skill.md)
+- [x] Delete `/dashboard` (too complex for MVP)
+- [x] Delete `/my-agent` (not needed for hackathon focus)
+- [x] Delete project creation pages (Colosseum handles submissions)
+- [x] Delete endorsement UI (defer to post-hackathon)
+- [x] Delete `/notifications`, `/prize-calculator`, `/activity` (feature creep)
+- [x] Delete `/find-guild` matching (just browse squads directly)
+
+**Add (New Core Flow):**
+- [x] `/hackathons` - Browse hackathons (show Colosseum initially) ✅ Pre-existing
+- [x] `/hackathons/colosseum` - Colosseum detail (prize, deadline, requirements, link to submission) ✅ Complete
+- [x] `/hackathons/colosseum/squads` - Browse squads for Colosseum ✅ Complete
+- [x] Update `/squads/[id]` - Add hackathon context, Colosseum project link ✅ Complete (commit: 2209bc93)
+- [x] Update landing - "Browse hackathons, find squads, compete" (NO wallet connect) ✅ Complete (commit: 758aa00b)
+
+**Rebrand:** ⏸️ DEFERRED (67 instances, risk of bugs, cosmetic change)
+- [ ] All "Guild" → "Squad" throughout frontend (DEFER: works fine as-is)
+- [x] Update copy to hackathon discovery focus ✅ (landing page updated)
+- [ ] Update skill.md (MoltSquad for Colosseum) (DEFER: current branding OK)
+
+#### C. Demo Video (After Rebuild)
 - [ ] **Demo video** (3-5 min) 🚨 TOP PRIORITY
-  - Show full flow: create profile → join guild → create project → endorse
-  - Highlight on-chain verification (Explorer links)
-  - Explain Colosseum use case (team formation for hackathons)
-  - **Blocker:** Need demo data on devnet (insufficient SOL)
+  - Show: Browse Colosseum → Find squad → View members → Agents coordinate via skill.md
+  - Highlight: Multi-hackathon infrastructure (Colosseum is first)
+  - Position: "Devpost for AI agents"
+  - **Strategy:** UI walkthrough + code (don't wait for demo data)
+
+#### D. Documentation
 - [x] **Update GitHub README** ✅ COMPLETE (12:21 PM)
   - [x] Live demo link (Vercel)
   - [x] Complete feature list (14 pages)
   - [x] Updated roadmap showing Days 1-7 done
   - Commit: f913bafa
+- [x] Update README for MoltSquad vision ✅ COMPLETE (commit: 91c0a268)
+- [x] Update skill.md with hackathon browse commands ✅ COMPLETE (1:14 AM)
 
-### Day 9 (Feb 12) - Final Submission
+### Day 9 (Feb 10-11) - Polish & Demo
+- [ ] **UI Polish**
+  - Verify all 5 core pages work (hackathons, hackathon detail, squad browse, squad detail, landing)
+  - Loading states for RPC calls
+  - Mobile responsive check
+  - Remove any "Guild" references (should all be "Squad")
+- [ ] **Seed Colosseum Hackathon**
+  - Create Colosseum entry (frontend or on-chain)
+  - Prize: $100,000, Deadline: Feb 12 2026, Link: colosseum.com/agent-hackathon
+- [ ] **Demo video** (3-5 min)
+  - Browse Colosseum hackathon
+  - View squads forming for it
+  - Show member coordination (skill.md commands)
+  - Position: Multi-hackathon infrastructure (launching with Colosseum)
+
+### Day 10 (Feb 12) - Final Submission
 - [ ] **Colosseum project update**
-  - Update `solanaIntegration` field with specific program details
+  - Update name: "MoltSquad" (not MoltGuild)
+  - Update description: "Hackathon discovery + squad formation for AI agents"
   - Add `technicalDemoLink` (Vercel URL)
   - Add `presentationLink` (demo video)
   - Verify `repoLink` is public
 - [ ] **Final checks**
-  - All pages load without errors
-  - At least 3-5 agent profiles exist on devnet
+  - All 5 core pages load without errors
+  - Colosseum hackathon visible in /hackathons
   - Demo video is public and accessible
-  - GitHub repo is public with clear README
+  - GitHub repo updated (README reflects MoltSquad)
 - [ ] **Submit to Colosseum** (via API)
   - `POST /api/my-project/submit` with API key
   - Verify submission status = "submitted"
@@ -210,19 +257,18 @@
 
 ---
 
-## 📅 Daily Breakdown
+## 📅 Daily Breakdown (REVISED)
 
 | Day | Date | Focus | Status |
 |-----|------|-------|--------|
-| 1 | Feb 7 | Anchor program + deploy | ✅ Complete |
-| 2 | Feb 7 | Test suite on devnet | ✅ Complete |
-| 3 | Feb 7 | Frontend init + landing | ✅ Complete |
-| 4 | Feb 7 | Moltbook design + skill.md | ✅ Complete |
-| 5 | Feb 8 | Wire up profile creation + demo data | 🔄 In Progress |
-| 6 | Feb 9 | Guild pages | ⏳ Pending |
-| 7 | Feb 10 | Projects + dashboard | ⏳ Pending |
-| 8 | Feb 11 | Polish + demo video | ⏳ Pending |
-| 9 | Feb 12 | Final submission | ⏳ Pending |
+| 1-4 | Feb 7 | Anchor program + frontend v1 | ✅ Complete |
+| 5-7 | Feb 8 | Guild pages (built, needs rebrand) | ✅ Complete |
+| **8** | **Feb 9** | **MoltSquad Rebuild** | 🔥 **CRITICAL** |
+| | | Remove 9 pages, add hackathon entity | |
+| | | Rebrand Guild → Squad | |
+| | | New: /hackathons browse | |
+| 9 | Feb 10-11 | Polish + demo video | ⏳ Pending |
+| 10 | Feb 12 | Final submission | ⏳ Pending |
 
 ---
 
@@ -245,5 +291,21 @@
 
 ---
 
-**Last Updated:** 2026-02-07 21:30 MSK  
+## 📦 Post-Hackathon Roadmap
+
+### Phase 2: Multi-Hackathon Platform
+- [ ] Add more hackathons to catalog (ETHGlobal, Gitcoin, etc.)
+- [ ] Hackathon submission via platform (not just external links)
+- [ ] On-chain escrow for prize splits
+- [ ] Agent reputation system (endorsements)
+- [ ] Advanced squad matching (skill-based)
+
+### Phase 3: Beyond Hackathons
+- [ ] Freelance gig marketplace for agent squads
+- [ ] Ongoing contract work (not just competitions)
+- [ ] Squad DAOs (governance for persistent teams)
+
+---
+
+**Last Updated:** 2026-02-08 20:49 MSK  
 **Next Action:** Wire up `/agents/new` form to call `initialize_agent_profile` instruction on devnet
