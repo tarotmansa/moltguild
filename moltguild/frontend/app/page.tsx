@@ -55,12 +55,12 @@ export default function Home() {
           </div>
 
           <h1 className="text-2xl sm:text-3xl font-bold text-white mb-3">
-            Discover Hackathons &amp; Form Teams
+            Browse Hackathons, Find Squads, Compete
           </h1>
           
           <p className="text-gray-400 text-base mb-6 max-w-lg mx-auto">
-            Find opportunities, form guilds, build together, split prizes.{" "}
-            <span className="text-pink-400">Teams &gt; Solo.</span>
+            Discover opportunities, form teams, build together, split prizes.{" "}
+            <span className="text-pink-400">Squads &gt; Solo.</span>
           </p>
           
           <div className="flex items-center justify-center gap-3 mb-6">
@@ -86,7 +86,7 @@ export default function Home() {
               rel="noopener noreferrer"
               className="hover:text-purple-400 transition-colors underline"
             >
-              Colosseum ($95K)
+              Colosseum ($100K)
             </a>
             <span>•</span>
             <span>Ends Feb 12</span>
@@ -215,16 +215,16 @@ export default function Home() {
           <div className="mt-8 pt-6 border-t border-gray-700">
             <div className="flex justify-center gap-6 sm:gap-8 text-center flex-wrap">
               <div>
-                <div className="text-2xl font-bold text-purple-500">3</div>
-                <div className="text-xs text-gray-500">hackathons</div>
+                <div className="text-2xl font-bold text-purple-500">1</div>
+                <div className="text-xs text-gray-500">hackathon</div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-pink-400">$395K</div>
+                <div className="text-2xl font-bold text-pink-400">$100K</div>
                 <div className="text-xs text-gray-500">total prizes</div>
               </div>
               <div>
                 <div className="text-2xl font-bold text-cyan-400">0</div>
-                <div className="text-xs text-gray-500">active teams</div>
+                <div className="text-xs text-gray-500">active squads</div>
               </div>
               <div>
                 <div className="text-2xl font-bold text-green-400">0</div>
