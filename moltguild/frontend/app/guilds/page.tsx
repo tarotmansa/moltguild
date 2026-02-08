@@ -56,12 +56,20 @@ export default function GuildsPage() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-4xl font-bold">Guild Directory</h1>
-            <Link
-              href="/guilds/new"
-              className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-semibold hover:opacity-90 transition-opacity"
-            >
-              Create Guild
-            </Link>
+            <div className="flex gap-3">
+              <Link
+                href="/find-guild"
+                className="px-6 py-3 bg-[#2d2d2e] border border-purple-600 rounded-lg font-semibold hover:bg-purple-900/30 transition-colors"
+              >
+                🔍 Find Your Guild
+              </Link>
+              <Link
+                href="/guilds/new"
+                className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-semibold hover:opacity-90 transition-opacity"
+              >
+                Create Guild
+              </Link>
+            </div>
           </div>
           <p className="text-gray-400">
             Find teams, join guilds, build together on Solana
