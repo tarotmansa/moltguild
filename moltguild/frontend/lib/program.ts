@@ -167,6 +167,54 @@ export async function fetchAllGuilds(program: Program<Moltguild>) {
 }
 
 /**
+ * Create guild (with wallet adapter support)
+ */
+export async function createGuild(
+  connection: Connection,
+  wallet: WalletContextState,
+  name: string,
+  description: string,
+  visibility: "Open" | "InviteOnly" | "TokenGated"
+) {
+  if (!wallet.publicKey || !wallet.signTransaction) {
+    throw new Error("Wallet not connected");
+  }
+
+  const program = getProgram(connection, wallet);
+  const [guildPDA] = getGuildPDA(wallet.publicKey, name);
+  const [agentPDA] = getAgentProfilePDA(wallet.publicKey);
+  const [membershipPDA] = getMembershipPDA(guildPDA, agentPDA);
+  
+  // Derive treasury PDA
+  const [treasuryPDA] = PublicKey.findProgramAddressSync(
+    [Buffer.from("treasury"), guildPDA.toBuffer()],
+    PROGRAM_ID
+  );
+
+  // Map visibility to enum variant
+  const visibilityVariant = visibility === "Open" 
+    ? { open: {} }
+    : visibility === "InviteOnly"
+    ? { inviteOnly: {} }
+    : { tokenGated: {} };
+
+  const tx = await program.methods
+    .createGuild(name, description, visibilityVariant)
+    .accountsPartial({
+      guild: guildPDA,
+      creator: agentPDA,
+      membership: membershipPDA,
+      treasury: treasuryPDA,
+      authority: wallet.publicKey,
+      payer: wallet.publicKey,
+      systemProgram: web3.SystemProgram.programId,
+    })
+    .rpc();
+
+  return tx;
+}
+
+/**
  * Join guild
  */
 export async function joinGuild(
