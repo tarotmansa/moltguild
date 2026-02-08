@@ -8,6 +8,8 @@ import { getAgentProfilePDA, PROGRAM_ID } from "@/lib/program";
 import { AnchorProvider, Program } from "@coral-xyz/anchor";
 import IDL from "@/target/idl/moltguild.json";
 import type { Moltguild } from "@/target/types/moltguild";
+import ProgressTracker from "@/components/ProgressTracker";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
 
 interface AgentStatus {
   hasProfile: boolean;
@@ -143,10 +145,15 @@ export default function MyAgentPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0b] text-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500 mb-4"></div>
-          <p className="text-gray-400">Loading your agent's status...</p>
+      <div className="min-h-screen bg-[#0a0a0b] text-white">
+        <div className="max-w-5xl mx-auto px-4 py-12">
+          <div className="mb-8">
+            <h1 className="text-4xl font-bold mb-2">My Agent Dashboard</h1>
+            <p className="text-gray-400">Track your agent's Colosseum hackathon progress</p>
+          </div>
+          <div className="space-y-6">
+            <LoadingSkeleton type="card" count={3} />
+          </div>
         </div>
       </div>
     );
@@ -172,6 +179,34 @@ export default function MyAgentPage() {
     : status.guilds.length === 0 
     ? 33 
     : 66;
+
+  const progressSteps = [
+    {
+      label: "Register at Colosseum",
+      status: (colosseumRegistered !== false ? "complete" : "active") as "complete" | "active" | "pending",
+      description: "Get your claim code from Colosseum hackathon"
+    },
+    {
+      label: "Create MoltGuild Profile",
+      status: (status?.hasProfile ? "complete" : colosseumRegistered ? "active" : "pending") as "complete" | "active" | "pending",
+      description: "Set up your on-chain agent profile"
+    },
+    {
+      label: "Join or Create a Guild",
+      status: (status && status.guilds.length > 0 ? "complete" : status?.hasProfile ? "active" : "pending") as "complete" | "active" | "pending",
+      description: "Form a team with other agents"
+    },
+    {
+      label: "Link Guild Treasury",
+      status: (status && status.guilds.length > 0 ? "active" : "pending") as "complete" | "active" | "pending",
+      description: "Connect treasury to Colosseum for prize payouts"
+    },
+    {
+      label: "Build & Submit Project",
+      status: "pending" as "complete" | "active" | "pending",
+      description: "Complete your Solana project before Feb 12"
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-[#0a0a0b] text-white">
@@ -236,18 +271,10 @@ export default function MyAgentPage() {
           </div>
         </div>
 
-        {/* Progress Bar */}
+        {/* Progress Tracker */}
         <div className="mb-8 p-6 bg-[#1a1a1b] rounded-lg border border-gray-800">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-bold">Setup Progress</h3>
-            <span className="text-sm text-gray-400">{progressPercentage}%</span>
-          </div>
-          <div className="w-full bg-gray-800 rounded-full h-3">
-            <div 
-              className="bg-gradient-to-r from-purple-600 to-pink-600 h-3 rounded-full transition-all duration-500"
-              style={{ width: `${progressPercentage}%` }}
-            ></div>
-          </div>
+          <h3 className="font-bold mb-4">Hackathon Setup Progress</h3>
+          <ProgressTracker steps={progressSteps} showDescriptions={true} />
         </div>
 
         {/* Agent Profile */}
