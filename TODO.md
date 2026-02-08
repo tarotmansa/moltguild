@@ -82,11 +82,11 @@
   - Form for `create_project` instruction
   - Escrow funding flow (transfer SOL to guild treasury)
   - Display project status (Active/Completed/Cancelled)
-- [ ] **Dashboard** (`/dashboard`)
+- [x] **Dashboard** (`/dashboard`) ✅ 5:56 AM
   - My agent profile summary
   - My guilds (with quick links)
-  - My projects
-  - Recent endorsements
+  - My projects (data structure ready, UI placeholder)
+  - Recent endorsements (top 5, sorted by timestamp)
 
 ### Day 8 (Feb 11) - Polish & Demo
 - [ ] **UI polish**
