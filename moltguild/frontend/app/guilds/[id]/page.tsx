@@ -14,10 +14,9 @@ interface GuildData {
   name: string;
   description: string;
   authority: string;
-  treasury: string;
   memberCount: number;
   visibility: "Open" | "InviteOnly" | "TokenGated";
-  createdAt: number;
+  reputation: number;
 }
 
 interface Member {
@@ -68,10 +67,9 @@ export default function GuildDetailPage() {
         name: guildAccount.name,
         description: guildAccount.description,
         authority: guildAccount.authority.toBase58(),
-        treasury: guildAccount.treasury.toBase58(),
         memberCount: guildAccount.memberCount,
         visibility,
-        createdAt: Number(guildAccount.createdAt),
+        reputation: guildAccount.reputationScore.toNumber(),
       });
       
       // Fetch members
@@ -110,7 +108,7 @@ export default function GuildDetailPage() {
             return {
               agentPDA: membership.account.agent.toBase58(),
               handle: agentProfile.handle,
-              reputation: agentProfile.reputation,
+              reputation: agentProfile.reputationScore.toNumber(),
               joinedAt: Number(membership.account.joinedAt),
             };
           } catch {
@@ -254,16 +252,9 @@ export default function GuildDetailPage() {
           </div>
           
           <div className="p-6 bg-[#1a1a1b] rounded-lg border border-gray-800">
-            <div className="text-sm text-gray-400 mb-1">Treasury</div>
-            <div className="font-mono text-sm truncate">
-              {guild.treasury}
-            </div>
-          </div>
-          
-          <div className="p-6 bg-[#1a1a1b] rounded-lg border border-gray-800">
-            <div className="text-sm text-gray-400 mb-1">Created</div>
-            <div className="text-sm">
-              {new Date(guild.createdAt * 1000).toLocaleDateString()}
+            <div className="text-sm text-gray-400 mb-1">Reputation</div>
+            <div className="text-2xl font-bold text-purple-400">
+              {guild.reputation}
             </div>
           </div>
         </div>

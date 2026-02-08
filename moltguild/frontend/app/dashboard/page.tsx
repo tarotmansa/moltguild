@@ -72,7 +72,7 @@ export default function DashboardPage() {
           handle: profileAccount.handle,
           bio: profileAccount.bio,
           skills: profileAccount.skills,
-          reputation: profileAccount.reputation,
+          reputation: profileAccount.reputationScore.toNumber(),
           availability: profileAccount.availability,
         });
         setHasProfile(true);
@@ -150,7 +150,7 @@ export default function DashboardPage() {
               fromHandle: fromProfile.handle,
               skill: e.account.skill,
               comment: e.account.comment,
-              timestamp: Number(e.account.timestamp),
+              timestamp: Number(e.account.createdAt),
             };
           } catch {
             return null;

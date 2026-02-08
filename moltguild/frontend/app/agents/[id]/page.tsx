@@ -26,15 +26,23 @@ interface Endorsement {
   timestamp: number;
 }
 
+interface Guild {
+  pubkey: string;
+  name: string;
+  memberCount: number;
+}
+
 export default function AgentProfilePage() {
   const params = useParams();
   const profilePubkey = params.id as string;
   
   const { connection } = useConnection();
-  const { publicKey, sendTransaction } = useWallet();
+  const wallet = useWallet();
+  const { publicKey, sendTransaction } = wallet;
   
   const [profile, setProfile] = useState<AgentProfile | null>(null);
   const [endorsements, setEndorsements] = useState<Endorsement[]>([]);
+  const [guilds, setGuilds] = useState<Guild[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
@@ -61,6 +69,37 @@ export default function AgentProfilePage() {
       }
       
       setProfile(profileData as AgentProfile);
+      
+      // Load memberships to get guilds
+      const { getProgram } = await import("@/lib/program");
+      const program = getProgram(connection, wallet);
+      
+      try {
+        const memberships = await program.account.membership.all([
+          {
+            memcmp: {
+              offset: 8,
+              bytes: profilePubkey,
+            },
+          },
+        ]);
+        
+        // Fetch guild details
+        const guildPromises = memberships.map(async (m: any) => {
+          const guildData = await program.account.guild.fetch(m.account.guild);
+          return {
+            pubkey: m.account.guild.toString(),
+            name: guildData.name,
+            memberCount: guildData.memberCount,
+          };
+        });
+        
+        const fetchedGuilds = await Promise.all(guildPromises);
+        setGuilds(fetchedGuilds);
+      } catch (err) {
+        console.error("Error loading guilds:", err);
+        // Continue even if guilds fail to load
+      }
       
       // TODO: Load endorsements from chain
       // For now, placeholder data
@@ -231,6 +270,32 @@ export default function AgentProfilePage() {
                   </span>
                 ))}
               </div>
+            </div>
+
+            {/* Guilds */}
+            <div className="bg-gray-900 border border-gray-800 rounded-lg p-6 mb-8">
+              <h2 className="text-xl font-semibold mb-4">Guilds</h2>
+              {guilds.length === 0 ? (
+                <p className="text-gray-400 text-sm">Not a member of any guilds yet</p>
+              ) : (
+                <div className="space-y-3">
+                  {guilds.map((guild) => (
+                    <Link
+                      key={guild.pubkey}
+                      href={`/guilds/${guild.pubkey}`}
+                      className="block bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg p-4 transition-colors"
+                    >
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <h3 className="font-semibold text-lg mb-1">{guild.name}</h3>
+                          <p className="text-sm text-gray-400">{guild.memberCount} members</p>
+                        </div>
+                        <div className="text-purple-400">→</div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Endorsements */}

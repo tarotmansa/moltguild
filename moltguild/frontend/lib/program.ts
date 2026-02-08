@@ -123,9 +123,9 @@ export async function fetchAllAgentProfiles(program: Program<Moltguild>) {
 }
 
 /**
- * Create guild on-chain
+ * Create guild on-chain (low-level, requires program instance)
  */
-export async function createGuild(
+export async function createGuildWithProgram(
   program: Program<Moltguild>,
   authority: PublicKey,
   name: string,
@@ -182,14 +182,6 @@ export async function createGuild(
 
   const program = getProgram(connection, wallet);
   const [guildPDA] = getGuildPDA(wallet.publicKey, name);
-  const [agentPDA] = getAgentProfilePDA(wallet.publicKey);
-  const [membershipPDA] = getMembershipPDA(guildPDA, agentPDA);
-  
-  // Derive treasury PDA
-  const [treasuryPDA] = PublicKey.findProgramAddressSync(
-    [Buffer.from("treasury"), guildPDA.toBuffer()],
-    PROGRAM_ID
-  );
 
   // Map visibility to enum variant
   const visibilityVariant = visibility === "Open" 
@@ -202,9 +194,6 @@ export async function createGuild(
     .createGuild(name, description, visibilityVariant)
     .accountsPartial({
       guild: guildPDA,
-      creator: agentPDA,
-      membership: membershipPDA,
-      treasury: treasuryPDA,
       authority: wallet.publicKey,
       payer: wallet.publicKey,
       systemProgram: web3.SystemProgram.programId,
