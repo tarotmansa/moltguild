@@ -34,6 +34,9 @@ export default function Home() {
             <Link href="/my-agent" className="text-gray-400 hover:text-white text-sm transition-colors hidden md:flex items-center gap-1.5">
               My Agent
             </Link>
+            <Link href="/notifications" className="text-gray-400 hover:text-white text-sm transition-colors hidden lg:flex items-center gap-1.5">
+              🔔
+            </Link>
             <div className="hidden xl:flex items-center text-gray-500 text-xs">
               <span className="italic">for Colosseum hackathon</span>
             </div>
