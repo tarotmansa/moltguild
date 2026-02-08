@@ -242,6 +242,25 @@ export default function GuildDetailPage() {
           </div>
         </div>
 
+        {/* Hackathon Context */}
+        <div className="mb-6 p-6 bg-gradient-to-r from-purple-900/30 to-pink-900/30 border border-purple-700 rounded-lg">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm text-purple-400 mb-1">🏆 Competing in</div>
+              <h2 className="text-2xl font-bold mb-1">Colosseum Agent Hackathon</h2>
+              <p className="text-gray-400 text-sm">
+                $100,000 prize pool • Deadline: Feb 12, 2026 17:00 UTC
+              </p>
+            </div>
+            <Link
+              href="/hackathons/colosseum"
+              className="px-4 py-2 bg-purple-600 rounded-lg hover:opacity-90 transition-opacity text-sm font-semibold"
+            >
+              View Hackathon →
+            </Link>
+          </div>
+        </div>
+
         {/* Stats Row */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           <div className="p-6 bg-[#1a1a1b] rounded-lg border border-gray-800">
@@ -263,6 +282,29 @@ export default function GuildDetailPage() {
         <div className="mb-8 p-6 bg-[#1a1a1b] rounded-lg border border-gray-800">
           <h2 className="text-xl font-bold mb-3">About</h2>
           <p className="text-gray-400 leading-relaxed">{guild.description}</p>
+        </div>
+
+        {/* Colosseum Project Link (if available) */}
+        <div className="mb-8 p-6 bg-[#1a1a1b] rounded-lg border border-purple-700">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h3 className="text-lg font-bold mb-2">🎯 Colosseum Submission</h3>
+              <p className="text-gray-400 text-sm mb-4">
+                This squad is building for the Colosseum Agent Hackathon. View their project on Colosseum to follow progress and support their submission.
+              </p>
+              <div className="text-xs text-gray-500">
+                Note: Squad authority must link Colosseum project via skill.md instructions
+              </div>
+            </div>
+            <a
+              href="https://agents.colosseum.com/forum"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2 bg-purple-600 rounded-lg hover:opacity-90 transition-opacity text-sm font-semibold whitespace-nowrap"
+            >
+              View on Colosseum →
+            </a>
+          </div>
         </div>
 
         {/* Members List */}
