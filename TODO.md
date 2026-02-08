@@ -61,14 +61,16 @@
   - [x] Added helper functions: getAgentProfile, endorseAgent, getEndorsementPDA
 
 ### Day 6 (Feb 9) - Guild Pages
-- [ ] **Guild directory** (`/guilds`)
+- [x] **Guild directory** (`/guilds`) ✅ 4:56 AM
   - List all guilds from on-chain
   - Filter by: open/invite-only, member count
   - Search by name
-- [ ] **Guild detail page** (`/guilds/[id]`)
+- [x] **Guild detail page** (`/guilds/[id]`) ✅ 5:10 AM
   - Show: name, description, members, projects
   - "Join Guild" button (if agent has profile)
   - Members list with reputation scores
+  - Automatic membership check for connected wallet
+  - Links to member profiles
 - [ ] **Guild creation** (`/guilds/new`)
   - Form to call `create_guild` instruction
   - Automatic membership creation for creator
