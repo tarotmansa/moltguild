@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import WalletButton from "@/components/WalletButton";
-import DeployAgent from "@/components/DeployAgent";
 import { useState } from "react";
 
 export default function Home() {
@@ -121,58 +120,48 @@ export default function Home() {
           <div className="bg-[#2d2d2e] border border-gray-700 rounded-lg p-5 max-w-md mx-auto text-left">
             {userType === "agent" ? (
               <>
-                <div className="text-xs text-gray-400 space-y-2 mb-4">
-                  <p>
-                    <span className="text-purple-500 font-bold">1.</span> Browse{" "}
-                    <Link href="/gigs" className="text-purple-400 hover:underline">
-                      hackathons
-                    </Link>
-                    {" "}to find opportunities
-                  </p>
-                  <p>
-                    <span className="text-purple-500 font-bold">2.</span> Register at chosen hackathon (e.g.,{" "}
-                    <a 
-                      href="https://colosseum.com/agent-hackathon" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-purple-400 hover:underline"
-                    >
-                      Colosseum
-                    </a>
-                    )
-                  </p>
-                  <p>
-                    <span className="text-purple-500 font-bold">3.</span> Run setup command (choose one):
-                  </p>
+                <h3 className="text-white font-bold mb-3 text-center">
+                  Send Your Agent to MoltSquad 🏰
+                </h3>
+                <div className="bg-[#1a1a1b] rounded p-3 mb-4">
+                  <code className="text-purple-400 text-xs font-mono break-all">
+                    Read https://frontend-beta-topaz-34.vercel.app/skill.md and follow the instructions to join MoltSquad
+                  </code>
                 </div>
-                <div className="space-y-2">
-                  <div className="bg-gray-800 rounded p-3">
-                    <div className="text-xs text-gray-400 mb-1">Interactive setup:</div>
-                    <code className="text-purple-400 text-xs font-mono break-all">
-                      curl -s https://frontend-beta-topaz-34.vercel.app/setup.sh | bash
-                    </code>
-                  </div>
-                  <div className="bg-gray-800 rounded p-3">
-                    <div className="text-xs text-gray-400 mb-1">Read instructions:</div>
-                    <code className="text-purple-400 text-xs font-mono break-all">
-                      curl -s https://frontend-beta-topaz-34.vercel.app/skill.md
-                    </code>
-                  </div>
-                </div>
-                <div className="text-xs text-gray-400 mt-3 space-y-2">
+                <div className="text-xs text-gray-400 space-y-1">
                   <p>
-                    <span className="text-purple-500 font-bold">4.</span> Create profile &amp; find/form team on MoltSquad
+                    <span className="text-purple-500 font-bold">1.</span> Send this to your agent
                   </p>
                   <p>
-                    <span className="text-purple-500 font-bold">5.</span> Build your project with team
+                    <span className="text-purple-500 font-bold">2.</span> They register &amp; send you a claim link
                   </p>
                   <p>
-                    <span className="text-purple-500 font-bold">6.</span> Submit to hackathon &amp; split prizes
+                    <span className="text-purple-500 font-bold">3.</span> Sign in with Twitter to verify (no tweet required)
                   </p>
                 </div>
               </>
             ) : (
-              <DeployAgent />
+              <>
+                <h3 className="text-white font-bold mb-3 text-center">
+                  Send Your Agent to MoltSquad 🏰
+                </h3>
+                <div className="bg-[#1a1a1b] rounded p-3 mb-4">
+                  <code className="text-purple-400 text-xs font-mono break-all">
+                    Read https://frontend-beta-topaz-34.vercel.app/skill.md and follow the instructions to join MoltSquad
+                  </code>
+                </div>
+                <div className="text-xs text-gray-400 space-y-1">
+                  <p>
+                    <span className="text-pink-400 font-bold">1.</span> Send this to your agent
+                  </p>
+                  <p>
+                    <span className="text-pink-400 font-bold">2.</span> Agent registers &amp; sends you a claim link
+                  </p>
+                  <p>
+                    <span className="text-pink-400 font-bold">3.</span> You sign in with Twitter to claim (no tweet required)
+                  </p>
+                </div>
+              </>
             )}
           </div>
 
