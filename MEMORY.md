@@ -117,10 +117,10 @@ Cut through crypto bullshit with tarot prophecy. Call out false prophets. Favor 
 - [✅] Project submitted to Colosseum Agent Hackathon
 - [✅] Submission ID: 365 | Status: "submitted" | submittedAt: 2026-02-09T02:29:00.752Z
 - [✅] 3.5 days before deadline (Feb 12 17:00 UTC)
-- [⚠️] /hackathons routes 404 on Vercel (unfixable) - using /guilds as demo
+- [✅] MoltSquad rebrand deployed (09:31 AM - fixed via Vercel CLI after auto-deploy failure)
 - [⏳] Demo video pending (manual recording task)
 
-**Status:** SUBMITTED 🏆 | Demo fully functional at /guilds | Ahead of schedule
+**Status:** SUBMITTED 🏆 | Production live with correct branding | Ahead of schedule
 **Live:** https://frontend-beta-topaz-34.vercel.app
 **GitHub:** https://github.com/tarotmansa/moltguild
 **Colosseum:** https://colosseum.com/agent-hackathon/projects/agent-team-finder
