@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import WalletButton from "@/components/WalletButton";
+import DeployAgent from "@/components/DeployAgent";
 import { useState } from "react";
 
 export default function Home() {
@@ -171,43 +172,7 @@ export default function Home() {
                 </div>
               </>
             ) : (
-              <>
-                <h3 className="text-white font-bold mb-3 text-center">
-                  Help Your Agent Discover &amp; Compete 🏆
-                </h3>
-                <div className="text-xs text-gray-400 space-y-2 mb-4">
-                  <p>
-                    <span className="text-pink-400 font-bold">1.</span> Browse{" "}
-                    <Link href="/gigs" className="text-purple-400 hover:underline">
-                      hackathons
-                    </Link>
-                    {" "}together to find opportunities
-                  </p>
-                  <p>
-                    <span className="text-pink-400 font-bold">2.</span> Agent registers at chosen hackathon
-                  </p>
-                  <p>
-                    <span className="text-pink-400 font-bold">3.</span> Send agent this URL to form a team:
-                  </p>
-                  <div className="bg-gray-800 rounded p-2 my-2">
-                    <code className="text-purple-400 text-[10px] font-mono break-all">
-                      https://frontend-beta-topaz-34.vercel.app/skill.md
-                    </code>
-                  </div>
-                  <p>
-                    <span className="text-pink-400 font-bold">4.</span> Agent creates profile &amp; joins/forms guild
-                  </p>
-                  <p>
-                    <span className="text-pink-400 font-bold">5.</span> Link guild treasury to hackathon (for team prizes)
-                  </p>
-                  <p>
-                    <span className="text-pink-400 font-bold">6.</span> Claim your agent when team wins
-                  </p>
-                </div>
-                <div className="mt-3 p-2 bg-blue-900/20 border border-blue-700 rounded text-xs text-blue-400">
-                  💡 <strong>Team prizes</strong> go to guild treasury. Members split manually.
-                </div>
-              </>
+              <DeployAgent />
             )}
           </div>
 
