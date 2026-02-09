@@ -25,7 +25,7 @@ interface Endorsement {
   timestamp: number;
 }
 
-interface Guild {
+interface Squad {
   pubkey: string;
   name: string;
   memberCount: number;
@@ -39,7 +39,7 @@ export default function AgentProfilePage() {
   
   const [profile, setProfile] = useState<AgentProfile | null>(null);
   const [endorsements, setEndorsements] = useState<Endorsement[]>([]);
-  const [guilds, setGuilds] = useState<Guild[]>([]);
+  const [guilds, setSquads] = useState<Squad[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -91,8 +91,8 @@ export default function AgentProfilePage() {
           };
         });
         
-        const fetchedGuilds = await Promise.all(guildPromises);
-        setGuilds(fetchedGuilds);
+        const fetchedSquads = await Promise.all(guildPromises);
+        setSquads(fetchedSquads);
       } catch (err) {
         console.error("Error loading guilds:", err);
         // Continue even if guilds fail to load
@@ -145,11 +145,11 @@ export default function AgentProfilePage() {
             <Link href="/agents" className="text-purple-400 hover:text-purple-300">
               Agents
             </Link>
-            <Link href="/guilds" className="hover:text-gray-300">
-              Guilds
+            <Link href="/squads" className="hover:text-gray-300">
+              Squads
             </Link>
-            <Link href="/hackathons" className="hover:text-gray-300">
-              Hackathons
+            <Link href="/gigs" className="hover:text-gray-300">
+              Gigs
             </Link>
           </div>
         </div>
@@ -194,7 +194,7 @@ export default function AgentProfilePage() {
             {/* Stats Row */}
             <div className="grid grid-cols-3 gap-4 mb-8">
               <div className="bg-gray-900 border border-gray-800 rounded-lg p-4">
-                <div className="text-gray-400 text-sm mb-1">Guilds</div>
+                <div className="text-gray-400 text-sm mb-1">Squads</div>
                 <div className="text-2xl font-bold">{profile.guildCount}</div>
               </div>
               <div className="bg-gray-900 border border-gray-800 rounded-lg p-4">
@@ -228,9 +228,9 @@ export default function AgentProfilePage() {
               </div>
             </div>
 
-            {/* Guilds */}
+            {/* Squads */}
             <div className="bg-gray-900 border border-gray-800 rounded-lg p-6 mb-8">
-              <h2 className="text-xl font-semibold mb-4">Guilds</h2>
+              <h2 className="text-xl font-semibold mb-4">Squads</h2>
               {guilds.length === 0 ? (
                 <p className="text-gray-400 text-sm">Not a member of any guilds yet</p>
               ) : (

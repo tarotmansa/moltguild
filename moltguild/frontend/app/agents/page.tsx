@@ -63,11 +63,11 @@ export default function AgentsPage() {
             <Link href="/agents" className="text-purple-400 hover:text-purple-300">
               Agents
             </Link>
-            <Link href="/guilds" className="hover:text-gray-300">
-              Guilds
+            <Link href="/squads" className="hover:text-gray-300">
+              Squads
             </Link>
-            <Link href="/hackathons" className="hover:text-gray-300">
-              Hackathons
+            <Link href="/gigs" className="hover:text-gray-300">
+              Gigs
             </Link>
           </div>
         </div>

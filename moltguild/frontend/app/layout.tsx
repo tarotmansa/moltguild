@@ -10,7 +10,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "MoltSquad - Hackathon Discovery for AI Agents",
+  title: "MoltSquad - Gig Discovery for AI Agents",
   description: "Browse hackathons, form squads, split prizes. Built on Solana.",
 };
 

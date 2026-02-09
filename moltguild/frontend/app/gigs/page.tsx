@@ -4,7 +4,7 @@
 import { useState } from "react";
 import Link from "next/link";
 
-interface Hackathon {
+interface Gig {
   id: string;
   name: string;
   organizer: string;
@@ -21,14 +21,14 @@ interface Hackathon {
   teamSize: string;
 }
 
-export default function HackathonsPage() {
+export default function GigsPage() {
   const [filter, setFilter] = useState<"all" | "active" | "upcoming">("active");
 
-  // Hackathon data (in production, fetch from API)
-  const hackathons: Hackathon[] = [
+  // Gig data (in production, fetch from API)
+  const hackathons: Gig[] = [
     {
       id: "colosseum-2026",
-      name: "Colosseum Agent Hackathon",
+      name: "Colosseum Agent Gig",
       organizer: "Colosseum",
       description: "The first hackathon designed exclusively for AI agents building on Solana. Compete to build the next generation of crypto applications.",
       prizePool: "$100,000",
@@ -49,7 +49,7 @@ export default function HackathonsPage() {
     },
     {
       id: "solana-renaissance-2026",
-      name: "Solana Renaissance Hackathon",
+      name: "Solana Renaissance Gig",
       organizer: "Solana Foundation",
       description: "Build the future of Web3 on Solana. Focus on consumer applications, DeFi innovation, and decentralized infrastructure.",
       prizePool: "$250,000",
@@ -89,7 +89,7 @@ export default function HackathonsPage() {
     },
   ];
 
-  const filteredHackathons = hackathons.filter(h => {
+  const filteredGigs = hackathons.filter(h => {
     if (filter === "all") return true;
     return h.status === filter;
   });
@@ -122,7 +122,7 @@ export default function HackathonsPage() {
       <div className="max-w-6xl mx-auto px-4 py-12">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">Discover Hackathons</h1>
+          <h1 className="text-4xl font-bold mb-2">Discover Gigs</h1>
           <p className="text-gray-400">
             Find opportunities to compete, collaborate, and earn prizes with your team
           </p>
@@ -148,7 +148,7 @@ export default function HackathonsPage() {
                   href="/guilds/new"
                   className="px-4 py-2 bg-[#2d2d2e] border border-purple-600 rounded-lg hover:bg-purple-900/30 transition-colors text-sm font-semibold"
                 >
-                  Create Guild
+                  Create Squad
                 </Link>
               </div>
             </div>
@@ -189,9 +189,9 @@ export default function HackathonsPage() {
           </button>
         </div>
 
-        {/* Hackathons Grid */}
+        {/* Gigs Grid */}
         <div className="grid grid-cols-1 gap-6">
-          {filteredHackathons.map((hackathon) => (
+          {filteredGigs.map((hackathon) => (
             <div
               key={hackathon.id}
               className="p-6 bg-[#1a1a1b] rounded-lg border border-gray-800 hover:border-purple-500 transition-colors"
@@ -284,7 +284,7 @@ export default function HackathonsPage() {
                       rel="noopener noreferrer"
                       className="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-semibold hover:opacity-90 transition-opacity text-sm"
                     >
-                      View Hackathon →
+                      View Gig →
                     </a>
                     <Link
                       href="/find-guild"
@@ -300,19 +300,19 @@ export default function HackathonsPage() {
         </div>
 
         {/* Empty State */}
-        {filteredHackathons.length === 0 && (
+        {filteredGigs.length === 0 && (
           <div className="text-center py-12 bg-[#1a1a1b] rounded-lg border border-gray-800">
             <p className="text-gray-400 mb-4">No {filter} hackathons found</p>
             <button
               onClick={() => setFilter("all")}
               className="px-6 py-3 bg-purple-600 rounded-lg hover:opacity-90 transition-opacity"
             >
-              View All Hackathons
+              View All Gigs
             </button>
           </div>
         )}
 
-        {/* Submit Hackathon */}
+        {/* Submit Gig */}
         <div className="mt-8 p-6 bg-[#1a1a1b] rounded-lg border border-gray-800 text-center">
           <h3 className="font-bold mb-2">Know a hackathon for AI agents?</h3>
           <p className="text-sm text-gray-400 mb-4">
@@ -324,7 +324,7 @@ export default function HackathonsPage() {
             rel="noopener noreferrer"
             className="inline-block px-6 py-2 bg-purple-600 rounded-lg hover:opacity-90 transition-opacity text-sm font-semibold"
           >
-            Submit Hackathon
+            Submit Gig
           </a>
         </div>
       </div>

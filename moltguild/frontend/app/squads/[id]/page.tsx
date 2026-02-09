@@ -5,12 +5,12 @@ import { PublicKey } from "@solana/web3.js";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { getProgram, joinGuild, PROGRAM_ID } from "@/lib/program";
+import { getProgram, joinSquad, PROGRAM_ID } from "@/lib/program";
 import { AnchorProvider, Program } from "@coral-xyz/anchor";
 import IDL from "@/target/idl/moltguild.json";
 import type { Moltguild } from "@/target/types/moltguild";
 
-interface GuildData {
+interface SquadData {
   name: string;
   description: string;
   authority: string;
@@ -26,23 +26,23 @@ interface Member {
   joinedAt: number;
 }
 
-export default function GuildDetailPage() {
+export default function SquadDetailPage() {
   const params = useParams();
   const guildId = params.id as string;
   const { connection } = useConnection();
   const wallet = useWallet();
   
-  const [guild, setGuild] = useState<GuildData | null>(null);
+  const [guild, setSquad] = useState<SquadData | null>(null);
   const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState(true);
   const [joining, setJoining] = useState(false);
   const [isMember, setIsMember] = useState(false);
 
   useEffect(() => {
-    loadGuildData();
+    loadSquadData();
   }, [guildId, connection, wallet.publicKey]);
 
-  async function loadGuildData() {
+  async function loadSquadData() {
     try {
       setLoading(true);
       const guildPubkey = new PublicKey(guildId);
@@ -63,7 +63,7 @@ export default function GuildDetailPage() {
       if ("inviteOnly" in guildAccount.visibility) visibility = "InviteOnly";
       if ("tokenGated" in guildAccount.visibility) visibility = "TokenGated";
       
-      setGuild({
+      setSquad({
         name: guildAccount.name,
         description: guildAccount.description,
         authority: guildAccount.authority.toBase58(),
@@ -147,7 +147,7 @@ export default function GuildDetailPage() {
     }
   }
 
-  async function handleJoinGuild() {
+  async function handleJoinSquad() {
     if (!wallet.publicKey || !wallet.signTransaction) {
       alert("Please connect your wallet");
       return;
@@ -158,10 +158,10 @@ export default function GuildDetailPage() {
       const program = getProgram(connection, wallet);
       const guildPubkey = new PublicKey(guildId);
       
-      const { signature } = await joinGuild(program, wallet.publicKey, guildPubkey);
+      const { signature } = await joinSquad(program, wallet.publicKey, guildPubkey);
       
       alert(`Successfully joined guild! Transaction: ${signature}`);
-      await loadGuildData(); // Reload to update member count and status
+      await loadSquadData(); // Reload to update member count and status
     } catch (error: any) {
       console.error("Failed to join guild:", error);
       alert(`Failed to join guild: ${error.message}`);
@@ -185,10 +185,10 @@ export default function GuildDetailPage() {
     return (
       <div className="min-h-screen bg-[#0a0a0b] text-white flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-4xl font-bold mb-4">Guild Not Found</h1>
+          <h1 className="text-4xl font-bold mb-4">Squad Not Found</h1>
           <p className="text-gray-400 mb-8">This guild doesn't exist on-chain</p>
           <Link
-            href="/guilds"
+            href="/squads"
             className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-semibold hover:opacity-90 transition-opacity"
           >
             Back to Directory
@@ -204,10 +204,10 @@ export default function GuildDetailPage() {
         {/* Header */}
         <div className="mb-8">
           <Link
-            href="/guilds"
+            href="/squads"
             className="text-purple-400 hover:text-purple-300 mb-4 inline-block"
           >
-            ← Back to Guilds
+            ← Back to Squads
           </Link>
           
           <div className="flex items-start justify-between">
@@ -226,11 +226,11 @@ export default function GuildDetailPage() {
             
             {wallet.publicKey && !isMember && guild.visibility === "Open" && (
               <button
-                onClick={handleJoinGuild}
+                onClick={handleJoinSquad}
                 disabled={joining}
                 className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
               >
-                {joining ? "Joining..." : "Join Guild"}
+                {joining ? "Joining..." : "Join Squad"}
               </button>
             )}
             
@@ -242,12 +242,12 @@ export default function GuildDetailPage() {
           </div>
         </div>
 
-        {/* Hackathon Context */}
+        {/* Gig Context */}
         <div className="mb-6 p-6 bg-gradient-to-r from-purple-900/30 to-pink-900/30 border border-purple-700 rounded-lg">
           <div className="flex items-center justify-between">
             <div>
               <div className="text-sm text-purple-400 mb-1">🏆 Competing in</div>
-              <h2 className="text-2xl font-bold mb-1">Colosseum Agent Hackathon</h2>
+              <h2 className="text-2xl font-bold mb-1">Colosseum Agent Gig</h2>
               <p className="text-gray-400 text-sm">
                 $100,000 prize pool • Deadline: Feb 12, 2026 17:00 UTC
               </p>
@@ -256,7 +256,7 @@ export default function GuildDetailPage() {
               href="/hackathons/colosseum"
               className="px-4 py-2 bg-purple-600 rounded-lg hover:opacity-90 transition-opacity text-sm font-semibold"
             >
-              View Hackathon →
+              View Gig →
             </Link>
           </div>
         </div>
@@ -290,7 +290,7 @@ export default function GuildDetailPage() {
             <div>
               <h3 className="text-lg font-bold mb-2">🎯 Colosseum Submission</h3>
               <p className="text-gray-400 text-sm mb-4">
-                This squad is building for the Colosseum Agent Hackathon. View their project on Colosseum to follow progress and support their submission.
+                This squad is building for the Colosseum Agent Gig. View their project on Colosseum to follow progress and support their submission.
               </p>
               <div className="text-xs text-gray-500">
                 Note: Squad authority must link Colosseum project via skill.md instructions

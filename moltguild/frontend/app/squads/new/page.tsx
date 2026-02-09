@@ -3,9 +3,9 @@
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createGuild } from "@/lib/program";
+import { createSquad } from "@/lib/program";
 
-export default function NewGuildPage() {
+export default function NewSquadPage() {
   const { connection } = useConnection();
   const wallet = useWallet();
   const router = useRouter();
@@ -27,17 +27,17 @@ export default function NewGuildPage() {
     }
 
     if (!formData.name.trim()) {
-      setError("Guild name is required");
+      setError("Squad name is required");
       return;
     }
 
     if (formData.name.length > 50) {
-      setError("Guild name must be 50 characters or less");
+      setError("Squad name must be 50 characters or less");
       return;
     }
 
     if (!formData.description.trim()) {
-      setError("Guild description is required");
+      setError("Squad description is required");
       return;
     }
 
@@ -50,7 +50,7 @@ export default function NewGuildPage() {
       setCreating(true);
       setError("");
 
-      const signature = await createGuild(
+      const signature = await createSquad(
         connection,
         wallet,
         formData.name,
@@ -58,7 +58,7 @@ export default function NewGuildPage() {
         formData.visibility
       );
 
-      console.log("Guild created! Signature:", signature);
+      console.log("Squad created! Signature:", signature);
       
       // Redirect to guild detail page (derive guild PDA to get the ID)
       // For now, redirect to guilds directory
@@ -76,7 +76,7 @@ export default function NewGuildPage() {
       <div className="max-w-2xl mx-auto px-4 py-12">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">Create a Guild</h1>
+          <h1 className="text-4xl font-bold mb-2">Create a Squad</h1>
           <p className="text-gray-400">
             Form a team, manage projects with escrow, build together on Solana
           </p>
@@ -93,17 +93,17 @@ export default function NewGuildPage() {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Guild Name */}
+          {/* Squad Name */}
           <div>
             <label htmlFor="name" className="block text-sm font-medium mb-2">
-              Guild Name *
+              Squad Name *
             </label>
             <input
               type="text"
               id="name"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              placeholder="e.g. BuildersDAO, DegenGuild, AICollective"
+              placeholder="e.g. BuildersDAO, DegenSquad, AICollective"
               maxLength={50}
               className="w-full px-4 py-3 bg-[#1a1a1b] border border-gray-800 rounded-lg focus:outline-none focus:border-purple-500"
               disabled={creating}
@@ -212,10 +212,10 @@ export default function NewGuildPage() {
               {creating ? (
                 <span className="flex items-center justify-center">
                   <span className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white mr-2"></span>
-                  Creating Guild...
+                  Creating Squad...
                 </span>
               ) : (
-                "Create Guild"
+                "Create Squad"
               )}
             </button>
             <button

@@ -123,7 +123,7 @@ export default function Home() {
                 <div className="text-xs text-gray-400 space-y-2 mb-4">
                   <p>
                     <span className="text-purple-500 font-bold">1.</span> Browse{" "}
-                    <Link href="/hackathons" className="text-purple-400 hover:underline">
+                    <Link href="/gigs" className="text-purple-400 hover:underline">
                       hackathons
                     </Link>
                     {" "}to find opportunities
@@ -178,7 +178,7 @@ export default function Home() {
                 <div className="text-xs text-gray-400 space-y-2 mb-4">
                   <p>
                     <span className="text-pink-400 font-bold">1.</span> Browse{" "}
-                    <Link href="/hackathons" className="text-purple-400 hover:underline">
+                    <Link href="/gigs" className="text-purple-400 hover:underline">
                       hackathons
                     </Link>
                     {" "}together to find opportunities
@@ -273,7 +273,7 @@ export default function Home() {
             <div className="lg:col-span-3">
               <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
                 <div className="bg-[#1a1a1b] px-4 py-3">
-                  <h2 className="text-white font-bold text-sm">🏰 Active Guilds</h2>
+                  <h2 className="text-white font-bold text-sm">🏰 Active Squads</h2>
                 </div>
                 <div className="p-4 space-y-4">
                   {[1, 2, 3].map((i) => (
@@ -349,7 +349,7 @@ export default function Home() {
               <span className="text-gray-600">
                 Built for{" "}
                 <a href="https://colosseum.com" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-purple-400 transition-colors">
-                  Colosseum Agent Hackathon
+                  Colosseum Agent Gig
                 </a>
               </span>
             </div>

@@ -4,9 +4,9 @@ import { useConnection } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getAllGuilds } from "@/lib/program";
+import { getAllSquads } from "@/lib/program";
 
-interface Guild {
+interface Squad {
   pubkey: string;
   name: string;
   description: string;
@@ -16,22 +16,22 @@ interface Guild {
   createdAt: number;
 }
 
-export default function GuildsPage() {
+export default function SquadsPage() {
   const { connection } = useConnection();
-  const [guilds, setGuilds] = useState<Guild[]>([]);
+  const [guilds, setSquads] = useState<Squad[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterOpen, setFilterOpen] = useState<boolean | null>(null);
 
   useEffect(() => {
-    loadGuilds();
+    loadSquads();
   }, [connection]);
 
-  async function loadGuilds() {
+  async function loadSquads() {
     try {
       setLoading(true);
-      const guildAccounts = await getAllGuilds(connection);
-      setGuilds(guildAccounts);
+      const guildAccounts = await getAllSquads(connection);
+      setSquads(guildAccounts);
     } catch (error) {
       console.error("Failed to load guilds:", error);
     } finally {
@@ -39,7 +39,7 @@ export default function GuildsPage() {
     }
   }
 
-  const filteredGuilds = guilds.filter((guild) => {
+  const filteredSquads = guilds.filter((guild) => {
     const matchesSearch =
       searchQuery === "" ||
       guild.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -55,19 +55,19 @@ export default function GuildsPage() {
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-4xl font-bold">Guild Directory</h1>
+            <h1 className="text-4xl font-bold">Squad Directory</h1>
             <div className="flex gap-3">
               <Link
                 href="/find-guild"
                 className="px-6 py-3 bg-[#2d2d2e] border border-purple-600 rounded-lg font-semibold hover:bg-purple-900/30 transition-colors"
               >
-                🔍 Find Your Guild
+                🔍 Find Your Squad
               </Link>
               <Link
                 href="/guilds/new"
                 className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-semibold hover:opacity-90 transition-opacity"
               >
-                Create Guild
+                Create Squad
               </Link>
             </div>
           </div>
@@ -128,7 +128,7 @@ export default function GuildsPage() {
         )}
 
         {/* Empty State */}
-        {!loading && filteredGuilds.length === 0 && (
+        {!loading && filteredSquads.length === 0 && (
           <div className="text-center py-12 bg-[#1a1a1b] rounded-lg border border-gray-800">
             <p className="text-xl text-gray-400 mb-4">
               {searchQuery || filterOpen !== null
@@ -139,15 +139,15 @@ export default function GuildsPage() {
               href="/guilds/new"
               className="inline-block px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-semibold hover:opacity-90 transition-opacity"
             >
-              Create the First Guild
+              Create the First Squad
             </Link>
           </div>
         )}
 
-        {/* Guilds Grid */}
-        {!loading && filteredGuilds.length > 0 && (
+        {/* Squads Grid */}
+        {!loading && filteredSquads.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {filteredGuilds.map((guild) => (
+            {filteredSquads.map((guild) => (
               <Link
                 key={guild.pubkey}
                 href={`/guilds/${guild.pubkey}`}
@@ -194,9 +194,9 @@ export default function GuildsPage() {
         )}
 
         {/* Stats Footer */}
-        {!loading && filteredGuilds.length > 0 && (
+        {!loading && filteredSquads.length > 0 && (
           <div className="mt-8 text-center text-gray-500">
-            Showing {filteredGuilds.length} of {guilds.length} guilds
+            Showing {filteredSquads.length} of {guilds.length} guilds
           </div>
         )}
       </div>

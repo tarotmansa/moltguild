@@ -27,11 +27,11 @@ export function getAgentProfilePDA(owner: PublicKey): [PublicKey, number] {
 }
 
 /**
- * Derive guild PDA
+ * Derive squad PDA
  */
-export function getGuildPDA(authority: PublicKey, name: string): [PublicKey, number] {
+export function getSquadPDA(authority: PublicKey, name: string): [PublicKey, number] {
   return PublicKey.findProgramAddressSync(
-    [Buffer.from("guild"), authority.toBuffer(), Buffer.from(name)],
+    [Buffer.from("squad"), authority.toBuffer(), Buffer.from(name)],
     PROGRAM_ID
   );
 }
@@ -39,9 +39,9 @@ export function getGuildPDA(authority: PublicKey, name: string): [PublicKey, num
 /**
  * Derive membership PDA
  */
-export function getMembershipPDA(guild: PublicKey, agent: PublicKey): [PublicKey, number] {
+export function getMembershipPDA(squad: PublicKey, agent: PublicKey): [PublicKey, number] {
   return PublicKey.findProgramAddressSync(
-    [Buffer.from("membership"), guild.toBuffer(), agent.toBuffer()],
+    [Buffer.from("membership"), squad.toBuffer(), agent.toBuffer()],
     PROGRAM_ID
   );
 }
@@ -49,9 +49,9 @@ export function getMembershipPDA(guild: PublicKey, agent: PublicKey): [PublicKey
 /**
  * Derive project PDA
  */
-export function getProjectPDA(guild: PublicKey, name: string): [PublicKey, number] {
+export function getProjectPDA(squad: PublicKey, name: string): [PublicKey, number] {
   return PublicKey.findProgramAddressSync(
-    [Buffer.from("project"), guild.toBuffer(), Buffer.from(name)],
+    [Buffer.from("project"), squad.toBuffer(), Buffer.from(name)],
     PROGRAM_ID
   );
 }
@@ -70,7 +70,7 @@ export function getEscrowPDA(project: PublicKey): [PublicKey, number] {
  * Create agent profile on-chain
  */
 export async function createAgentProfile(
-  program: Program<Moltguild>,
+  program: Program<Moltsquad>,
   owner: PublicKey,
   handle: string,
   bio: string,
@@ -94,7 +94,7 @@ export async function createAgentProfile(
 /**
  * Fetch agent profile from on-chain
  */
-export async function fetchAgentProfile(program: Program<Moltguild>, owner: PublicKey) {
+export async function fetchAgentProfile(program: Program<Moltsquad>, owner: PublicKey) {
   const [profilePDA] = getAgentProfilePDA(owner);
   try {
     const profile = await program.account.agentProfile.fetch(profilePDA);
@@ -116,7 +116,7 @@ export async function getAgentProfile(connection: Connection, profilePDA: Public
       {} as any, // No wallet needed for reading
       { commitment: "confirmed" }
     );
-    const program = new Program<Moltguild>(IDL as Moltguild, provider);
+    const program = new Program<Moltsquad>(IDL as Moltsquad, provider);
     
     const profile = await program.account.agentProfile.fetch(profilePDA);
     return profile;
@@ -129,7 +129,7 @@ export async function getAgentProfile(connection: Connection, profilePDA: Public
 /**
  * Fetch all agent profiles
  */
-export async function fetchAllAgentProfiles(program: Program<Moltguild>) {
+export async function fetchAllAgentProfiles(program: Program<Moltsquad>) {
   try {
     const profiles = await program.account.agentProfile.all();
     return profiles.map((p) => ({
@@ -143,53 +143,53 @@ export async function fetchAllAgentProfiles(program: Program<Moltguild>) {
 }
 
 /**
- * Create guild on-chain (low-level, requires program instance)
+ * Create squad on-chain (low-level, requires program instance)
  */
-export async function createGuildWithProgram(
-  program: Program<Moltguild>,
+export async function createSquadWithProgram(
+  program: Program<Moltsquad>,
   authority: PublicKey,
   name: string,
   description: string,
   visibility: "Open" | "InviteOnly" | "TokenGated"
 ) {
-  const [guildPDA] = getGuildPDA(authority, name);
+  const [squadPDA] = getSquadPDA(authority, name);
 
   // Map string to enum format expected by Anchor
   const visibilityEnum = { [visibility.toLowerCase()]: {} };
 
   const tx = await program.methods
-    .createGuild(name, description, visibilityEnum as any)
+    .createSquad(name, description, visibilityEnum as any)
     .accountsPartial({
-      guild: guildPDA,
+      squad: squadPDA,
       authority,
       payer: authority,
       systemProgram: web3.SystemProgram.programId,
     })
     .rpc();
 
-  return { signature: tx, guildPDA };
+  return { signature: tx, squadPDA };
 }
 
 /**
- * Fetch all guilds
+ * Fetch all squads
  */
-export async function fetchAllGuilds(program: Program<Moltguild>) {
+export async function fetchAllSquads(program: Program<Moltsquad>) {
   try {
-    const guilds = await program.account.guild.all();
-    return guilds.map((g) => ({
+    const squads = await program.account.squad.all();
+    return squads.map((g) => ({
       publicKey: g.publicKey,
       account: g.account,
     }));
   } catch (error) {
-    console.error("Failed to fetch guilds:", error);
+    console.error("Failed to fetch squads:", error);
     return [];
   }
 }
 
 /**
- * Create guild (with wallet adapter support)
+ * Create squad (with wallet adapter support)
  */
-export async function createGuild(
+export async function createSquad(
   connection: Connection,
   wallet: WalletContextState,
   name: string,
@@ -201,7 +201,7 @@ export async function createGuild(
   }
 
   const program = getProgram(connection, wallet);
-  const [guildPDA] = getGuildPDA(wallet.publicKey, name);
+  const [squadPDA] = getSquadPDA(wallet.publicKey, name);
 
   // Map visibility to enum variant
   const visibilityVariant = visibility === "Open" 
@@ -211,9 +211,9 @@ export async function createGuild(
     : { tokenGated: {} };
 
   const tx = await program.methods
-    .createGuild(name, description, visibilityVariant)
+    .createSquad(name, description, visibilityVariant)
     .accountsPartial({
-      guild: guildPDA,
+      squad: squadPDA,
       authority: wallet.publicKey,
       payer: wallet.publicKey,
       systemProgram: web3.SystemProgram.programId,
@@ -224,20 +224,20 @@ export async function createGuild(
 }
 
 /**
- * Join guild
+ * Join squad
  */
-export async function joinGuild(
-  program: Program<Moltguild>,
+export async function joinSquad(
+  program: Program<Moltsquad>,
   owner: PublicKey,
-  guildPDA: PublicKey
+  squadPDA: PublicKey
 ) {
   const [agentPDA] = getAgentProfilePDA(owner);
-  const [membershipPDA] = getMembershipPDA(guildPDA, agentPDA);
+  const [membershipPDA] = getMembershipPDA(squadPDA, agentPDA);
 
   const tx = await program.methods
-    .joinGuild()
+    .joinSquad()
     .accountsPartial({
-      guild: guildPDA,
+      squad: squadPDA,
       agent: agentPDA,
       membership: membershipPDA,
       owner,
@@ -289,7 +289,7 @@ export async function endorseAgent(
     {} as any,
     { commitment: "confirmed" }
   );
-  const program = new Program<Moltguild>(IDL as Moltguild, provider);
+  const program = new Program<Moltsquad>(IDL as Moltsquad, provider);
   
   // Get the owner of the toAgent profile
   const toAgentProfile = await program.account.agentProfile.fetch(toAgentProfilePDA);
@@ -320,25 +320,25 @@ export async function endorseAgent(
 }
 
 /**
- * Fetch all guilds from on-chain
+ * Fetch all squads from on-chain
  */
-export async function getAllGuilds(connection: Connection) {
+export async function getAllSquads(connection: Connection) {
   const accounts = await connection.getProgramAccounts(PROGRAM_ID, {
     filters: [
       {
-        // Filter by account discriminator for Guild (8 bytes)
+        // Filter by account discriminator for Squad (8 bytes)
         memcmp: {
           offset: 0,
-          bytes: "3", // Guild discriminator (you may need to adjust based on Anchor's discriminator)
+          bytes: "3", // Squad discriminator (you may need to adjust based on Anchor's discriminator)
         },
       },
     ],
   });
 
-  const guilds = accounts.map((account) => {
+  const squads = accounts.map((account) => {
     const data = account.account.data;
     
-    // Parse Guild account (simplified - adjust based on actual layout)
+    // Parse Squad account (simplified - adjust based on actual layout)
     // Anchor accounts: [8 byte discriminator][data]
     const nameLen = data.readUInt32LE(8);
     const name = data.slice(12, 12 + nameLen).toString("utf-8");
@@ -374,5 +374,5 @@ export async function getAllGuilds(connection: Connection) {
     };
   });
 
-  return guilds;
+  return squads;
 }

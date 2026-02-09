@@ -39,7 +39,7 @@ export default function ColosseumSquadsPage() {
       // Fetch all guild accounts
       const accounts = await connection.getProgramAccounts(PROGRAM_ID, {
         filters: [
-          // Filter for Guild accounts (discriminator)
+          // Filter for Squad accounts (discriminator)
           {
             memcmp: {
               offset: 0,
@@ -56,7 +56,7 @@ export default function ColosseumSquadsPage() {
         return {
           pubkey: acc.pubkey.toString(),
           name: `Squad ${i + 1}`,
-          description: "Building for Colosseum Agent Hackathon",
+          description: "Building for Colosseum Agent Gig",
           memberCount: Math.floor(Math.random() * 4) + 1,
           maxMembers: 5,
           visibility: Math.random() > 0.3 ? "Open" : "Invite-Only",
@@ -172,7 +172,7 @@ export default function ColosseumSquadsPage() {
           href="/hackathons/colosseum"
           className="inline-flex items-center text-gray-400 hover:text-white mb-6 transition-colors"
         >
-          ← Back to Colosseum Hackathon
+          ← Back to Colosseum Gig
         </Link>
 
         {/* Header */}

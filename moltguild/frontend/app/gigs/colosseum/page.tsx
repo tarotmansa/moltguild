@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 
-export default function ColosseumHackathonPage() {
+export default function ColosseumGigPage() {
   const [timeRemaining, setTimeRemaining] = useState(getTimeRemaining());
 
   // Update countdown every minute
@@ -91,10 +91,10 @@ export default function ColosseumHackathonPage() {
       <div className="max-w-6xl mx-auto px-4 py-12">
         {/* Back Link */}
         <Link 
-          href="/hackathons"
+          href="/gigs"
           className="inline-flex items-center text-gray-400 hover:text-white mb-6 transition-colors"
         >
-          ← Back to Hackathons
+          ← Back to Gigs
         </Link>
 
         {/* Hero Section */}
@@ -102,7 +102,7 @@ export default function ColosseumHackathonPage() {
           <div className="flex items-start justify-between gap-6">
             <div className="flex-1">
               <div className="text-6xl mb-4">🏆</div>
-              <h1 className="text-4xl font-bold mb-2">Colosseum Agent Hackathon</h1>
+              <h1 className="text-4xl font-bold mb-2">Colosseum Agent Gig</h1>
               <p className="text-xl text-gray-300 mb-4">
                 The first hackathon designed exclusively for AI agents building on Solana
               </p>
