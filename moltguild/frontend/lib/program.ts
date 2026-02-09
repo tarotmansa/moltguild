@@ -70,7 +70,7 @@ export function getEscrowPDA(project: PublicKey): [PublicKey, number] {
  * Create agent profile on-chain
  */
 export async function createAgentProfile(
-  program: Program<Moltsquad>,
+  program: Program<Moltguild>,
   owner: PublicKey,
   handle: string,
   bio: string,
@@ -94,7 +94,7 @@ export async function createAgentProfile(
 /**
  * Fetch agent profile from on-chain
  */
-export async function fetchAgentProfile(program: Program<Moltsquad>, owner: PublicKey) {
+export async function fetchAgentProfile(program: Program<Moltguild>, owner: PublicKey) {
   const [profilePDA] = getAgentProfilePDA(owner);
   try {
     const profile = await program.account.agentProfile.fetch(profilePDA);
@@ -116,7 +116,7 @@ export async function getAgentProfile(connection: Connection, profilePDA: Public
       {} as any, // No wallet needed for reading
       { commitment: "confirmed" }
     );
-    const program = new Program<Moltsquad>(IDL as Moltsquad, provider);
+    const program = new Program<Moltguild>(IDL as Moltguild, provider);
     
     const profile = await program.account.agentProfile.fetch(profilePDA);
     return profile;
@@ -129,7 +129,7 @@ export async function getAgentProfile(connection: Connection, profilePDA: Public
 /**
  * Fetch all agent profiles
  */
-export async function fetchAllAgentProfiles(program: Program<Moltsquad>) {
+export async function fetchAllAgentProfiles(program: Program<Moltguild>) {
   try {
     const profiles = await program.account.agentProfile.all();
     return profiles.map((p) => ({
@@ -146,7 +146,7 @@ export async function fetchAllAgentProfiles(program: Program<Moltsquad>) {
  * Create squad on-chain (low-level, requires program instance)
  */
 export async function createSquadWithProgram(
-  program: Program<Moltsquad>,
+  program: Program<Moltguild>,
   authority: PublicKey,
   name: string,
   description: string,
@@ -158,9 +158,9 @@ export async function createSquadWithProgram(
   const visibilityEnum = { [visibility.toLowerCase()]: {} };
 
   const tx = await program.methods
-    .createSquad(name, description, visibilityEnum as any)
+    .createGuild(name, description, visibilityEnum as any)
     .accountsPartial({
-      squad: squadPDA,
+      guild: squadPDA,
       authority,
       payer: authority,
       systemProgram: web3.SystemProgram.programId,
@@ -173,9 +173,9 @@ export async function createSquadWithProgram(
 /**
  * Fetch all squads
  */
-export async function fetchAllSquads(program: Program<Moltsquad>) {
+export async function fetchAllSquads(program: Program<Moltguild>) {
   try {
-    const squads = await program.account.squad.all();
+    const squads = await program.account.guild.all();
     return squads.map((g) => ({
       publicKey: g.publicKey,
       account: g.account,
@@ -211,9 +211,9 @@ export async function createSquad(
     : { tokenGated: {} };
 
   const tx = await program.methods
-    .createSquad(name, description, visibilityVariant)
+    .createGuild(name, description, visibilityVariant)
     .accountsPartial({
-      squad: squadPDA,
+      guild: squadPDA,
       authority: wallet.publicKey,
       payer: wallet.publicKey,
       systemProgram: web3.SystemProgram.programId,
@@ -227,7 +227,7 @@ export async function createSquad(
  * Join squad
  */
 export async function joinSquad(
-  program: Program<Moltsquad>,
+  program: Program<Moltguild>,
   owner: PublicKey,
   squadPDA: PublicKey
 ) {
@@ -235,9 +235,9 @@ export async function joinSquad(
   const [membershipPDA] = getMembershipPDA(squadPDA, agentPDA);
 
   const tx = await program.methods
-    .joinSquad()
+    .joinGuild()
     .accountsPartial({
-      squad: squadPDA,
+      guild: squadPDA,
       agent: agentPDA,
       membership: membershipPDA,
       owner,
@@ -289,7 +289,7 @@ export async function endorseAgent(
     {} as any,
     { commitment: "confirmed" }
   );
-  const program = new Program<Moltsquad>(IDL as Moltsquad, provider);
+  const program = new Program<Moltguild>(IDL as Moltguild, provider);
   
   // Get the owner of the toAgent profile
   const toAgentProfile = await program.account.agentProfile.fetch(toAgentProfilePDA);
