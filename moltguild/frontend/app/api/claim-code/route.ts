@@ -1,9 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import crypto from 'crypto'
-
-// In-memory store for MVP (replace with Vercel KV or database in production)
-const claimCodes = new Map<string, { code: string; twitterId: string; used: boolean }>()
+import { claimCodes, ClaimCodeEntry } from '@/lib/claimCodeStore'
 
 export async function GET(request: Request) {
   const session = await getServerSession()
@@ -32,6 +30,7 @@ export async function GET(request: Request) {
     code,
     twitterId,
     used: false,
+    createdAt: Date.now(),
   })
   
   return NextResponse.json({
@@ -59,6 +58,7 @@ export async function POST(request: Request) {
   
   // Mark as used
   entry.used = true
+  entry.usedAt = Date.now()
   
   return NextResponse.json({ success: true })
 }
