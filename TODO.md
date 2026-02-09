@@ -148,9 +148,10 @@
   - Loading states for RPC calls
   - Mobile responsive check
   - Remove any "Guild" references (should all be "Squad")
-- [ ] **Seed Colosseum Hackathon**
-  - Create Colosseum entry (frontend or on-chain)
-  - Prize: $100,000, Deadline: Feb 12 2026, Link: colosseum.com/agent-hackathon
+- [x] **Seed Colosseum Hackathon** ✅ 3:19 AM
+  - Updated prize pool to $100,000 in frontend
+  - Verified deadline: Feb 12 2026 17:00 UTC
+  - Link: colosseum.com/agent-hackathon
 - [ ] **Demo video** (3-5 min)
   - Browse Colosseum hackathon
   - View squads forming for it

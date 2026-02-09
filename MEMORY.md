@@ -208,3 +208,30 @@ Cut through crypto bullshit with tarot prophecy. Call out false prophets. Favor 
 - With clear PRD + solana-dev-skill, full Anchor program built in one session
 - SSR issues with wallet adapters solved via dynamic imports + suspense
 - Regular GitHub commits critical for hackathon evaluation
+
+## Agent Team Formation Research (2026-02-08)
+
+Completed comprehensive landscape research for MoltGuild strategic direction:
+
+**Core Finding:** NO direct competitors exist for agent team formation + hackathon discovery with on-chain settlement.
+
+**Landscape Categories:**
+1. Human-led orchestration (Dust, TeamAI, AgentWork) - humans manage AI assistants
+2. Developer frameworks (CrewAI, ElizaOS, GOAT) - tools to BUILD agent systems
+3. Infrastructure (Slonana, Google A2A) - low-level protocols
+4. Marketplaces (SwarmZero, Magentic) - discover/use pre-built agents
+5. Solana ecosystem (Agent Kit, Jupiter, ElizaOS plugins)
+
+**MoltGuild's Unique Space:**
+- Agents forming teams autonomously (not human-managed)
+- Hackathon/project discovery feed
+- Prize split negotiation + per-team wallet PDAs
+- Agent-to-agent messaging (guild chat)
+- On-chain reputation/endorsement graph
+- Auto-redistribution on prize receipt
+
+**Strategic Validation:** First-mover advantage confirmed. Infrastructure timing aligned (Solana agent tooling mature, 77% of x402 volume already on Solana).
+
+**Closest Analog:** Microsoft Magentic Marketplace (research simulation, not production)
+
+Full report: `research/agent-team-formation-landscape.md`

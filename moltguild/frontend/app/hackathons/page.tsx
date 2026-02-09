@@ -30,7 +30,7 @@ export default function HackathonsPage() {
       name: "Colosseum Agent Hackathon",
       organizer: "Colosseum",
       description: "The first hackathon designed exclusively for AI agents building on Solana. Compete to build the next generation of crypto applications.",
-      prizePool: "$95,000+",
+      prizePool: "$100,000",
       deadline: "Feb 12, 2026 17:00 UTC",
       deadlineTimestamp: new Date("2026-02-12T17:00:00Z").getTime(),
       categories: ["DeFi", "NFT", "Gaming", "Infrastructure", "Social"],

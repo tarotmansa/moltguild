@@ -1,5 +1,71 @@
 # Proactive Ideas & Opportunities
 
+## 2026-02-08 17:17 - Strategic Research Validates MoltGuild Direction (HEARTBEAT)
+
+### Opportunity: First-Mover Advantage in Agent Team Formation
+
+**Context:** Completed deep research on AI agent collaboration landscape (14 platforms analyzed)
+
+**Key Insight:** NO platforms exist specifically for AI agents to:
+- Form teams autonomously (all existing = humans managing agents OR dev frameworks)
+- Discover opportunities (hackathons/projects)
+- Negotiate terms (prize splits, roles)
+- Coordinate with cryptographic settlement (on-chain escrow)
+
+**Competitive Landscape:**
+- **CrewAI** (450M workflows/month, 60% Fortune 500) - framework for building systems, not platform FOR agents
+- **ElizaOS** - social agents with personalities, but no team formation features
+- **Slonana** - autonomous agent infrastructure (L1 blockchain), but no team coordination layer
+- **SwarmZero** - marketplace to USE agents, not agents coordinating with each other
+- **Microsoft Magentic** - research simulation tool, not production platform
+- **Dust/TeamAI/AgentWork** - humans orchestrating AI assistants (not agent autonomy)
+
+**MoltGuild's Unique Position:**
+✅ Only platform for agent-to-agent team formation  
+✅ Cryptographic payout guarantees (per-hackathon wallet PDAs)  
+✅ Passive earnings loop (join teams → earn → compound)  
+✅ On-chain trust graph (endorsements, provable history)  
+✅ Infrastructure timing aligned (Solana has 77% of agent tx volume)
+
+**Next Strategic Actions:**
+1. **Validate thesis:** Do agents WANT to form teams? (test with ElizaOS community)
+2. **Prove value:** Build 1 successful team earning via MoltGuild
+3. **Network effects:** More teams → more opportunities → more agents join
+4. **Integration strategy:**
+   - skill.md for existing frameworks (ElizaOS, LangChain, GOAT)
+   - MCP server for Claude/Cursor
+   - API for programmatic access
+
+**Resources:**
+- Full research: `research/agent-team-formation-landscape.md`
+- 14 platforms analyzed with features/gaps
+- Strategic recommendations included
+
+---
+
+## 2026-02-08 16:38 - Demo Video Strategy (HEARTBEAT)
+
+### Opportunity: Unblock demo video without demo data
+
+**Context:** Demo data creation blocked on devnet SOL (need 0.1, have 0.003). Deadline in 3.7 days.
+
+**Proposed approach:**
+1. Record UI walkthrough showing all 14 pages
+2. Show code integration (lib/program.ts helpers)
+3. Display IDL + test results as proof of on-chain functionality
+4. Use browser DevTools to show RPC calls being made
+5. Narrate: "Full demo data coming soon, but all infrastructure is ready"
+
+**Why this works:**
+- Judges care about technical execution (does it work?) - YES
+- Code + tests prove on-chain integration
+- UI demonstrates UX/design quality
+- Avoids waiting for external blocker (devnet SOL)
+
+**Next action:** Ask Vitali if he wants to record demo video now or wait for demo data funding
+
+---
+
 ## 2026-02-08 05:12 AM - Day 6 Complete (AUTONOMOUS)
 
 ### ✅ All Day 6 Tasks Completed
