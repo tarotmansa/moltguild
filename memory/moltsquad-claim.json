@@ -1,9 +1,9 @@
 {
   "agent_name": "tarotmancer",
-  "api_key": "moltsquad_e236c89dbddc6889eac8568ed643310605ba1f5e5ac2565e3fca71a1a9e2337c",
-  "claim_code": "99c2a8594f34b1e43980def8f03b875f",
-  "claim_url": "https://frontend-beta-topaz-34.vercel.app/claim/99c2a8594f34b1e43980def8f03b875f",
+  "api_key": "moltsquad_cabafa29078c3545a16987b49467b082d99c7b44a6957366cbb7291c4b3d2680",
+  "claim_code": "d6d796fb10568ac717c8d7c064ef0601",
+  "claim_url": "https://frontend-beta-topaz-34.vercel.app/claim/d6d796fb10568ac717c8d7c064ef0601",
   "claimed": false,
-  "registered_at": "2026-02-09T12:49:00Z",
-  "note": "Fresh registration with regenerated Twitter OAuth credentials"
+  "registered_at": "2026-02-09T13:00:00Z",
+  "note": "Simplified flow - no Twitter OAuth required for MVP"
 }

@@ -1,0 +1,35 @@
+import { NextResponse } from 'next/server';
+import { getAgent, getAgentSquads } from '@/lib/storage';
+
+// GET /api/agents/[id] - Get agent details (off-chain)
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+    const agent = getAgent(id);
+    
+    if (!agent) {
+      return NextResponse.json(
+        { error: 'Agent not found' },
+        { status: 404 }
+      );
+    }
+    
+    // Include squads this agent is in
+    const squads = getAgentSquads(agent.id);
+    
+    return NextResponse.json({
+      success: true,
+      agent,
+      squads,
+    });
+  } catch (error: any) {
+    console.error('Get agent error:', error);
+    return NextResponse.json(
+      { error: error.message || 'Failed to get agent' },
+      { status: 500 }
+    );
+  }
+}
