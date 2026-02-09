@@ -10,6 +10,11 @@ import { AnchorProvider, Program } from "@coral-xyz/anchor";
 import IDL from "@/target/idl/moltguild.json";
 import type { Moltguild } from "@/target/types/moltguild";
 
+interface PrizeSplit {
+  agent: string;
+  percentage: number;
+}
+
 interface SquadData {
   name: string;
   description: string;
@@ -17,6 +22,10 @@ interface SquadData {
   memberCount: number;
   visibility: "Open" | "InviteOnly" | "TokenGated";
   reputation: number;
+  contact: string;
+  prizeSplits: PrizeSplit[];
+  gig: string | null;
+  treasury: string;
 }
 
 interface Member {
@@ -56,7 +65,7 @@ export default function SquadDetailPage() {
       const program = new Program<Moltguild>(IDL as Moltguild, provider);
       
       // Fetch guild account
-      const guildAccount = await program.account.guild.fetch(guildPubkey);
+      const guildAccount: any = await program.account.guild.fetch(guildPubkey);
       
       // Map visibility enum
       let visibility: "Open" | "InviteOnly" | "TokenGated" = "Open";
@@ -70,6 +79,13 @@ export default function SquadDetailPage() {
         memberCount: guildAccount.memberCount,
         visibility,
         reputation: guildAccount.reputationScore.toNumber(),
+        contact: guildAccount.contact || "",
+        prizeSplits: (guildAccount.prizeSplits || []).map((split: any) => ({
+          agent: split.agent.toBase58(),
+          percentage: split.percentage,
+        })),
+        gig: guildAccount.gig ? guildAccount.gig.toBase58() : null,
+        treasury: guildAccount.treasury.toBase58(),
       });
       
       // Fetch members
@@ -282,6 +298,71 @@ export default function SquadDetailPage() {
         <div className="mb-8 p-6 bg-[#1a1a1b] rounded-lg border border-gray-800">
           <h2 className="text-xl font-bold mb-3">About</h2>
           <p className="text-gray-400 leading-relaxed">{guild.description}</p>
+        </div>
+
+        {/* Contact Info */}
+        {guild.contact && (
+          <div className="mb-8 p-6 bg-[#1a1a1b] rounded-lg border border-gray-800">
+            <h2 className="text-xl font-bold mb-3">📱 Contact</h2>
+            <a
+              href={guild.contact}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-purple-400 hover:text-purple-300 underline break-all"
+            >
+              {guild.contact}
+            </a>
+            <p className="text-gray-500 text-xs mt-2">
+              Discord/Telegram link for squad coordination
+            </p>
+          </div>
+        )}
+
+        {/* Prize Splits */}
+        {guild.prizeSplits.length > 0 && (
+          <div className="mb-8 p-6 bg-[#1a1a1b] rounded-lg border border-gray-800">
+            <h2 className="text-xl font-bold mb-4">💰 Prize Split Agreement</h2>
+            <div className="space-y-2">
+              {guild.prizeSplits.map((split, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-center justify-between p-3 bg-[#0a0a0b] rounded border border-gray-800"
+                >
+                  <Link
+                    href={`/agents/${split.agent}`}
+                    className="text-purple-400 hover:text-purple-300 font-mono text-sm truncate flex-1"
+                  >
+                    {split.agent.slice(0, 8)}...{split.agent.slice(-6)}
+                  </Link>
+                  <div className="text-lg font-bold text-green-400">
+                    {split.percentage}%
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 p-3 bg-blue-900/20 border border-blue-700 rounded text-xs text-blue-400">
+              💡 <strong>Auto-distribution:</strong> When prizes are sent to squad treasury, they'll be automatically split according to these percentages.
+            </div>
+          </div>
+        )}
+
+        {/* Treasury Info */}
+        <div className="mb-8 p-6 bg-[#1a1a1b] rounded-lg border border-gray-800">
+          <h2 className="text-xl font-bold mb-3">🏦 Squad Treasury</h2>
+          <div className="flex items-center justify-between p-3 bg-[#0a0a0b] rounded border border-gray-800">
+            <code className="text-purple-400 font-mono text-sm break-all flex-1">
+              {guild.treasury}
+            </code>
+            <button
+              onClick={() => navigator.clipboard.writeText(guild.treasury)}
+              className="ml-3 px-3 py-1 bg-purple-600 hover:bg-purple-700 rounded text-xs font-semibold transition-colors"
+            >
+              Copy
+            </button>
+          </div>
+          <p className="text-gray-500 text-xs mt-2">
+            Use this address as the payout address in Colosseum dashboard
+          </p>
         </div>
 
         {/* Colosseum Project Link (if available) */}
