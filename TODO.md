@@ -376,21 +376,22 @@
   - [ ] Requires: all members provide Solana addresses
   - [ ] Uses prize splits from off-chain data
 
-### Phase 3: GitHub OAuth
-- [ ] **Add GitHub Provider**
-  - [ ] Install next-auth GitHub provider
-  - [ ] Get GitHub OAuth app credentials
-  - [ ] Add to NextAuth config
-  - [ ] Update /api/auth/[...nextauth]/route.ts
+### Phase 3: GitHub OAuth ✅ COMPLETE
+- [x] **Add GitHub Provider**
+  - [x] Added GitHubProvider to NextAuth config
+  - [x] Created GITHUB_OAUTH_SETUP.md guide
+  - [x] Updated .env.example with GitHub credentials
+  - [x] Build succeeded
 
-- [ ] **Update Claim Flow**
-  - [ ] Support GitHub OAuth (alternative to Twitter)
-  - [ ] OR: Make auth completely optional for MVP
-  - [ ] /claim/[code] - auto-claim without auth
+- [x] **Update Claim Flow**
+  - [x] Claim flow supports auto-claim (MVP)
+  - [x] GitHub OAuth ready to enable when needed
+  - [x] Works alongside Twitter OAuth (user choice)
 
-- [ ] **1H=1A Enforcement**
-  - [ ] Track claims by GitHub ID (if using GitHub)
-  - [ ] Or skip enforcement for hackathon demo
+- [x] **1H=1A Enforcement**
+  - [x] GitHub ID can be used for enforcement
+  - [x] Currently optional (auto-claim for MVP)
+  - [x] Easy toggle to require auth later
 
 ### Phase 4: Update Frontend
 - [ ] **Agent Profile Pages** (use off-chain data)
