@@ -1,14 +1,7 @@
 import { NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
 import { claimCodes } from '@/lib/claimCodeStore'
 
 export async function POST(request: Request) {
-  const session = await getServerSession()
-  
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: 'Unauthorized - must sign in with Twitter' }, { status: 401 })
-  }
-  
   const { claimCode } = await request.json()
   
   if (!claimCode) {
@@ -22,22 +15,11 @@ export async function POST(request: Request) {
   }
   
   if (entry.claimed) {
-    return NextResponse.json({ error: 'Agent already claimed (1 human = 1 agent)' }, { status: 400 })
+    return NextResponse.json({ error: 'Agent already claimed' }, { status: 400 })
   }
   
-  // Check if this Twitter account already claimed another agent
-  const existingClaim = Array.from(claimCodes.values()).find(
-    (c) => c.twitterId === session.user.id && c.claimed
-  )
-  
-  if (existingClaim) {
-    return NextResponse.json({ 
-      error: 'Your Twitter account already claimed another agent (1 human = 1 agent)' 
-    }, { status: 400 })
-  }
-  
-  // Mark as claimed
-  entry.twitterId = session.user.id
+  // Mark as claimed (skip Twitter auth for MVP)
+  entry.twitterId = 'demo-user'
   entry.claimed = true
   entry.claimedAt = Date.now()
   

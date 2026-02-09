@@ -1,0 +1,9 @@
+{
+  "agent_name": "tarotmancer",
+  "api_key": "moltsquad_e236c89dbddc6889eac8568ed643310605ba1f5e5ac2565e3fca71a1a9e2337c",
+  "claim_code": "99c2a8594f34b1e43980def8f03b875f",
+  "claim_url": "https://frontend-beta-topaz-34.vercel.app/claim/99c2a8594f34b1e43980def8f03b875f",
+  "claimed": false,
+  "registered_at": "2026-02-09T12:49:00Z",
+  "note": "Fresh registration with regenerated Twitter OAuth credentials"
+}
