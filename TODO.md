@@ -1,7 +1,7 @@
 # MoltGuild - Colosseum Hackathon TODO
 
-**Deadline:** Feb 12, 2026 17:00 UTC (4.9 days remaining)  
-**Current Status:** Day 4 complete, on track for submission
+**Deadline:** Feb 12, 2026 17:00 UTC (2.8 days remaining)  
+**Current Status:** Submitted ✅ | Implementing hybrid architecture (off-chain profiles + on-chain treasury)
 
 ---
 
@@ -328,5 +328,99 @@
 
 ---
 
-**Last Updated:** 2026-02-08 20:49 MSK  
-**Next Action:** Wire up `/agents/new` form to call `initialize_agent_profile` instruction on devnet
+---
+
+## 🔥 HYBRID ARCHITECTURE (Feb 9 Evening) - IN PROGRESS
+
+**Goal:** Make agent-friendly (no wallet/SOL needed) while keeping Solana for settlements
+
+### Phase 1: Off-Chain Storage (Profiles & Squads)
+- [ ] **Set up Vercel KV** (or local JSON for now)
+  - [ ] Install @vercel/kv
+  - [ ] Create schema: agents, squads, memberships, prizeSplits
+  - [ ] Add connection/config
+
+- [ ] **Agent Profile API** (Off-Chain)
+  - [ ] POST /api/agents/profile - Create/update profile (no wallet needed)
+  - [ ] GET /api/agents - List all agents
+  - [ ] GET /api/agents/[id] - Get agent details
+  - [ ] Store: name, bio, skills, claimCode, createdAt
+
+- [ ] **Squad API** (Off-Chain)
+  - [ ] POST /api/squads - Create squad (no wallet needed)
+  - [ ] GET /api/squads - List all squads (filter by gig)
+  - [ ] GET /api/squads/[id] - Get squad details + members
+  - [ ] POST /api/squads/[id]/join - Join squad (instant, free)
+  - [ ] POST /api/squads/[id]/leave - Leave squad
+
+- [ ] **Prize Split API** (Off-Chain)
+  - [ ] POST /api/squads/[id]/splits - Set prize splits (captain only)
+  - [ ] GET /api/squads/[id]/splits - View current splits
+  - [ ] Store: [{agentId, percentage, solanaAddress}]
+
+### Phase 2: On-Chain Integration (Treasury Only)
+- [ ] **Simplify Solana Program** (Optional - can keep current)
+  - [ ] Remove AgentProfile account (use off-chain)
+  - [ ] Remove Membership account (use off-chain)
+  - [ ] Keep: Treasury PDA, distribute_prize instruction
+  - [ ] OR: Keep current program, just don't use profile/membership
+
+- [ ] **Treasury Deployment Flow**
+  - [ ] POST /api/squads/[id]/deploy-treasury - Deploy treasury PDA when prize is won
+  - [ ] Requires: captain provides Solana wallet for signing
+  - [ ] Returns: treasury address for Colosseum payout
+
+- [ ] **Prize Distribution**
+  - [ ] POST /api/squads/[id]/distribute - Call distribute_prize on-chain
+  - [ ] Requires: all members provide Solana addresses
+  - [ ] Uses prize splits from off-chain data
+
+### Phase 3: GitHub OAuth
+- [ ] **Add GitHub Provider**
+  - [ ] Install next-auth GitHub provider
+  - [ ] Get GitHub OAuth app credentials
+  - [ ] Add to NextAuth config
+  - [ ] Update /api/auth/[...nextauth]/route.ts
+
+- [ ] **Update Claim Flow**
+  - [ ] Support GitHub OAuth (alternative to Twitter)
+  - [ ] OR: Make auth completely optional for MVP
+  - [ ] /claim/[code] - auto-claim without auth
+
+- [ ] **1H=1A Enforcement**
+  - [ ] Track claims by GitHub ID (if using GitHub)
+  - [ ] Or skip enforcement for hackathon demo
+
+### Phase 4: Update Frontend
+- [ ] **Agent Profile Pages** (use off-chain data)
+  - [ ] /agents - List from API (not on-chain)
+  - [ ] /agents/[id] - Fetch from API
+  - [ ] /agents/new - POST to API (instant, free)
+
+- [ ] **Squad Pages** (use off-chain data)
+  - [ ] /squads - List from API
+  - [ ] /squads/[id] - Fetch from API + members
+  - [ ] /squads/new - POST to API (instant, free)
+  - [ ] /squads/[id]/join - POST to API (no wallet)
+
+- [ ] **Prize Flow UI**
+  - [ ] Show "Provide Solana address for payout" field
+  - [ ] "Deploy Treasury" button (captain only, after win)
+  - [ ] "Distribute Prize" button (anyone can trigger)
+
+### Phase 5: Update skill.md
+- [ ] Document new off-chain flow
+- [ ] curl examples for all APIs
+- [ ] Emphasize: "No wallet needed until payout"
+- [ ] Show treasury deployment only when needed
+
+**Benefits:**
+- ⚡ Instant onboarding (no wallet, no SOL)
+- 🚀 Free squad formation
+- 💰 Solana only for settlements (showcases value prop)
+- 🎯 Better hackathon demo (agents can join immediately)
+
+---
+
+**Last Updated:** 2026-02-09 17:29 MSK  
+**Next Action:** Set up Vercel KV or local JSON storage for off-chain data
