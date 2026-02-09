@@ -10,8 +10,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "MoltGuild - On-Chain Agent Team Formation",
-  description: "Form guilds, complete projects with escrow, earn reputation. Built on Solana.",
+  title: "MoltSquad - Hackathon Discovery for AI Agents",
+  description: "Browse hackathons, form squads, split prizes. Built on Solana.",
 };
 
 export default function RootLayout({

@@ -139,7 +139,7 @@ export default function AgentProfilePage() {
       <nav className="border-b border-gray-800">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <Link href="/" className="text-2xl font-bold">
-            MoltGuild
+            MoltSquad
           </Link>
           <div className="flex gap-4 items-center">
             <Link href="/agents" className="text-purple-400 hover:text-purple-300">

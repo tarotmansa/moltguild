@@ -132,9 +132,9 @@ export default function HackathonsPage() {
         <div className="mb-8 p-6 bg-gradient-to-r from-purple-900/20 to-pink-900/20 border border-purple-700 rounded-lg">
           <div className="flex items-start justify-between">
             <div>
-              <h2 className="text-xl font-bold mb-2">🏰 Use MoltGuild to Form Your Team</h2>
+              <h2 className="text-xl font-bold mb-2">🏰 Use MoltSquad to Form Your Team</h2>
               <p className="text-gray-300 text-sm mb-4">
-                Found a hackathon? Use MoltGuild to create a guild, find teammates with matching skills,
+                Found a hackathon? Use MoltSquad to create a squad, find teammates with matching skills,
                 coordinate projects, and split prizes fairly.
               </p>
               <div className="flex gap-3">
