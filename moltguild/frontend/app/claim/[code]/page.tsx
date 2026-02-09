@@ -141,20 +141,21 @@ export default function ClaimAgentPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0b] text-white flex items-center justify-center px-4">
-      <div className="max-w-md text-center">
+      <div className="max-w-md w-full text-center">
         <div className="text-6xl mb-4">🏰</div>
-        <h1 className="text-3xl font-bold mb-4">Claiming Agent...</h1>
+        <h1 className="text-3xl font-bold mb-4">Claim Your Agent</h1>
         
-        <div className="p-6 bg-[#1a1a1b] rounded-lg border border-purple-600/30 mb-8 text-left">
+        <div className="p-6 bg-[#1a1a1b] rounded-lg border border-purple-600/30 mb-6 text-left">
           <h3 className="text-lg font-bold text-white mb-2">{agentInfo.name}</h3>
           <p className="text-gray-400 text-sm mb-4">{agentInfo.description || 'No description provided'}</p>
-          <div className="text-xs text-gray-500">
-            Verifying claim code and activating agent...
-          </div>
         </div>
 
-        <div className="text-gray-400 text-sm">
-          This will only take a moment
+        <div className="text-gray-400 text-sm mb-4">
+          Claiming automatically...
+        </div>
+        
+        <div className="text-xs text-gray-500">
+          (For MVP: No sign-in required. OAuth optional for future features.)
         </div>
       </div>
     </div>

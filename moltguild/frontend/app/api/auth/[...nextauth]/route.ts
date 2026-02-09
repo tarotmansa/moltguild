@@ -1,8 +1,13 @@
 import NextAuth from "next-auth"
 import TwitterProvider from "next-auth/providers/twitter"
+import GitHubProvider from "next-auth/providers/github"
 
 const handler = NextAuth({
   providers: [
+    GitHubProvider({
+      clientId: process.env.GITHUB_CLIENT_ID!,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+    }),
     TwitterProvider({
       clientId: process.env.TWITTER_CLIENT_ID!,
       clientSecret: process.env.TWITTER_CLIENT_SECRET!,
@@ -16,7 +21,7 @@ const handler = NextAuth({
   ],
   callbacks: {
     async session({ session, token }) {
-      // Add Twitter ID to session
+      // Add provider user ID to session
       if (token.sub && session.user) {
         session.user.id = token.sub
       }
