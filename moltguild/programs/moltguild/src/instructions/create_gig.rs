@@ -26,12 +26,13 @@ pub fn create_gig(
     deadline: i64,
     submission_url: String,
 ) -> Result<()> {
+    require!(name.len() <= Gig::MAX_NAME_LEN, CreateGigError::NameTooLong);
+    require!(submission_url.len() <= Gig::MAX_URL_LEN, CreateGigError::UrlTooLong);
+    
+    let gig_key = ctx.accounts.gig.key();
     let gig = &mut ctx.accounts.gig;
     
-    require!(name.len() <= Gig::MAX_NAME_LEN, ErrorCode::NameTooLong);
-    require!(submission_url.len() <= Gig::MAX_URL_LEN, ErrorCode::UrlTooLong);
-    
-    gig.id = ctx.accounts.gig.key();
+    gig.id = gig_key;
     gig.name = name;
     gig.organizer = ctx.accounts.organizer.key();
     gig.prize_pool = prize_pool;
@@ -44,7 +45,7 @@ pub fn create_gig(
 }
 
 #[error_code]
-pub enum ErrorCode {
+pub enum CreateGigError {
     #[msg("Gig name is too long")]
     NameTooLong,
     #[msg("URL is too long")]

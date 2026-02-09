@@ -228,3 +228,18 @@
 - Persistent URL parsing errors for all skill updates
 - May need to file issue or check registry status
 - Workaround: manual skill updates if critical patches available
+
+## 2026-02-09 13:27 - Vercel Routing Issue Root Cause
+
+**Problem:** Renamed route folders (app/squads, app/gigs) return 404 on Vercel despite existing in repo and building successfully locally.
+
+**Hypothesis:** Vercel's build cache or routing config not detecting folder renames via git mv. Old /guilds /hackathons routes work.
+
+**Potential fixes:**
+1. Delete .vercel folder and redeploy clean
+2. Add explicit rewrites in vercel.json or next.config.js
+3. Use Next.js middleware for route aliases
+4. Keep old routes, add new ones as aliases (backwards compatible)
+
+**Impact:** Low (old routes functional, just cosmetic rebrand issue)
+**Priority:** Defer until after program deployment

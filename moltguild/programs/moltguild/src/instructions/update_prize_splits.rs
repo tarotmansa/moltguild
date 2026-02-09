@@ -20,8 +20,8 @@ pub fn update_prize_splits(
     
     // Validate splits sum to 100%
     let total: u16 = prize_splits.iter().map(|s| s.percentage as u16).sum();
-    require!(total == 100, ErrorCode::InvalidPrizeSplits);
-    require!(prize_splits.len() <= Guild::MAX_MEMBERS, ErrorCode::TooManySplits);
+    require!(total == 100, UpdatePrizeSplitsError::InvalidPrizeSplits);
+    require!(prize_splits.len() <= Guild::MAX_MEMBERS, UpdatePrizeSplitsError::TooManySplits);
     
     guild.prize_splits = prize_splits;
     
@@ -29,7 +29,7 @@ pub fn update_prize_splits(
 }
 
 #[error_code]
-pub enum ErrorCode {
+pub enum UpdatePrizeSplitsError {
     #[msg("Prize splits must sum to 100%")]
     InvalidPrizeSplits,
     #[msg("Too many prize splits")]

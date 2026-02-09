@@ -1,5 +1,4 @@
 use anchor_lang::prelude::*;
-use anchor_lang::system_program::{transfer, Transfer};
 use crate::state::*;
 
 #[derive(Accounts)]
@@ -13,7 +12,7 @@ pub struct DistributePrize<'info> {
         bump
     )]
     /// CHECK: Treasury PDA, validated by seeds
-    pub treasury: AccountInfo<'info>,
+    pub treasury: SystemAccount<'info>,
     
     pub caller: Signer<'info>,
     
@@ -22,41 +21,40 @@ pub struct DistributePrize<'info> {
 
 pub fn distribute_prize(ctx: Context<DistributePrize>) -> Result<()> {
     let guild = &ctx.accounts.guild;
-    let treasury = &ctx.accounts.treasury;
+    let treasury = ctx.accounts.treasury.to_account_info();
     
     // Get treasury balance
     let balance = treasury.lamports();
-    require!(balance > 0, ErrorCode::NoPrizeToDistribute);
+    require!(balance > 0, DistributePrizeError::NoPrizeToDistribute);
     
     // Validate prize splits
-    require!(!guild.prize_splits.is_empty(), ErrorCode::NoPrizeSplitsDefined);
+    require!(!guild.prize_splits.is_empty(), DistributePrizeError::NoPrizeSplitsDefined);
     let total: u16 = guild.prize_splits.iter().map(|s| s.percentage as u16).sum();
-    require!(total == 100, ErrorCode::InvalidPrizeSplits);
+    require!(total == 100, DistributePrizeError::InvalidPrizeSplits);
+    
+    // Validate remaining_accounts match prize_splits
+    require_eq!(
+        ctx.remaining_accounts.len(),
+        guild.prize_splits.len(),
+        DistributePrizeError::InvalidRecipientAccounts
+    );
     
     // Distribute to each agent based on percentage
-    for split in &guild.prize_splits {
+    for (i, split) in guild.prize_splits.iter().enumerate() {
+        let recipient = &ctx.remaining_accounts[i];
+        
+        // Validate recipient pubkey matches split
+        require_keys_eq!(
+            recipient.key(),
+            split.agent,
+            DistributePrizeError::InvalidRecipientAccount
+        );
+        
         let share = (balance as u128 * split.percentage as u128 / 100) as u64;
         
         if share > 0 {
-            // Transfer from treasury to agent
-            let guild_key = guild.key();
-            let seeds = &[
-                b"treasury",
-                guild_key.as_ref(),
-                &[ctx.bumps.treasury],
-            ];
-            let signer_seeds = &[&seeds[..]];
-            
-            let cpi_ctx = CpiContext::new_with_signer(
-                ctx.accounts.system_program.to_account_info(),
-                Transfer {
-                    from: treasury.to_account_info(),
-                    to: split.agent.to_account_info(),
-                },
-                signer_seeds,
-            );
-            
-            transfer(cpi_ctx, share)?;
+            **treasury.try_borrow_mut_lamports()? -= share;
+            **recipient.try_borrow_mut_lamports()? += share;
         }
     }
     
@@ -64,11 +62,15 @@ pub fn distribute_prize(ctx: Context<DistributePrize>) -> Result<()> {
 }
 
 #[error_code]
-pub enum ErrorCode {
+pub enum DistributePrizeError {
     #[msg("No prize to distribute")]
     NoPrizeToDistribute,
     #[msg("No prize splits defined")]
     NoPrizeSplitsDefined,
     #[msg("Prize splits must sum to 100%")]
     InvalidPrizeSplits,
+    #[msg("Number of recipient accounts must match prize splits")]
+    InvalidRecipientAccounts,
+    #[msg("Recipient account does not match prize split")]
+    InvalidRecipientAccount,
 }
