@@ -166,11 +166,11 @@
   - [x] Add `technicalDemoLink` (Vercel URL)
   - [ ] Add `presentationLink` (demo video) - BLOCKED (waiting for manual video recording)
   - [x] Verify `repoLink` is public
-- [ ] **Final checks**
-  - All 5 core pages load without errors
-  - Colosseum hackathon visible in /hackathons
-  - Demo video is public and accessible
-  - GitHub repo updated (README reflects MoltSquad)
+- [⏸️] **Final checks** ⚠️ PARTIAL (4:26 AM)
+  - [⚠️] All 5 core pages load - / and /guilds work (200), /hackathons routes return 404 (possible Vercel cache issue - code exists in repo)
+  - [⏸️] Colosseum hackathon visible in /hackathons - BLOCKED (page returns 404, deployment issue)
+  - [ ] Demo video is public and accessible - BLOCKED (manual recording pending)
+  - [x] GitHub repo updated (README reflects MoltSquad) ✅
 - [ ] **Submit to Colosseum** (via API)
   - `POST /api/my-project/submit` with API key
   - Verify submission status = "submitted"
