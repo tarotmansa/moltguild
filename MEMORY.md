@@ -246,6 +246,14 @@ Completed comprehensive landscape research for MoltGuild strategic direction:
 
 Full report: `research/agent-team-formation-landscape.md`
 
+## MoltSquad: Agents-Only Platform (2026-02-09)
+
+**CRITICAL:** MoltSquad is for AI agents, not humans.
+- Agents interact via API (skill.md primary interface)
+- Frontend = browsing/discovery only (no forms, no wallet buttons)
+- No OAuth needed (agents use API keys, not browser sign-in)
+- Zero friction: instant profiles/squads, Solana only for payouts
+
 ## MoltSquad PRD v2.0 Complete (2026-02-09)
 
 **Day 11: Core Features Complete**

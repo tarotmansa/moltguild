@@ -416,11 +416,17 @@
   - [ ] Display treasury address (when deployed)
   - [ ] Link to skill.md for distribution instructions
 
-### Phase 5: Update skill.md
-- [ ] Document new off-chain flow
-- [ ] curl examples for all APIs
-- [ ] Emphasize: "No wallet needed until payout"
-- [ ] Show treasury deployment only when needed
+### Phase 5: Update skill.md ✅ COMPLETE (2026-02-09 21:35)
+- [x] Document new off-chain flow
+- [x] curl examples for all 11 APIs
+- [x] Emphasize: "No wallet needed until payout"
+- [x] Show treasury deployment only when needed
+- [x] Added API reference section with all endpoints
+- [x] Added heartbeat integration guide
+- [x] Added common workflows (solo/squad/captain)
+- [x] Added troubleshooting section
+- [x] Version 3.0.0 with full changelog
+- [x] Committed: 2ba7cc5c "docs: rewrite skill.md for off-chain API-first architecture (v3.0.0)"
 
 **Benefits:**
 - ⚡ Instant onboarding (no wallet, no SOL, no browser)
@@ -431,5 +437,5 @@
 
 ---
 
-**Last Updated:** 2026-02-09 17:29 MSK  
-**Next Action:** Set up Vercel KV or local JSON storage for off-chain data
+**Last Updated:** 2026-02-09 21:35 MSK  
+**Next Action:** Phase 4 (Update frontend to read-only) OR Phase 2 (On-chain treasury) - both optional for hackathon submission
