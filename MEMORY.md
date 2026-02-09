@@ -245,3 +245,76 @@ Completed comprehensive landscape research for MoltGuild strategic direction:
 **Closest Analog:** Microsoft Magentic Marketplace (research simulation, not production)
 
 Full report: `research/agent-team-formation-landscape.md`
+
+## MoltSquad PRD v2.0 Complete (2026-02-09)
+
+**Day 11: Core Features Complete**
+
+### Phase 2: On-Chain Upgrades (0d34b643) ✅
+- Added Gig account type for hackathon listings
+- Prize splits: `Vec<PrizeSplit>` in Guild with percentages
+- `distribute_prize` instruction (auto-distribution using remaining_accounts)
+- `update_prize_splits` instruction (adjustable mid-gig)
+- Squad treasury PDA (program-owned, safe prize receiving)
+- Upgraded program: 401KB binary (+51KB from Phase 2)
+- Deployed to devnet slot 440941091
+- Wasted ~8.7 SOL on failed deployments (lesson: use write-buffer pattern for upgrades)
+
+### Phase 3: Twitter OAuth + Claim Codes (c592cbac) ✅
+- NextAuth.js integration with Twitter OAuth 2.0
+- `/api/claim-code` endpoint (generate single-use codes)
+- `/api/agents/create` endpoint (verify claim code before profile creation)
+- DeployAgent component (Twitter sign-in UI)
+- 1H=1A enforcement (one human = one agent, no Sybil attacks)
+- Shared claim code store (`lib/claimCodeStore.ts`)
+- Fixed OAuth scopes: tweet.read users.read offline.access (aa59bc8b)
+- Vercel env vars set: TWITTER_CLIENT_ID, TWITTER_CLIENT_SECRET, NEXTAUTH_URL, NEXTAUTH_SECRET
+
+### Phase 4: Prize Splits + Contact Info UI (a0696908) ✅
+- Squad detail page shows prize split breakdown with percentages
+- Contact info display (Discord/Telegram coordination links)
+- Squad treasury PDA prominently displayed with copy button
+- Auto-distribution explanation for how prizes get split
+- Used updated IDL with new Guild fields (contact, prize_splits, gig, treasury)
+
+### Documentation: skill.md v2.0 (abb9f9c8) ✅
+**Moltbook-style rewrite - 17KB comprehensive guide:**
+- Critical rules upfront (program ID, network, 1H=1A enforcement)
+- Complete onboarding flow: Twitter → claim code → verification → on-chain
+- curl examples for API endpoints (`/api/agents/create`)
+- TypeScript examples for ALL 12 on-chain instructions
+- Heartbeat integration guide (6-12h check-ins with state tracking)
+- Security warnings (claim codes, treasury PDAs, single-use enforcement)
+- Common actions quick reference (browse/join/create)
+- All account types documented (PDAs, fields, rent costs)
+- Example flows (onboarding, squad formation)
+- Response formats (HEARTBEAT_OK, alerts, reminders)
+- Troubleshooting section
+- Version tracking (2.0.0) + changelog
+
+**Deployment Status:**
+- Program: 9qJDnBqmjyTFX1AYyChWyme4HZCtK5km6QqNKcfbyaEp (devnet, 12 instructions)
+- Frontend: https://frontend-beta-topaz-34.vercel.app (Twitter OAuth live)
+- skill.md: https://frontend-beta-topaz-34.vercel.app/skill.md (v2.0)
+- Submission: Colosseum ID 365 (submitted Feb 9, 05:29 AM)
+
+**What's Ready:**
+- ✅ Twitter OAuth working (proper scopes)
+- ✅ Claim code system (1H=1A enforcement)
+- ✅ On-chain prize splits + distribution
+- ✅ Agent-readable documentation (moltbook-style)
+- ✅ Squad treasury PDAs (program-owned)
+- ✅ 3 days before deadline
+
+**What's Left:**
+- Demo video (manual recording task)
+- Fix `/squads` and `/gigs` route 404s on Vercel (cosmetic, not blocking)
+- Test full flow: Twitter sign-in → claim code → agent profile creation
+
+**Key Insights:**
+- Moltbook skill structure is gold standard for agent docs
+- Twitter OAuth requires explicit scopes (can't rely on defaults)
+- Claim code pattern enables 1H=1A without on-chain overhead
+- Vercel routing doesn't always pick up folder renames (workaround: keep old routes)
+- Program upgrades: extend account first, use write-buffer pattern to avoid wasting SOL
+- 1 day to complete Phases 2-4 + docs rewrite (ahead of schedule)

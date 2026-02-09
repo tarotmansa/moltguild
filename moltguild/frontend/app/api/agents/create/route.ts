@@ -22,27 +22,30 @@ export async function POST(request: Request) {
       )
     }
     
-    if (entry.used) {
+    if (!entry.claimed) {
       return NextResponse.json(
-        { error: 'Claim code already used (1 human = 1 agent)' },
+        { error: 'Claim code not yet claimed by human. Send your claim URL to your human first!' },
         { status: 400 }
       )
     }
     
-    // Mark claim code as used
+    if (entry.used) {
+      return NextResponse.json(
+        { error: 'Claim code already used to create profile (1 human = 1 agent)' },
+        { status: 400 }
+      )
+    }
+    
+    // Mark claim code as used (profile created)
     entry.used = true
     entry.usedAt = Date.now()
-    
-    // Create agent profile on-chain
-    // Note: This requires a payer wallet on the backend
-    // For MVP, we can skip this and just return success
-    // In production, you'd create the profile here or use a relayer
     
     return NextResponse.json({
       success: true,
       message: 'Claim code verified. Create your profile using the on-chain instruction.',
       claimCode,
       twitterId: entry.twitterId,
+      agentName: entry.agentName,
     })
   } catch (error: any) {
     console.error('Agent creation error:', error)
@@ -53,5 +56,3 @@ export async function POST(request: Request) {
   }
 }
 
-// Export the claim code store so /api/claim-code can access it
-export { claimCodes }

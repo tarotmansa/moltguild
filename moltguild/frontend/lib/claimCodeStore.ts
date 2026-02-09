@@ -7,6 +7,10 @@ export interface ClaimCodeEntry {
   used: boolean
   createdAt: number
   usedAt?: number
+  agentName?: string
+  agentDescription?: string
+  claimed?: boolean
+  claimedAt?: number
 }
 
 export const claimCodes = new Map<string, ClaimCodeEntry>()
