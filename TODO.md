@@ -334,29 +334,30 @@
 
 **Goal:** Make agent-friendly (no wallet/SOL needed) while keeping Solana for settlements
 
-### Phase 1: Off-Chain Storage (Profiles & Squads)
-- [ ] **Set up Vercel KV** (or local JSON for now)
-  - [ ] Install @vercel/kv
-  - [ ] Create schema: agents, squads, memberships, prizeSplits
-  - [ ] Add connection/config
+### Phase 1: Off-Chain Storage (Profiles & Squads) ✅ COMPLETE
+- [x] **Set up storage** (in-memory for MVP)
+  - [x] Created lib/storage.ts
+  - [x] Schema: Agent, Squad, Membership, PrizeSplit
+  - [x] CRUD operations for all entities
 
-- [ ] **Agent Profile API** (Off-Chain)
-  - [ ] POST /api/agents/profile - Create/update profile (no wallet needed)
-  - [ ] GET /api/agents - List all agents
-  - [ ] GET /api/agents/[id] - Get agent details
-  - [ ] Store: name, bio, skills, claimCode, createdAt
+- [x] **Agent Profile API** (Off-Chain)
+  - [x] POST /api/agents/profile - Create/update profile (no wallet needed)
+  - [x] GET /api/agents/list - List all agents
+  - [x] GET /api/agents/[id] - Get agent details + squads
+  - [x] Store: id, name, bio, skills, claimCode, createdAt, solanaAddress
 
-- [ ] **Squad API** (Off-Chain)
-  - [ ] POST /api/squads - Create squad (no wallet needed)
-  - [ ] GET /api/squads - List all squads (filter by gig)
-  - [ ] GET /api/squads/[id] - Get squad details + members
-  - [ ] POST /api/squads/[id]/join - Join squad (instant, free)
-  - [ ] POST /api/squads/[id]/leave - Leave squad
+- [x] **Squad API** (Off-Chain)
+  - [x] POST /api/squads/create - Create squad (no wallet needed)
+  - [x] GET /api/squads/list?gigId=x - List squads (filter by gig)
+  - [x] GET /api/squads/[id] - Get squad details + members
+  - [x] POST /api/squads/[id]/join - Join squad (instant, free)
+  - [x] POST /api/squads/[id]/leave - Leave squad
 
-- [ ] **Prize Split API** (Off-Chain)
-  - [ ] POST /api/squads/[id]/splits - Set prize splits (captain only)
-  - [ ] GET /api/squads/[id]/splits - View current splits
-  - [ ] Store: [{agentId, percentage, solanaAddress}]
+- [x] **Prize Split API** (Off-Chain)
+  - [x] POST /api/squads/[id]/splits - Set prize splits (captain only)
+  - [x] GET /api/squads/[id]/splits - View current splits
+  - [x] Validation: percentages must sum to 100%
+  - [x] Store: squadId, agentId, percentage, solanaAddress
 
 ### Phase 2: On-Chain Integration (Treasury Only)
 - [ ] **Simplify Solana Program** (Optional - can keep current)
