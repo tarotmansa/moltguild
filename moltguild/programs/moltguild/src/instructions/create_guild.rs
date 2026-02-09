@@ -7,6 +7,7 @@ pub fn create_guild(
     name: String,
     description: String,
     visibility: GuildVisibility,
+    contact: Option<String>,
 ) -> Result<()> {
     require!(
         name.len() <= Guild::MAX_NAME_LEN,
@@ -16,6 +17,13 @@ pub fn create_guild(
         description.len() <= Guild::MAX_DESC_LEN,
         MoltGuildError::GuildDescriptionTooLong
     );
+    
+    if let Some(ref c) = contact {
+        require!(
+            c.len() <= Guild::MAX_CONTACT_LEN,
+            MoltGuildError::ContactTooLong
+        );
+    }
 
     let guild = &mut ctx.accounts.guild;
     guild.authority = ctx.accounts.authority.key();
@@ -26,6 +34,11 @@ pub fn create_guild(
     guild.reputation_score = 0;
     guild.visibility = visibility;
     guild.token_mint = None;
+    guild.gig = None; // NEW: No gig by default
+    guild.treasury = ctx.accounts.treasury.key(); // NEW: Treasury PDA
+    guild.prize_splits = Vec::new(); // NEW: Empty splits initially
+    guild.contact = contact.unwrap_or_default(); // NEW: Discord/Telegram link
+    guild.submission_link = None; // NEW: No submission yet
     guild.bump = ctx.bumps.guild;
 
     msg!("Guild created: {}", name);
@@ -43,6 +56,13 @@ pub struct CreateGuild<'info> {
         bump
     )]
     pub guild: Account<'info, Guild>,
+    
+    #[account(
+        seeds = [b"treasury", guild.key().as_ref()],
+        bump
+    )]
+    /// CHECK: Treasury PDA, validated by seeds
+    pub treasury: AccountInfo<'info>,
     
     pub authority: Signer<'info>,
     

@@ -35,8 +35,9 @@ pub mod moltguild {
         name: String,
         description: String,
         visibility: state::GuildVisibility,
+        contact: Option<String>,
     ) -> Result<()> {
-        instructions::create_guild(ctx, name, description, visibility)
+        instructions::create_guild(ctx, name, description, visibility, contact)
     }
 
     pub fn join_guild(ctx: Context<JoinGuild>) -> Result<()> {
@@ -69,5 +70,26 @@ pub mod moltguild {
 
     pub fn close_guild(ctx: Context<CloseGuild>) -> Result<()> {
         instructions::close_guild(ctx)
+    }
+
+    pub fn create_gig(
+        ctx: Context<CreateGig>,
+        name: String,
+        prize_pool: u64,
+        deadline: i64,
+        submission_url: String,
+    ) -> Result<()> {
+        instructions::create_gig(ctx, name, prize_pool, deadline, submission_url)
+    }
+
+    pub fn update_prize_splits(
+        ctx: Context<UpdatePrizeSplits>,
+        prize_splits: Vec<state::PrizeSplit>,
+    ) -> Result<()> {
+        instructions::update_prize_splits(ctx, prize_splits)
+    }
+
+    pub fn distribute_prize(ctx: Context<DistributePrize>) -> Result<()> {
+        instructions::distribute_prize(ctx)
     }
 }

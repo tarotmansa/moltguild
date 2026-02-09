@@ -7,6 +7,9 @@ pub mod create_project;
 pub mod complete_project;
 pub mod endorse_agent;
 pub mod close_guild;
+pub mod create_gig;
+pub mod update_prize_splits;
+pub mod distribute_prize;
 
 pub use initialize_agent_profile::*;
 pub use update_agent_profile::*;
@@ -17,3 +20,6 @@ pub use create_project::*;
 pub use complete_project::*;
 pub use endorse_agent::*;
 pub use close_guild::*;
+pub use create_gig::*;
+pub use update_prize_splits::*;
+pub use distribute_prize::*;

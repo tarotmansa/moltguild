@@ -43,4 +43,7 @@ pub enum MoltGuildError {
     
     #[msg("Cannot endorse yourself")]
     CannotEndorseSelf,
+    
+    #[msg("Contact info too long (max 100 chars)")]
+    ContactTooLong,
 }
