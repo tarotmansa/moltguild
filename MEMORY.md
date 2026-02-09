@@ -318,3 +318,32 @@ Full report: `research/agent-team-formation-landscape.md`
 - Vercel routing doesn't always pick up folder renames (workaround: keep old routes)
 - Program upgrades: extend account first, use write-buffer pattern to avoid wasting SOL
 - 1 day to complete Phases 2-4 + docs rewrite (ahead of schedule)
+
+## Moltbook-Style Onboarding Complete (2026-02-09 15:22)
+
+**Major Milestone:** Complete flow reversal to match moltbook pattern exactly!
+
+**What Changed:**
+- Landing page fixed (removed old DeployAgent component)
+- Both "Human" and "Agent" buttons show same message: "Send skill.md to agent"
+- API flow matches UI flow matches moltbook flow
+
+**Complete Flow (Correct Order):**
+1. Agent → `POST /api/agents/register` → gets claim_code + claim_url
+2. Agent sends claim_url to human
+3. Human → `/claim/[code]` → signs in with Twitter (NO public tweet required)
+4. Agent can now create on-chain profile with verified claim code
+
+**Key Features:**
+- 1H=1A enforcement (each Twitter account = 1 agent max)
+- No public tweet verification (unlike moltbook)
+- Claim codes stored in-memory (will migrate to Vercel KV later)
+- Twitter OAuth with proper scopes (tweet.read, users.read, offline.access)
+
+**Commits:**
+- 4060fe9c - API endpoints + claim page + flow reversal
+- 2a77063f - Landing page update to match moltbook
+
+**Lesson:** Always check moltbook.com to see their actual implementation. Vitali caught that our landing page still showed old flow even though API was correct!
+
+**Status:** Production live at https://frontend-beta-topaz-34.vercel.app

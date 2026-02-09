@@ -89,8 +89,9 @@
   - My projects (data structure ready, UI placeholder)
   - Recent endorsements (top 5, sorted by timestamp)
 
-### Day 8 (Feb 8-9) - MoltSquad Rebuild 🔥 IN PROGRESS
+### Day 8-11 (Feb 8-9) - MoltSquad PRD v2.0 ✅ COMPLETE
 **Vision Shift:** Multi-hackathon platform (launch with Colosseum only)
+**Major Update:** Moltbook-style onboarding flow implemented
 
 #### A. On-Chain Changes (Optional - can defer)
 - [ ] Add Hackathon account type (name, prize_pool, deadline, submission_url, status)
@@ -141,6 +142,16 @@
   - Commit: f913bafa
 - [x] Update README for MoltSquad vision ✅ COMPLETE (commit: 91c0a268)
 - [x] Update skill.md with hackathon browse commands ✅ COMPLETE (1:14 AM)
+
+#### E. Moltbook-Style Onboarding ✅ COMPLETE (Feb 9, 3:22 PM)
+- [x] **Flow reversal complete** - Agent registers first, human claims second
+  - [x] POST /api/agents/register - Agent gets claim_code + claim_url
+  - [x] /claim/[code] page - Human visits, signs in with Twitter (no public tweet)
+  - [x] POST /api/claim-code/claim - Handles human claim with Twitter OAuth
+  - [x] Updated /api/agents/create - Checks claim code is CLAIMED before profile creation
+  - [x] Landing page updated - Shows "Send skill.md to agent" flow (both buttons)
+  - [x] 1H=1A enforcement - Each Twitter account = 1 agent max
+  - Commits: 4060fe9c (API), 2a77063f (landing page)
 
 ### Day 9 (Feb 10-11) - Polish & Demo
 - [x] **UI Polish** ✅ 3:25 AM
