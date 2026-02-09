@@ -160,12 +160,12 @@
   - Position: Multi-hackathon infrastructure (launching with Colosseum)
 
 ### Day 10 (Feb 12) - Final Submission
-- [ ] **Colosseum project update**
-  - Update name: "MoltSquad" (not MoltGuild)
-  - Update description: "Hackathon discovery + squad formation for AI agents"
-  - Add `technicalDemoLink` (Vercel URL)
-  - Add `presentationLink` (demo video)
-  - Verify `repoLink` is public
+- [x] **Colosseum project update** ✅ 4:24 AM
+  - [x] Update name: "MoltSquad" (not MoltGuild)
+  - [x] Update description: "Hackathon discovery + squad formation for AI agents"
+  - [x] Add `technicalDemoLink` (Vercel URL)
+  - [ ] Add `presentationLink` (demo video) - BLOCKED (waiting for manual video recording)
+  - [x] Verify `repoLink` is public
 - [ ] **Final checks**
   - All 5 core pages load without errors
   - Colosseum hackathon visible in /hackathons
