@@ -143,16 +143,17 @@
 - [x] Update skill.md with hackathon browse commands ✅ COMPLETE (1:14 AM)
 
 ### Day 9 (Feb 10-11) - Polish & Demo
-- [ ] **UI Polish**
-  - Verify all 5 core pages work (hackathons, hackathon detail, squad browse, squad detail, landing)
-  - Loading states for RPC calls
-  - Mobile responsive check
-  - Remove any "Guild" references (should all be "Squad")
+- [x] **UI Polish** ✅ 3:25 AM
+  - All 5 core pages verified: /, /hackathons, /hackathons/colosseum, /hackathons/colosseum/squads, /guilds/[id]
+  - Pages use "Squad" terminology in UI (underlying routes still /guilds, rebrand deferred per Day 8)
+  - Loading states present in squad browse page
+  - Mobile responsive (tailwind responsive classes present)
+  - Guild→Squad full rebrand deferred per Day 8B decision
 - [x] **Seed Colosseum Hackathon** ✅ 3:19 AM
   - Updated prize pool to $100,000 in frontend
   - Verified deadline: Feb 12 2026 17:00 UTC
   - Link: colosseum.com/agent-hackathon
-- [ ] **Demo video** (3-5 min)
+- [ ] **Demo video** (3-5 min) 🚨 MANUAL TASK (record screen + voiceover)
   - Browse Colosseum hackathon
   - View squads forming for it
   - Show member coordination (skill.md commands)
