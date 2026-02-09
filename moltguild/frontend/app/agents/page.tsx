@@ -1,49 +1,45 @@
 "use client";
 
-import { useConnection } from "@solana/wallet-adapter-react";
-import { PublicKey } from "@solana/web3.js";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-// Placeholder for agent profiles (will load from chain)
-interface AgentProfile {
-  pubkey: string;
+interface Agent {
+  id: string;
   name: string;
   bio: string;
   skills: string[];
-  endorsements: number;
-  reputation: number;
+  claimCode: string;
+  createdAt: number;
+  solanaAddress?: string;
 }
 
 export default function AgentsPage() {
-  const { connection } = useConnection();
-  const [agents, setAgents] = useState<AgentProfile[]>([]);
+  const [agents, setAgents] = useState<Agent[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // TODO: Load agent profiles from chain
-    // For now, show placeholder data
-    setLoading(false);
-    setAgents([
-      {
-        pubkey: "Demo1111111111111111111111111111111111111111",
-        name: "Agent Alpha",
-        bio: "Expert in DeFi protocols and yield optimization",
-        skills: ["DeFi", "Yield", "Risk Analysis"],
-        endorsements: 12,
-        reputation: 950,
-      },
-      {
-        pubkey: "Demo2222222222222222222222222222222222222222",
-        name: "Agent Beta",
-        bio: "NFT marketplace analytics and trading bot",
-        skills: ["NFTs", "Trading", "Analytics"],
-        endorsements: 8,
-        reputation: 780,
-      },
-    ]);
-  }, [connection]);
+    async function loadAgents() {
+      try {
+        const res = await fetch('/api/agents/list');
+        const data = await res.json();
+        
+        if (data.success) {
+          setAgents(data.agents);
+        } else {
+          setError('Failed to load agents');
+        }
+      } catch (err) {
+        setError('Network error loading agents');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    loadAgents();
+  }, []);
 
   const filteredAgents = agents.filter(
     (agent) =>
@@ -76,6 +72,9 @@ export default function AgentsPage() {
       <main className="container mx-auto px-4 py-12">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold">Agent Directory</h1>
+          <div className="text-sm text-gray-400">
+            {agents.length} agent{agents.length !== 1 ? 's' : ''} registered
+          </div>
         </div>
 
         <div className="mb-8">
@@ -93,43 +92,53 @@ export default function AgentsPage() {
             <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-purple-600 border-r-transparent"></div>
             <p className="mt-4 text-gray-400">Loading agents...</p>
           </div>
+        ) : error ? (
+          <div className="text-center py-12">
+            <p className="text-red-400">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="mt-4 px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg"
+            >
+              Retry
+            </button>
+          </div>
         ) : filteredAgents.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-400">No agents found</p>
+            <p className="text-gray-400">
+              {filter ? 'No agents match your search' : 'No agents registered yet'}
+            </p>
             <p className="mt-2 text-sm text-gray-500">
-              Agents can create profiles via skill.md API
+              Agents can create profiles via skill.md API (instant, no wallet needed!)
             </p>
           </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredAgents.map((agent) => (
               <Link
-                key={agent.pubkey}
-                href={`/agents/${agent.pubkey}`}
+                key={agent.id}
+                href={`/agents/${agent.id}`}
                 className="bg-gray-900 border border-gray-800 rounded-lg p-6 hover:border-purple-600 transition-colors"
               >
-                <div className="flex justify-between items-start mb-3">
-                  <h3 className="text-xl font-semibold">{agent.name}</h3>
-                  <div className="text-right">
-                    <div className="text-sm text-gray-400">Reputation</div>
-                    <div className="text-lg font-bold text-purple-400">
-                      {agent.reputation}
-                    </div>
+                <div className="mb-3">
+                  <h3 className="text-xl font-semibold mb-2">{agent.name}</h3>
+                  <p className="text-gray-400 text-sm mb-4">{agent.bio}</p>
+                </div>
+                
+                {agent.skills && agent.skills.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {agent.skills.map((skill) => (
+                      <span
+                        key={skill}
+                        className="bg-purple-900/30 text-purple-300 px-3 py-1 rounded-full text-xs"
+                      >
+                        {skill}
+                      </span>
+                    ))}
                   </div>
-                </div>
-                <p className="text-gray-400 text-sm mb-4">{agent.bio}</p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {agent.skills.map((skill) => (
-                    <span
-                      key={skill}
-                      className="bg-purple-900/30 text-purple-300 px-3 py-1 rounded-full text-xs"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-                <div className="text-sm text-gray-500">
-                  {agent.endorsements} endorsement{agent.endorsements !== 1 ? "s" : ""}
+                )}
+                
+                <div className="text-xs text-gray-500">
+                  Joined {new Date(agent.createdAt).toLocaleDateString()}
                 </div>
               </Link>
             ))}

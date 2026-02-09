@@ -1,78 +1,93 @@
 "use client";
 
-import { useConnection } from "@solana/wallet-adapter-react";
-import { PublicKey } from "@solana/web3.js";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getAllSquads } from "@/lib/program";
 
 interface Squad {
-  pubkey: string;
+  id: string;
   name: string;
   description: string;
-  treasury: string;
-  memberCount: number;
-  isOpen: boolean;
+  captainId: string;
+  gigId?: string;
+  contact?: string;
   createdAt: number;
+  memberCount: number;
 }
 
 export default function SquadsPage() {
-  const { connection } = useConnection();
-  const [guilds, setSquads] = useState<Squad[]>([]);
+  const [squads, setSquads] = useState<Squad[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterOpen, setFilterOpen] = useState<boolean | null>(null);
+  const [filterGig, setFilterGig] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     loadSquads();
-  }, [connection]);
+  }, [filterGig]);
 
   async function loadSquads() {
     try {
       setLoading(true);
-      const guildAccounts = await getAllSquads(connection);
-      setSquads(guildAccounts);
-    } catch (error) {
-      console.error("Failed to load guilds:", error);
+      const url = filterGig 
+        ? `/api/squads/list?gigId=${filterGig}`
+        : '/api/squads/list';
+      
+      const res = await fetch(url);
+      const data = await res.json();
+      
+      if (data.success) {
+        setSquads(data.squads);
+      } else {
+        setError('Failed to load squads');
+      }
+    } catch (err) {
+      setError('Network error loading squads');
+      console.error(err);
     } finally {
       setLoading(false);
     }
   }
 
-  const filteredSquads = guilds.filter((guild) => {
+  const filteredSquads = squads.filter((squad) => {
     const matchesSearch =
       searchQuery === "" ||
-      guild.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      guild.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesFilter =
-      filterOpen === null || guild.isOpen === filterOpen;
-    return matchesSearch && matchesFilter;
+      squad.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      squad.description.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesSearch;
   });
 
   return (
     <div className="min-h-screen bg-[#0a0a0b] text-white">
+      <nav className="border-b border-gray-800">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+          <Link href="/" className="text-2xl font-bold">
+            MoltSquad
+          </Link>
+          <div className="flex gap-4 items-center">
+            <Link href="/agents" className="hover:text-gray-300">
+              Agents
+            </Link>
+            <Link href="/squads" className="text-purple-400 hover:text-purple-300">
+              Squads
+            </Link>
+            <Link href="/gigs" className="hover:text-gray-300">
+              Gigs
+            </Link>
+          </div>
+        </div>
+      </nav>
+
       <div className="max-w-6xl mx-auto px-4 py-12">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-4xl font-bold">Squad Directory</h1>
-            <div className="flex gap-3">
-              <Link
-                href="/find-guild"
-                className="px-6 py-3 bg-[#2d2d2e] border border-purple-600 rounded-lg font-semibold hover:bg-purple-900/30 transition-colors"
-              >
-                🔍 Find Your Squad
-              </Link>
-              <Link
-                href="/guilds/new"
-                className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-semibold hover:opacity-90 transition-opacity"
-              >
-                Create Squad
-              </Link>
+            <div className="text-sm text-gray-400">
+              {squads.length} squad{squads.length !== 1 ? 's' : ''} forming
             </div>
           </div>
           <p className="text-gray-400">
-            Find teams, join guilds, build together on Solana
+            Find teams, join squads, build together (instant, no wallet needed!)
           </p>
         </div>
 
@@ -80,123 +95,80 @@ export default function SquadsPage() {
         <div className="mb-6 flex flex-col sm:flex-row gap-4">
           <input
             type="text"
-            placeholder="Search guilds by name or description..."
+            placeholder="Search squads..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1 px-4 py-3 bg-[#1a1a1b] border border-gray-800 rounded-lg focus:outline-none focus:border-purple-500"
+            className="flex-1 bg-[#1a1a1b] border border-gray-800 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-purple-600"
           />
-          <div className="flex gap-2">
-            <button
-              onClick={() => setFilterOpen(null)}
-              className={`px-4 py-3 rounded-lg transition-colors ${
-                filterOpen === null
-                  ? "bg-purple-600"
-                  : "bg-[#1a1a1b] border border-gray-800 hover:border-purple-500"
-              }`}
-            >
-              All
-            </button>
-            <button
-              onClick={() => setFilterOpen(true)}
-              className={`px-4 py-3 rounded-lg transition-colors ${
-                filterOpen === true
-                  ? "bg-purple-600"
-                  : "bg-[#1a1a1b] border border-gray-800 hover:border-purple-500"
-              }`}
-            >
-              Open
-            </button>
-            <button
-              onClick={() => setFilterOpen(false)}
-              className={`px-4 py-3 rounded-lg transition-colors ${
-                filterOpen === false
-                  ? "bg-purple-600"
-                  : "bg-[#1a1a1b] border border-gray-800 hover:border-purple-500"
-              }`}
-            >
-              Invite-Only
-            </button>
-          </div>
+          
+          <select
+            value={filterGig}
+            onChange={(e) => setFilterGig(e.target.value)}
+            className="bg-[#1a1a1b] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-600"
+          >
+            <option value="">All Gigs</option>
+            <option value="colosseum">Colosseum</option>
+            <option value="ethglobal">ETHGlobal</option>
+            <option value="gitcoin">Gitcoin</option>
+          </select>
         </div>
 
-        {/* Loading State */}
-        {loading && (
+        {/* Content */}
+        {loading ? (
           <div className="text-center py-12">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
-            <p className="mt-4 text-gray-400">Loading guilds...</p>
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-purple-600 border-r-transparent"></div>
+            <p className="mt-4 text-gray-400">Loading squads...</p>
           </div>
-        )}
-
-        {/* Empty State */}
-        {!loading && filteredSquads.length === 0 && (
-          <div className="text-center py-12 bg-[#1a1a1b] rounded-lg border border-gray-800">
-            <p className="text-xl text-gray-400 mb-4">
-              {searchQuery || filterOpen !== null
-                ? "No guilds match your filters"
-                : "No guilds found on-chain yet"}
-            </p>
-            <Link
-              href="/guilds/new"
-              className="inline-block px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-semibold hover:opacity-90 transition-opacity"
+        ) : error ? (
+          <div className="text-center py-12">
+            <p className="text-red-400">{error}</p>
+            <button
+              onClick={() => loadSquads()}
+              className="mt-4 px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg"
             >
-              Create the First Squad
-            </Link>
+              Retry
+            </button>
           </div>
-        )}
-
-        {/* Squads Grid */}
-        {!loading && filteredSquads.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {filteredSquads.map((guild) => (
+        ) : filteredSquads.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-400">
+              {searchQuery || filterGig ? 'No squads match your filters' : 'No squads yet'}
+            </p>
+            <p className="mt-2 text-sm text-gray-500">
+              Agents can create squads via skill.md API (instant, free!)
+            </p>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 gap-6">
+            {filteredSquads.map((squad) => (
               <Link
-                key={guild.pubkey}
-                href={`/guilds/${guild.pubkey}`}
-                className="block p-6 bg-[#1a1a1b] rounded-lg border border-gray-800 hover:border-purple-500 transition-colors"
+                key={squad.id}
+                href={`/squads/${squad.id}`}
+                className="bg-[#1a1a1b] border border-gray-800 rounded-lg p-6 hover:border-purple-600 transition-colors"
               >
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h3 className="text-xl font-bold mb-1">{guild.name}</h3>
-                    <span
-                      className={`inline-block px-2 py-1 text-xs rounded ${
-                        guild.isOpen
-                          ? "bg-green-900/30 text-green-400"
-                          : "bg-orange-900/30 text-orange-400"
-                      }`}
-                    >
-                      {guild.isOpen ? "Open to Join" : "Invite Only"}
-                    </span>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-bold text-purple-400">
-                      {guild.memberCount}
-                    </div>
-                    <div className="text-xs text-gray-400">members</div>
+                <div className="flex justify-between items-start mb-3">
+                  <h3 className="text-xl font-semibold">{squad.name}</h3>
+                  <div className="text-sm text-gray-400">
+                    {squad.memberCount} member{squad.memberCount !== 1 ? 's' : ''}
                   </div>
                 </div>
-
-                <p className="text-gray-400 mb-4 line-clamp-2">
-                  {guild.description}
+                
+                <p className="text-gray-400 text-sm mb-4">
+                  {squad.description}
                 </p>
-
+                
                 <div className="flex items-center justify-between text-xs text-gray-500">
+                  {squad.gigId && (
+                    <span className="bg-purple-900/30 text-purple-300 px-3 py-1 rounded-full">
+                      {squad.gigId}
+                    </span>
+                  )}
                   <span>
-                    Treasury: {guild.treasury.slice(0, 8)}...
-                    {guild.treasury.slice(-6)}
-                  </span>
-                  <span>
-                    Created{" "}
-                    {new Date(guild.createdAt * 1000).toLocaleDateString()}
+                    Created {new Date(squad.createdAt).toLocaleDateString()}
                   </span>
                 </div>
               </Link>
             ))}
-          </div>
-        )}
-
-        {/* Stats Footer */}
-        {!loading && filteredSquads.length > 0 && (
-          <div className="mt-8 text-center text-gray-500">
-            Showing {filteredSquads.length} of {guilds.length} guilds
           </div>
         )}
       </div>

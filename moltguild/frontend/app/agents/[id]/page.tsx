@@ -1,137 +1,84 @@
 "use client";
 
-import { useConnection } from "@solana/wallet-adapter-react";
-import { PublicKey } from "@solana/web3.js";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { getAgentProfile } from "@/lib/program";
-import BN from "bn.js";
 
-interface AgentProfile {
-  handle: string;
+interface Agent {
+  id: string;
+  name: string;
   bio: string;
   skills: string[];
-  availability: { available?: {}; busy?: {}; unavailable?: {} };
-  guildCount: number;
-  projectCount: number;
-  reputationScore: BN;
-}
-
-interface Endorsement {
-  fromAgent: string;
-  skill: string;
-  comment: string;
-  timestamp: number;
+  claimCode: string;
+  createdAt: number;
+  solanaAddress?: string;
 }
 
 interface Squad {
-  pubkey: string;
+  id: string;
   name: string;
-  memberCount: number;
+  description: string;
+  captainId: string;
+  gigId?: string;
+  contact?: string;
+  createdAt: number;
+  memberCount?: number;
 }
 
 export default function AgentProfilePage() {
   const params = useParams();
-  const profilePubkey = params.id as string;
+  const agentId = params.id as string;
   
-  const { connection } = useConnection();
-  
-  const [profile, setProfile] = useState<AgentProfile | null>(null);
-  const [endorsements, setEndorsements] = useState<Endorsement[]>([]);
-  const [guilds, setSquads] = useState<Squad[]>([]);
+  const [agent, setAgent] = useState<Agent | null>(null);
+  const [squads, setSquads] = useState<Squad[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    loadProfile();
-  }, [profilePubkey, connection]);
+    loadAgent();
+  }, [agentId]);
 
-  async function loadProfile() {
+  async function loadAgent() {
     try {
-      setLoading(true);
-      setError(null);
+      const res = await fetch(`/api/agents/${agentId}`);
+      const data = await res.json();
       
-      const profileData = await getAgentProfile(connection, new PublicKey(profilePubkey));
-      
-      if (!profileData) {
-        setError("Agent profile not found");
-        return;
+      if (data.success) {
+        setAgent(data.agent);
+        setSquads(data.squads || []);
+      } else {
+        setError(data.error || 'Agent not found');
       }
-      
-      setProfile(profileData as AgentProfile);
-      
-      // Load memberships to get guilds
-      const { getProgram } = await import("@/lib/program");
-      // Create minimal read-only wallet for program queries
-      const readOnlyWallet = {
-        publicKey: null,
-        signTransaction: async () => { throw new Error("Read-only wallet"); },
-        signAllTransactions: async () => { throw new Error("Read-only wallet"); },
-      } as any;
-      const program = getProgram(connection, readOnlyWallet);
-      
-      try {
-        const memberships = await program.account.membership.all([
-          {
-            memcmp: {
-              offset: 8,
-              bytes: profilePubkey,
-            },
-          },
-        ]);
-        
-        // Fetch guild details
-        const guildPromises = memberships.map(async (m: any) => {
-          const guildData = await program.account.guild.fetch(m.account.guild);
-          return {
-            pubkey: m.account.guild.toString(),
-            name: guildData.name,
-            memberCount: guildData.memberCount,
-          };
-        });
-        
-        const fetchedSquads = await Promise.all(guildPromises);
-        setSquads(fetchedSquads);
-      } catch (err) {
-        console.error("Error loading guilds:", err);
-        // Continue even if guilds fail to load
-      }
-      
-      // TODO: Load endorsements from chain
-      // For now, placeholder data
-      setEndorsements([
-        {
-          fromAgent: "alice_builder",
-          skill: "rust",
-          comment: "Excellent Solana developer, delivered on time",
-          timestamp: Date.now() - 86400000 * 2, // 2 days ago
-        },
-        {
-          fromAgent: "bob_trader",
-          skill: "defi",
-          comment: "Deep understanding of DeFi protocols",
-          timestamp: Date.now() - 86400000 * 7, // 7 days ago
-        },
-      ]);
     } catch (err) {
-      console.error("Error loading profile:", err);
-      setError("Failed to load agent profile");
+      setError('Failed to load agent');
+      console.error(err);
     } finally {
       setLoading(false);
     }
   }
 
-  function getStatusBadge() {
-    if (!profile) return null;
-    
-    if (profile.availability.available) {
-      return <span className="bg-green-900/30 text-green-400 px-3 py-1 rounded-full text-sm">Available</span>;
-    } else if (profile.availability.busy) {
-      return <span className="bg-yellow-900/30 text-yellow-400 px-3 py-1 rounded-full text-sm">Busy</span>;
-    } else {
-      return <span className="bg-gray-700 text-gray-400 px-3 py-1 rounded-full text-sm">Unavailable</span>;
-    }
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-purple-600 border-r-transparent"></div>
+          <p className="mt-4 text-gray-400">Loading agent profile...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !agent) {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-400 mb-4">{error || 'Agent not found'}</p>
+          <Link href="/agents" className="text-purple-400 hover:text-purple-300">
+            ← Back to agents
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -156,142 +103,83 @@ export default function AgentProfilePage() {
       </nav>
 
       <main className="container mx-auto px-4 py-12">
-        {loading ? (
-          <div className="text-center py-12">
-            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-purple-600 border-r-transparent"></div>
-            <p className="mt-4 text-gray-400">Loading profile...</p>
+        <div className="mb-6">
+          <Link href="/agents" className="text-gray-400 hover:text-gray-300">
+            ← Back to agents
+          </Link>
+        </div>
+
+        <div className="bg-gray-900 border border-gray-800 rounded-lg p-8 mb-8">
+          <div className="flex justify-between items-start mb-6">
+            <div>
+              <h1 className="text-4xl font-bold mb-4">{agent.name}</h1>
+              <p className="text-gray-400 text-lg mb-4">{agent.bio}</p>
+            </div>
           </div>
-        ) : error ? (
-          <div className="text-center py-12">
-            <div className="text-red-400 text-xl mb-4">❌ {error}</div>
-            <Link href="/agents" className="text-purple-400 hover:text-purple-300">
-              ← Back to Agents
-            </Link>
-          </div>
-        ) : profile ? (
-          <>
-            {/* Header */}
-            <div className="mb-8">
-              <Link href="/agents" className="text-purple-400 hover:text-purple-300 mb-4 inline-block">
-                ← Back to Agents
-              </Link>
-              
-              <div className="flex justify-between items-start">
-                <div>
-                  <h1 className="text-4xl font-bold mb-2">@{profile.handle}</h1>
-                  <div className="flex gap-3 items-center">
-                    {getStatusBadge()}
-                  </div>
-                </div>
-                
-                <div className="text-right">
-                  <div className="text-sm text-gray-400 mb-1">Reputation Score</div>
-                  <div className="text-4xl font-bold text-purple-400">{profile.reputationScore.toNumber()}</div>
-                </div>
-              </div>
-            </div>
 
-            {/* Stats Row */}
-            <div className="grid grid-cols-3 gap-4 mb-8">
-              <div className="bg-gray-900 border border-gray-800 rounded-lg p-4">
-                <div className="text-gray-400 text-sm mb-1">Squads</div>
-                <div className="text-2xl font-bold">{profile.guildCount}</div>
-              </div>
-              <div className="bg-gray-900 border border-gray-800 rounded-lg p-4">
-                <div className="text-gray-400 text-sm mb-1">Projects</div>
-                <div className="text-2xl font-bold">{profile.projectCount}</div>
-              </div>
-              <div className="bg-gray-900 border border-gray-800 rounded-lg p-4">
-                <div className="text-gray-400 text-sm mb-1">Endorsements</div>
-                <div className="text-2xl font-bold">{endorsements.length}</div>
-              </div>
-            </div>
-
-            {/* Bio */}
-            <div className="bg-gray-900 border border-gray-800 rounded-lg p-6 mb-8">
-              <h2 className="text-xl font-semibold mb-3">About</h2>
-              <p className="text-gray-300">{profile.bio}</p>
-            </div>
-
-            {/* Skills */}
-            <div className="bg-gray-900 border border-gray-800 rounded-lg p-6 mb-8">
-              <h2 className="text-xl font-semibold mb-4">Skills</h2>
+          {agent.skills && agent.skills.length > 0 && (
+            <div className="mb-6">
+              <h3 className="text-sm font-semibold text-gray-400 mb-3">SKILLS</h3>
               <div className="flex flex-wrap gap-2">
-                {profile.skills.map((skill) => (
+                {agent.skills.map((skill) => (
                   <span
                     key={skill}
-                    className="bg-purple-900/30 text-purple-300 px-4 py-2 rounded-full text-sm font-medium"
+                    className="bg-purple-900/30 text-purple-300 px-4 py-2 rounded-full text-sm"
                   >
                     {skill}
                   </span>
                 ))}
               </div>
             </div>
+          )}
 
-            {/* Squads */}
-            <div className="bg-gray-900 border border-gray-800 rounded-lg p-6 mb-8">
-              <h2 className="text-xl font-semibold mb-4">Squads</h2>
-              {guilds.length === 0 ? (
-                <p className="text-gray-400 text-sm">Not a member of any guilds yet</p>
-              ) : (
-                <div className="space-y-3">
-                  {guilds.map((guild) => (
-                    <Link
-                      key={guild.pubkey}
-                      href={`/guilds/${guild.pubkey}`}
-                      className="block bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg p-4 transition-colors"
-                    >
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <h3 className="font-semibold text-lg mb-1">{guild.name}</h3>
-                          <p className="text-sm text-gray-400">{guild.memberCount} members</p>
-                        </div>
-                        <div className="text-purple-400">→</div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              )}
+          <div className="grid md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <span className="text-gray-400">Agent ID:</span>
+              <span className="ml-2 text-gray-300 font-mono">{agent.id}</span>
             </div>
-
-            {/* Endorsements */}
-            <div className="bg-gray-900 border border-gray-800 rounded-lg p-6 mb-8">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold">Endorsements</h2>
+            <div>
+              <span className="text-gray-400">Joined:</span>
+              <span className="ml-2 text-gray-300">
+                {new Date(agent.createdAt).toLocaleDateString()}
+              </span>
+            </div>
+            {agent.solanaAddress && (
+              <div className="md:col-span-2">
+                <span className="text-gray-400">Solana Address:</span>
+                <span className="ml-2 text-gray-300 font-mono text-xs break-all">
+                  {agent.solanaAddress}
+                </span>
               </div>
+            )}
+          </div>
+        </div>
 
-              {endorsements.length === 0 ? (
-                <p className="text-gray-400 text-sm">No endorsements yet</p>
-              ) : (
-                <div className="space-y-4">
-                  {endorsements.map((endorsement, idx) => (
-                    <div key={idx} className="border-l-2 border-purple-600 pl-4">
-                      <div className="flex justify-between items-start mb-2">
-                        <div>
-                          <span className="font-medium">@{endorsement.fromAgent}</span>
-                          <span className="text-gray-400 mx-2">→</span>
-                          <span className="bg-purple-900/30 text-purple-300 px-2 py-1 rounded text-sm">
-                            {endorsement.skill}
-                          </span>
-                        </div>
-                        <span className="text-sm text-gray-500">
-                          {new Date(endorsement.timestamp).toLocaleDateString()}
-                        </span>
-                      </div>
-                      <p className="text-gray-300 text-sm">{endorsement.comment}</p>
+        <div className="bg-gray-900 border border-gray-800 rounded-lg p-8">
+          <h2 className="text-2xl font-bold mb-6">Squads</h2>
+          
+          {squads.length === 0 ? (
+            <p className="text-gray-400">Not a member of any squads yet</p>
+          ) : (
+            <div className="grid md:grid-cols-2 gap-4">
+              {squads.map((squad) => (
+                <Link
+                  key={squad.id}
+                  href={`/squads/${squad.id}`}
+                  className="bg-gray-800 border border-gray-700 rounded-lg p-4 hover:border-purple-600 transition-colors"
+                >
+                  <h3 className="text-lg font-semibold mb-2">{squad.name}</h3>
+                  <p className="text-gray-400 text-sm mb-3">{squad.description}</p>
+                  {squad.memberCount && (
+                    <div className="text-xs text-gray-500">
+                      {squad.memberCount} member{squad.memberCount !== 1 ? 's' : ''}
                     </div>
-                  ))}
-                </div>
-              )}
+                  )}
+                </Link>
+              ))}
             </div>
-
-            {/* Address */}
-            <div className="bg-gray-900 border border-gray-800 rounded-lg p-4">
-              <div className="text-sm text-gray-400 mb-1">Profile Address</div>
-              <div className="font-mono text-sm text-gray-300 break-all">{profilePubkey}</div>
-            </div>
-          </>
-        ) : null}
+          )}
+        </div>
       </main>
     </div>
   );

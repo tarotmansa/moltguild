@@ -1,455 +1,279 @@
 "use client";
 
-import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { PublicKey } from "@solana/web3.js";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { getProgram, joinSquad, PROGRAM_ID } from "@/lib/program";
-import { AnchorProvider, Program } from "@coral-xyz/anchor";
-import IDL from "@/target/idl/moltguild.json";
-import type { Moltguild } from "@/target/types/moltguild";
 
-interface PrizeSplit {
-  agent: string;
-  percentage: number;
-}
-
-interface SquadData {
+interface Agent {
+  id: string;
   name: string;
-  description: string;
-  authority: string;
-  memberCount: number;
-  visibility: "Open" | "InviteOnly" | "TokenGated";
-  reputation: number;
-  contact: string;
-  prizeSplits: PrizeSplit[];
-  gig: string | null;
-  treasury: string;
+  bio: string;
+  skills: string[];
 }
 
 interface Member {
-  agentPDA: string;
-  handle: string;
-  reputation: number;
+  squadId: string;
+  agentId: string;
   joinedAt: number;
+  role: 'captain' | 'member';
+  agent?: Agent;
+}
+
+interface Squad {
+  id: string;
+  name: string;
+  description: string;
+  captainId: string;
+  gigId?: string;
+  contact?: string;
+  createdAt: number;
+  treasuryAddress?: string;
+}
+
+interface PrizeSplit {
+  squadId: string;
+  agentId: string;
+  percentage: number;
+  solanaAddress?: string;
 }
 
 export default function SquadDetailPage() {
   const params = useParams();
-  const guildId = params.id as string;
-  const { connection } = useConnection();
-  const wallet = useWallet();
+  const squadId = params.id as string;
   
-  const [guild, setSquad] = useState<SquadData | null>(null);
+  const [squad, setSquad] = useState<Squad | null>(null);
   const [members, setMembers] = useState<Member[]>([]);
+  const [prizeSplits, setPrizeSplits] = useState<PrizeSplit[]>([]);
   const [loading, setLoading] = useState(true);
-  const [joining, setJoining] = useState(false);
-  const [isMember, setIsMember] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     loadSquadData();
-  }, [guildId, connection, wallet.publicKey]);
+  }, [squadId]);
 
   async function loadSquadData() {
     try {
       setLoading(true);
-      const guildPubkey = new PublicKey(guildId);
       
-      // Create provider for read-only operations
-      const provider = new AnchorProvider(
-        connection,
-        {} as any,
-        { commitment: "confirmed" }
-      );
-      const program = new Program<Moltguild>(IDL as Moltguild, provider);
+      // Load squad details + members
+      const squadRes = await fetch(`/api/squads/${squadId}`);
+      const squadData = await squadRes.json();
       
-      // Fetch guild account
-      const guildAccount: any = await program.account.guild.fetch(guildPubkey);
-      
-      // Map visibility enum
-      let visibility: "Open" | "InviteOnly" | "TokenGated" = "Open";
-      if ("inviteOnly" in guildAccount.visibility) visibility = "InviteOnly";
-      if ("tokenGated" in guildAccount.visibility) visibility = "TokenGated";
-      
-      setSquad({
-        name: guildAccount.name,
-        description: guildAccount.description,
-        authority: guildAccount.authority.toBase58(),
-        memberCount: guildAccount.memberCount,
-        visibility,
-        reputation: guildAccount.reputationScore.toNumber(),
-        contact: guildAccount.contact || "",
-        prizeSplits: (guildAccount.prizeSplits || []).map((split: any) => ({
-          agent: split.agent.toBase58(),
-          percentage: split.percentage,
-        })),
-        gig: guildAccount.gig ? guildAccount.gig.toBase58() : null,
-        treasury: guildAccount.treasury.toBase58(),
-      });
-      
-      // Fetch members
-      await loadMembers(program, guildPubkey);
-      
-      // Check if current wallet is a member
-      if (wallet.publicKey) {
-        await checkMembership(program, guildPubkey);
+      if (!squadData.success) {
+        setError(squadData.error || 'Squad not found');
+        return;
       }
-    } catch (error) {
-      console.error("Failed to load guild:", error);
+      
+      setSquad(squadData.squad);
+      setMembers(squadData.members || []);
+      
+      // Load prize splits
+      const splitsRes = await fetch(`/api/squads/${squadId}/splits`);
+      const splitsData = await splitsRes.json();
+      
+      if (splitsData.success) {
+        setPrizeSplits(splitsData.splits || []);
+      }
+    } catch (err) {
+      setError('Failed to load squad');
+      console.error(err);
     } finally {
       setLoading(false);
     }
   }
 
-  async function loadMembers(program: Program<Moltguild>, guildPubkey: PublicKey) {
-    try {
-      // Fetch all memberships for this guild
-      const memberships = await program.account.membership.all([
-        {
-          memcmp: {
-            offset: 8, // Skip discriminator
-            bytes: guildPubkey.toBase58(),
-          },
-        },
-      ]);
-      
-      // Fetch agent profiles for each member
-      const memberData = await Promise.all(
-        memberships.map(async (membership) => {
-          try {
-            const agentProfile = await program.account.agentProfile.fetch(
-              membership.account.agent
-            );
-            return {
-              agentPDA: membership.account.agent.toBase58(),
-              handle: agentProfile.handle,
-              reputation: agentProfile.reputationScore.toNumber(),
-              joinedAt: Number(membership.account.joinedAt),
-            };
-          } catch {
-            return null;
-          }
-        })
-      );
-      
-      setMembers(memberData.filter((m) => m !== null) as Member[]);
-    } catch (error) {
-      console.error("Failed to load members:", error);
-    }
-  }
-
-  async function checkMembership(program: Program<Moltguild>, guildPubkey: PublicKey) {
-    if (!wallet.publicKey) return;
-    
-    try {
-      // Derive agent profile PDA
-      const [agentPDA] = PublicKey.findProgramAddressSync(
-        [Buffer.from("agent"), wallet.publicKey.toBuffer()],
-        PROGRAM_ID
-      );
-      
-      // Derive membership PDA
-      const [membershipPDA] = PublicKey.findProgramAddressSync(
-        [Buffer.from("membership"), guildPubkey.toBuffer(), agentPDA.toBuffer()],
-        PROGRAM_ID
-      );
-      
-      // Try to fetch membership
-      await program.account.membership.fetch(membershipPDA);
-      setIsMember(true);
-    } catch {
-      setIsMember(false);
-    }
-  }
-
-  async function handleJoinSquad() {
-    if (!wallet.publicKey || !wallet.signTransaction) {
-      alert("Please connect your wallet");
-      return;
-    }
-    
-    try {
-      setJoining(true);
-      const program = getProgram(connection, wallet);
-      const guildPubkey = new PublicKey(guildId);
-      
-      const { signature } = await joinSquad(program, wallet.publicKey, guildPubkey);
-      
-      alert(`Successfully joined guild! Transaction: ${signature}`);
-      await loadSquadData(); // Reload to update member count and status
-    } catch (error: any) {
-      console.error("Failed to join guild:", error);
-      alert(`Failed to join guild: ${error.message}`);
-    } finally {
-      setJoining(false);
-    }
-  }
-
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0b] text-white flex items-center justify-center">
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500 mb-4"></div>
-          <p className="text-gray-400">Loading guild...</p>
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-purple-600 border-r-transparent"></div>
+          <p className="mt-4 text-gray-400">Loading squad...</p>
         </div>
       </div>
     );
   }
 
-  if (!guild) {
+  if (error || !squad) {
     return (
-      <div className="min-h-screen bg-[#0a0a0b] text-white flex items-center justify-center">
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-4xl font-bold mb-4">Squad Not Found</h1>
-          <p className="text-gray-400 mb-8">This guild doesn't exist on-chain</p>
-          <Link
-            href="/squads"
-            className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-semibold hover:opacity-90 transition-opacity"
-          >
-            Back to Directory
+          <p className="text-red-400 mb-4">{error || 'Squad not found'}</p>
+          <Link href="/squads" className="text-purple-400 hover:text-purple-300">
+            ← Back to squads
           </Link>
         </div>
       </div>
     );
   }
+
+  const captain = members.find(m => m.role === 'captain');
 
   return (
-    <div className="min-h-screen bg-[#0a0a0b] text-white">
-      <div className="max-w-6xl mx-auto px-4 py-12">
-        {/* Header */}
-        <div className="mb-8">
-          <Link
-            href="/squads"
-            className="text-purple-400 hover:text-purple-300 mb-4 inline-block"
-          >
-            ← Back to Squads
+    <div className="min-h-screen bg-black text-white">
+      <nav className="border-b border-gray-800">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+          <Link href="/" className="text-2xl font-bold">
+            MoltSquad
           </Link>
-          
-          <div className="flex items-start justify-between">
-            <div>
-              <h1 className="text-4xl font-bold mb-2">{guild.name}</h1>
-              <span
-                className={`inline-block px-3 py-1 text-sm rounded ${
-                  guild.visibility === "Open"
-                    ? "bg-green-900/30 text-green-400"
-                    : "bg-orange-900/30 text-orange-400"
-                }`}
-              >
-                {guild.visibility === "Open" ? "Open to Join" : "Invite Only"}
-              </span>
-            </div>
-            
-            {wallet.publicKey && !isMember && guild.visibility === "Open" && (
-              <button
-                onClick={handleJoinSquad}
-                disabled={joining}
-                className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
-              >
-                {joining ? "Joining..." : "Join Squad"}
-              </button>
-            )}
-            
-            {isMember && (
-              <div className="px-6 py-3 bg-green-900/30 text-green-400 rounded-lg font-semibold">
-                ✓ Member
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Gig Context */}
-        <div className="mb-6 p-6 bg-gradient-to-r from-purple-900/30 to-pink-900/30 border border-purple-700 rounded-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="text-sm text-purple-400 mb-1">🏆 Competing in</div>
-              <h2 className="text-2xl font-bold mb-1">Colosseum Agent Gig</h2>
-              <p className="text-gray-400 text-sm">
-                $100,000 prize pool • Deadline: Feb 12, 2026 17:00 UTC
-              </p>
-            </div>
-            <Link
-              href="/hackathons/colosseum"
-              className="px-4 py-2 bg-purple-600 rounded-lg hover:opacity-90 transition-opacity text-sm font-semibold"
-            >
-              View Gig →
+          <div className="flex gap-4 items-center">
+            <Link href="/agents" className="hover:text-gray-300">
+              Agents
+            </Link>
+            <Link href="/squads" className="text-purple-400 hover:text-purple-300">
+              Squads
+            </Link>
+            <Link href="/gigs" className="hover:text-gray-300">
+              Gigs
             </Link>
           </div>
         </div>
+      </nav>
 
-        {/* Stats Row */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <div className="p-6 bg-[#1a1a1b] rounded-lg border border-gray-800">
-            <div className="text-3xl font-bold text-purple-400 mb-1">
-              {guild.memberCount}
-            </div>
-            <div className="text-sm text-gray-400">Members</div>
-          </div>
-          
-          <div className="p-6 bg-[#1a1a1b] rounded-lg border border-gray-800">
-            <div className="text-sm text-gray-400 mb-1">Reputation</div>
-            <div className="text-2xl font-bold text-purple-400">
-              {guild.reputation}
-            </div>
-          </div>
+      <main className="container mx-auto px-4 py-12">
+        <div className="mb-6">
+          <Link href="/squads" className="text-gray-400 hover:text-gray-300">
+            ← Back to squads
+          </Link>
         </div>
 
-        {/* Description */}
-        <div className="mb-8 p-6 bg-[#1a1a1b] rounded-lg border border-gray-800">
-          <h2 className="text-xl font-bold mb-3">About</h2>
-          <p className="text-gray-400 leading-relaxed">{guild.description}</p>
-        </div>
-
-        {/* Contact Info */}
-        {guild.contact && (
-          <div className="mb-8 p-6 bg-[#1a1a1b] rounded-lg border border-gray-800">
-            <h2 className="text-xl font-bold mb-3">📱 Contact</h2>
-            <a
-              href={guild.contact}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-purple-400 hover:text-purple-300 underline break-all"
-            >
-              {guild.contact}
-            </a>
-            <p className="text-gray-500 text-xs mt-2">
-              Discord/Telegram link for squad coordination
-            </p>
-          </div>
-        )}
-
-        {/* Prize Splits */}
-        {guild.prizeSplits.length > 0 && (
-          <div className="mb-8 p-6 bg-[#1a1a1b] rounded-lg border border-gray-800">
-            <h2 className="text-xl font-bold mb-4">💰 Prize Split Agreement</h2>
-            <div className="space-y-2">
-              {guild.prizeSplits.map((split, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-center justify-between p-3 bg-[#0a0a0b] rounded border border-gray-800"
-                >
-                  <Link
-                    href={`/agents/${split.agent}`}
-                    className="text-purple-400 hover:text-purple-300 font-mono text-sm truncate flex-1"
-                  >
-                    {split.agent.slice(0, 8)}...{split.agent.slice(-6)}
-                  </Link>
-                  <div className="text-lg font-bold text-green-400">
-                    {split.percentage}%
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-4 p-3 bg-blue-900/20 border border-blue-700 rounded text-xs text-blue-400">
-              💡 <strong>Auto-distribution:</strong> When prizes are sent to squad treasury, they'll be automatically split according to these percentages.
-            </div>
-          </div>
-        )}
-
-        {/* Treasury Info */}
-        <div className="mb-8 p-6 bg-[#1a1a1b] rounded-lg border border-gray-800">
-          <h2 className="text-xl font-bold mb-3">🏦 Squad Treasury</h2>
-          <div className="flex items-center justify-between p-3 bg-[#0a0a0b] rounded border border-gray-800">
-            <code className="text-purple-400 font-mono text-sm break-all flex-1">
-              {guild.treasury}
-            </code>
-            <button
-              onClick={() => navigator.clipboard.writeText(guild.treasury)}
-              className="ml-3 px-3 py-1 bg-purple-600 hover:bg-purple-700 rounded text-xs font-semibold transition-colors"
-            >
-              Copy
-            </button>
-          </div>
-          <p className="text-gray-500 text-xs mt-2">
-            Use this address as the payout address in Colosseum dashboard
-          </p>
-        </div>
-
-        {/* Colosseum Project Link (if available) */}
-        <div className="mb-8 p-6 bg-[#1a1a1b] rounded-lg border border-purple-700">
-          <div className="flex items-start justify-between gap-4">
+        {/* Squad Info */}
+        <div className="bg-gray-900 border border-gray-800 rounded-lg p-8 mb-8">
+          <div className="flex justify-between items-start mb-6">
             <div>
-              <h3 className="text-lg font-bold mb-2">🎯 Colosseum Submission</h3>
-              <p className="text-gray-400 text-sm mb-4">
-                This squad is building for the Colosseum Agent Gig. View their project on Colosseum to follow progress and support their submission.
-              </p>
-              <div className="text-xs text-gray-500">
-                Note: Squad authority must link Colosseum project via skill.md instructions
-              </div>
+              <h1 className="text-4xl font-bold mb-4">{squad.name}</h1>
+              <p className="text-gray-400 text-lg mb-4">{squad.description}</p>
             </div>
-            <a
-              href="https://agents.colosseum.com/forum"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-4 py-2 bg-purple-600 rounded-lg hover:opacity-90 transition-opacity text-sm font-semibold whitespace-nowrap"
-            >
-              View on Colosseum →
-            </a>
+            <div className="text-right">
+              <div className="text-sm text-gray-400">Members</div>
+              <div className="text-3xl font-bold text-purple-400">{members.length}</div>
+            </div>
           </div>
-        </div>
 
-        {/* Members List */}
-        <div className="p-6 bg-[#1a1a1b] rounded-lg border border-gray-800">
-          <h2 className="text-xl font-bold mb-4">
-            Members ({members.length})
-          </h2>
-          
-          {members.length === 0 ? (
-            <p className="text-gray-400 text-center py-8">
-              No members yet. Be the first to join!
-            </p>
-          ) : (
-            <div className="space-y-3">
-              {members
-                .sort((a, b) => b.reputation - a.reputation)
-                .map((member) => (
-                  <Link
-                    key={member.agentPDA}
-                    href={`/agents/${member.agentPDA}`}
-                    className="block p-4 bg-[#0a0a0b] rounded-lg border border-gray-800 hover:border-purple-500 transition-colors"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="font-semibold">{member.handle}</div>
-                        <div className="text-sm text-gray-400">
-                          Joined{" "}
-                          {new Date(member.joinedAt * 1000).toLocaleDateString()}
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-lg font-bold text-purple-400">
-                          {member.reputation}
-                        </div>
-                        <div className="text-xs text-gray-400">reputation</div>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
+          <div className="grid md:grid-cols-2 gap-4 text-sm">
+            {squad.gigId && (
+              <div>
+                <span className="text-gray-400">Gig:</span>
+                <span className="ml-2 bg-purple-900/30 text-purple-300 px-3 py-1 rounded-full text-xs">
+                  {squad.gigId}
+                </span>
+              </div>
+            )}
+            {squad.contact && (
+              <div>
+                <span className="text-gray-400">Contact:</span>
+                <a 
+                  href={squad.contact} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="ml-2 text-purple-400 hover:text-purple-300"
+                >
+                  {squad.contact.includes('discord') ? 'Discord' : 
+                   squad.contact.includes('telegram') ? 'Telegram' : 'Link'}
+                </a>
+              </div>
+            )}
+            <div>
+              <span className="text-gray-400">Created:</span>
+              <span className="ml-2 text-gray-300">
+                {new Date(squad.createdAt).toLocaleDateString()}
+              </span>
             </div>
-          )}
-        </div>
-
-        {/* Projects Section */}
-        <div className="mt-8 p-6 bg-[#1a1a1b] rounded-lg border border-gray-800">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold">Projects</h2>
-            
-            {/* Show Create Project button only for guild authority */}
-            {wallet.publicKey && guild.authority === wallet.publicKey.toBase58() && (
-              <Link
-                href={`/guilds/${guildId}/projects/new`}
-                className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-semibold hover:opacity-90 transition-opacity text-sm"
-              >
-                + Create Project
-              </Link>
+            {squad.treasuryAddress && (
+              <div className="md:col-span-2">
+                <span className="text-gray-400">Treasury (Solana):</span>
+                <span className="ml-2 text-gray-300 font-mono text-xs break-all">
+                  {squad.treasuryAddress}
+                </span>
+              </div>
             )}
           </div>
-          
-          <p className="text-gray-400 text-center py-8">
-            No projects yet. {wallet.publicKey && guild.authority === wallet.publicKey.toBase58() && "Create one to get started!"}
-          </p>
         </div>
-      </div>
+
+        {/* Members */}
+        <div className="bg-gray-900 border border-gray-800 rounded-lg p-8 mb-8">
+          <h2 className="text-2xl font-bold mb-6">Members</h2>
+          
+          <div className="grid md:grid-cols-2 gap-4">
+            {members.map((member) => (
+              <div
+                key={member.agentId}
+                className="bg-gray-800 border border-gray-700 rounded-lg p-4"
+              >
+                <div className="flex justify-between items-start mb-2">
+                  <Link
+                    href={`/agents/${member.agentId}`}
+                    className="text-lg font-semibold hover:text-purple-400"
+                  >
+                    {member.agent?.name || member.agentId}
+                  </Link>
+                  {member.role === 'captain' && (
+                    <span className="bg-purple-900/30 text-purple-300 px-2 py-1 rounded text-xs">
+                      Captain
+                    </span>
+                  )}
+                </div>
+                
+                {member.agent?.bio && (
+                  <p className="text-gray-400 text-sm mb-3">{member.agent.bio}</p>
+                )}
+                
+                {member.agent?.skills && member.agent.skills.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {member.agent.skills.map((skill) => (
+                      <span
+                        key={skill}
+                        className="bg-gray-700 text-gray-300 px-2 py-1 rounded text-xs"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Prize Splits */}
+        {prizeSplits.length > 0 && (
+          <div className="bg-gray-900 border border-gray-800 rounded-lg p-8">
+            <h2 className="text-2xl font-bold mb-6">Prize Distribution</h2>
+            
+            <div className="space-y-3">
+              {prizeSplits.map((split) => {
+                const member = members.find(m => m.agentId === split.agentId);
+                return (
+                  <div
+                    key={split.agentId}
+                    className="flex justify-between items-center bg-gray-800 border border-gray-700 rounded-lg p-4"
+                  >
+                    <div>
+                      <div className="font-semibold">
+                        {member?.agent?.name || split.agentId}
+                      </div>
+                      {split.solanaAddress && (
+                        <div className="text-xs text-gray-500 font-mono mt-1">
+                          {split.solanaAddress.slice(0, 8)}...{split.solanaAddress.slice(-8)}
+                        </div>
+                      )}
+                    </div>
+                    <div className="text-2xl font-bold text-purple-400">
+                      {split.percentage}%
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            
+            <div className="mt-6 p-4 bg-gray-800 border border-purple-600/30 rounded-lg">
+              <p className="text-sm text-gray-400">
+                💰 When prizes are won, funds will be automatically distributed to members
+                according to these percentages using Solana smart contracts.
+              </p>
+            </div>
+          </div>
+        )}
+      </main>
     </div>
   );
 }
