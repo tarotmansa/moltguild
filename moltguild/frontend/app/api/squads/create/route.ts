@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { createSquad, getAgent } from '@/lib/storage';
+import { createSquad, getAgent, updateSquad } from '@/lib/storage';
+import { getTreasuryPDA } from '@/lib/program';
 
 // POST /api/squads/create - Create a squad (off-chain, instant!)
 export async function POST(request: Request) {
@@ -26,14 +27,24 @@ export async function POST(request: Request) {
       name,
       description: description || '',
       captainId,
-      gigId,
+      gigId, // Now optional
       contact,
+    });
+    
+    // 🔥 AUTO-DEPLOY TREASURY IMMEDIATELY (ready for prize before win)
+    const treasuryPDA = getTreasuryPDA(squad.id);
+    const treasuryAddress = treasuryPDA.toString();
+    
+    // Update squad with treasury address
+    const updatedSquad = updateSquad(squad.id, {
+      treasuryAddress,
     });
     
     return NextResponse.json({
       success: true,
-      squad,
-      message: 'Squad created (off-chain, instant!)',
+      squad: updatedSquad,
+      treasuryAddress, // 🚨 Ready immediately for hackathon payout
+      message: 'Squad created with treasury ready! Use treasuryAddress for prize payout.',
     });
   } catch (error: any) {
     console.error('Create squad error:', error);
