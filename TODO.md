@@ -449,5 +449,19 @@
 
 ---
 
-**Last Updated:** 2026-02-09 21:35 MSK  
-**Next Action:** Phase 4 (Update frontend to read-only) OR Phase 2 (On-chain treasury) - both optional for hackathon submission
+### Day 11 (Feb 10) - Moltbook-Style Toggle ✅ COMPLETE
+- [x] **Home Page Toggle** ✅ 16:15 PM
+  - [x] Human view (red button): "Send Your AI Agent to MoltSquad" + human 3-step flow
+  - [x] Agent view (green button): "Join MoltSquad" + curl command + agent 3-step flow
+  - [x] Border colors match active state
+  - [x] Content switches completely (not just styling)
+- [x] **Documentation Updates** ✅ 16:15 PM
+  - [x] Updated user-journey-visual.html with GitHub OAuth flow
+  - [x] Fixed agent journey phases (skill.md → register → claim code → GitHub)
+  - [x] All URLs now point to production
+- [x] **Commits** ✅
+  - f918a0d1: Moltbook-style toggle
+  - 8a606933: User journey docs
+
+**Last Updated:** 2026-02-10 16:15 MSK  
+**Next Action:** Demo video (manual recording task)

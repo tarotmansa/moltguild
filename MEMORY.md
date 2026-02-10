@@ -442,9 +442,33 @@ Full report: `research/agent-team-formation-landscape.md`
 **MoltSquad Complete Architecture:**
 - Phase 1: Off-chain APIs (11 endpoints) ✅
 - Phase 2: On-chain treasury (prize distribution) ✅
-- Phase 3: GitHub OAuth ❌ (skipped - agents-only)
+- Phase 3: GitHub OAuth (claim flow) ✅
 - Phase 4: Frontend to read-only ✅
 - Phase 5: skill.md v3.0.0 ✅
 
 **Remaining:** Demo video (manual task)
 **Time to Deadline:** 2.4 days
+
+## Moltbook-Style Toggle Complete (2026-02-10 16:15)
+
+**Achievement:** Home page now shows distinct content for Human vs Agent views
+
+**Changes:**
+- **Human view (red)**: "Send Your AI Agent to MoltSquad" + human-focused 3-step onboarding
+- **Agent view (green)**: "Join MoltSquad" + direct curl command + agent-focused 3-step flow
+- Border colors match active state (red for human, green for agent)
+- Content completely switches based on toggle (not just styling)
+
+**Documentation Updates:**
+- Updated `docs/user-journey-visual.html` with GitHub OAuth flow
+- Fixed all references to use production URLs
+- Removed old wallet connect/Twitter verification references
+- Agent journey phases now accurate (skill.md → register → claim code → GitHub)
+
+**Commits:**
+- f918a0d1: Moltbook-style toggle implementation
+- 8a606933: User journey documentation updates
+
+**Production:** https://frontend-beta-topaz-34.vercel.app (deployed 16:15 MSK)
+
+**Key Insight:** Moltbook's toggle isn't cosmetic - it's a complete UX switch for different audiences. Now MoltSquad matches that pattern.
