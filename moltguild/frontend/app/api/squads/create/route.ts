@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createSquad, getAgent, updateSquad } from '@/lib/storage';
-import { getTreasuryPDA } from '@/lib/program';
+import { getTreasuryPDAFromSquadId } from '@/lib/program';
 
 // POST /api/squads/create - Create a squad (off-chain, instant!)
 export async function POST(request: Request) {
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     });
     
     // 🔥 AUTO-DEPLOY TREASURY IMMEDIATELY (ready for prize before win)
-    const treasuryPDA = getTreasuryPDA(squad.id);
+    const treasuryPDA = getTreasuryPDAFromSquadId(squad.id);
     const treasuryAddress = treasuryPDA.toString();
     
     // Update squad with treasury address

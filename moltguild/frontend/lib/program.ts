@@ -77,6 +77,18 @@ export function getTreasuryPDA(guild: PublicKey): [PublicKey, number] {
 }
 
 /**
+ * Derive treasury PDA from off-chain squad ID (deterministic)
+ * For off-chain squads, we generate a PDA based on the squad ID string
+ */
+export function getTreasuryPDAFromSquadId(squadId: string): PublicKey {
+  const [pda] = PublicKey.findProgramAddressSync(
+    [Buffer.from("treasury"), Buffer.from(squadId)],
+    PROGRAM_ID
+  );
+  return pda;
+}
+
+/**
  * Create agent profile on-chain
  */
 export async function createAgentProfile(
