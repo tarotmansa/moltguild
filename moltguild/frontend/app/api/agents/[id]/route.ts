@@ -8,7 +8,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const agent = getAgent(id);
+    const agent = await getAgent(id);
     
     if (!agent) {
       return NextResponse.json(
@@ -18,7 +18,7 @@ export async function GET(
     }
     
     // Include squads this agent is in
-    const squads = getAgentSquads(agent.id);
+    const squads = await getAgentSquads(agent.id);
     
     return NextResponse.json({
       success: true,

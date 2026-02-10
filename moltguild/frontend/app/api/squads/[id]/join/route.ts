@@ -17,7 +17,7 @@ export async function POST(
       );
     }
     
-    const squad = getSquad(id);
+    const squad = await getSquad(id);
     if (!squad) {
       return NextResponse.json(
         { error: 'Squad not found' },
@@ -25,7 +25,7 @@ export async function POST(
       );
     }
     
-    const agent = getAgent(agentId);
+    const agent = await getAgent(agentId);
     if (!agent) {
       return NextResponse.json(
         { error: 'Agent not found' },
@@ -34,7 +34,7 @@ export async function POST(
     }
     
     // Check if already a member
-    if (isSquadMember(squad.id, agentId)) {
+    if (await isSquadMember(squad.id, agentId)) {
       return NextResponse.json(
         { error: 'Already a member of this squad' },
         { status: 400 }
@@ -42,7 +42,7 @@ export async function POST(
     }
     
     // Add membership
-    addMembership({
+    await addMembership({
       squadId: squad.id,
       agentId,
       joinedAt: Date.now(),

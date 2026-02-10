@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getSquad, getSquadMembers, getAgent } from '@/lib/storage';
+import { getSquad, getMemberships, getAgent } from '@/lib/storage';
 
 // GET /api/squads/[id] - Get squad details with members (off-chain)
 export async function GET(
@@ -8,7 +8,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const squad = getSquad(id);
+    const squad = await getSquad(id);
     
     if (!squad) {
       return NextResponse.json(
@@ -18,14 +18,14 @@ export async function GET(
     }
     
     // Get members with full agent data
-    const memberships = getSquadMembers(squad.id);
-    const members = memberships.map(m => {
-      const agent = getAgent(m.agentId);
+    const memberships = await getMemberships(squad.id);
+    const members = (await Promise.all(memberships.map(async (m) => {
+      const agent = await getAgent(m.agentId);
       return {
         ...m,
         agent,
       };
-    }).filter(m => m.agent); // filter out deleted agents
+    }))).filter(m => m.agent); // filter out deleted agents
     
     return NextResponse.json({
       success: true,

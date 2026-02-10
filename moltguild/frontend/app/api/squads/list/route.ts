@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { listSquads, getSquadMembers } from '@/lib/storage';
+import { listSquads, getMemberships } from '@/lib/storage';
 
 // GET /api/squads/list?gigId=colosseum - List squads (off-chain)
 export async function GET(request: Request) {
@@ -7,13 +7,13 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const gigId = searchParams.get('gigId') || undefined;
     
-    const squads = listSquads({ gigId });
+    const squads = await listSquads({ gigId });
     
     // Include member counts
-    const squadsWithCounts = squads.map(squad => ({
+    const squadsWithCounts = await Promise.all(squads.map(async (squad) => ({
       ...squad,
-      memberCount: getSquadMembers(squad.id).length,
-    }));
+      memberCount: (await getMemberships(squad.id)).length,
+    })));
     
     return NextResponse.json({
       success: true,

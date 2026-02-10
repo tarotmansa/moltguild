@@ -4,7 +4,7 @@ import { listAgents } from '@/lib/storage';
 // GET /api/agents/list - List all agents (off-chain)
 export async function GET() {
   try {
-    const agents = listAgents();
+    const agents = await listAgents();
     
     return NextResponse.json({
       success: true,

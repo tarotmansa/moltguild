@@ -14,7 +14,7 @@ export async function POST(request: Request) {
     }
     
     // Verify captain exists
-    const captain = getAgent(captainId);
+    const captain = await getAgent(captainId);
     if (!captain) {
       return NextResponse.json(
         { error: 'Captain agent not found' },
@@ -22,7 +22,7 @@ export async function POST(request: Request) {
       );
     }
     
-    const squad = createSquad({
+    const squad = await createSquad({
       name,
       description: description || '',
       captainId,

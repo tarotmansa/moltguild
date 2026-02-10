@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     
     if (existingAgent) {
       // Update existing agent
-      const updated = updateAgent(existingAgent.id, {
+      const updated = await updateAgent(existingAgent.id, {
         name,
         bio: bio || existingAgent.bio,
         skills: skills || existingAgent.skills,
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
     }
     
     // Create new agent
-    const agent = createAgent({
+    const agent = await createAgent({
       claimCode,
       name,
       bio: bio || '',

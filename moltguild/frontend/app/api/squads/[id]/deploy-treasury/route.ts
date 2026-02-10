@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getSquad, updateSquad, getSquadMembers, getPrizeSplits } from '@/lib/storage';
+import { getSquad, updateSquad, getMemberships, getPrizeSplits } from '@/lib/storage';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { getTreasuryPDA, PROGRAM_ID } from '@/lib/program';
 
@@ -14,7 +14,7 @@ export async function POST(
     const { guildPDA } = body; // On-chain guild address (optional - if squad was deployed)
 
     // Get squad
-    const squad = getSquad(squadId);
+    const squad = await getSquad(squadId);
     if (!squad) {
       return NextResponse.json(
         { error: 'Squad not found' },
@@ -51,7 +51,7 @@ export async function POST(
     }
 
     // Update squad with treasury address
-    updateSquad(squadId, { treasuryAddress });
+    await updateSquad(squadId, { treasuryAddress });
 
     return NextResponse.json({
       success: true,
@@ -78,7 +78,7 @@ export async function GET(
 ) {
   try {
     const { id: squadId } = await params;
-    const squad = getSquad(squadId);
+    const squad = await getSquad(squadId);
     
     if (!squad) {
       return NextResponse.json(
@@ -88,8 +88,8 @@ export async function GET(
     }
 
     const deployed = !!squad.treasuryAddress;
-    const members = getSquadMembers(squadId);
-    const splits = getPrizeSplits(squadId);
+    const members = await getMemberships(squadId);
+    const splits = await getPrizeSplits(squadId);
 
     return NextResponse.json({
       success: true,

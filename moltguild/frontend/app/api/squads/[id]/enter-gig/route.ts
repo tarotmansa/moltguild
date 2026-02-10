@@ -18,7 +18,7 @@ export async function POST(
       );
     }
 
-    const squad = getSquad(id);
+    const squad = await getSquad(id);
     if (!squad) {
       return NextResponse.json(
         { error: 'Squad not found' },
@@ -30,7 +30,7 @@ export async function POST(
     const treasuryPDA = getTreasuryPDAFromSquadId(squad.id);
     const treasuryAddress = treasuryPDA.toString();
 
-    const updated = updateSquad(squad.id, {
+    const updated = await updateSquad(squad.id, {
       gigId,
       treasuryAddress,
     });

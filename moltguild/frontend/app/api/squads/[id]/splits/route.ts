@@ -8,7 +8,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const squad = getSquad(id);
+    const squad = await getSquad(id);
     if (!squad) {
       return NextResponse.json(
         { error: 'Squad not found' },
@@ -16,7 +16,7 @@ export async function GET(
       );
     }
     
-    const splits = getPrizeSplits(squad.id);
+    const splits = await getPrizeSplits(squad.id);
     
     return NextResponse.json({
       success: true,
@@ -54,7 +54,7 @@ export async function POST(
       );
     }
     
-    const squad = getSquad(id);
+    const squad = await getSquad(id);
     if (!squad) {
       return NextResponse.json(
         { error: 'Squad not found' },
@@ -63,7 +63,7 @@ export async function POST(
     }
     
     // Only captain can set splits
-    if (!isSquadCaptain(squad.id, agentId)) {
+    if (!(await isSquadCaptain(squad.id, agentId))) {
       return NextResponse.json(
         { error: 'Only squad captain can set prize splits' },
         { status: 403 }
@@ -87,7 +87,7 @@ export async function POST(
       solanaAddress: s.solanaAddress,
     }));
     
-    setPrizeSplits(squad.id, formattedSplits);
+    await setPrizeSplits(squad.id, formattedSplits);
     
     return NextResponse.json({
       success: true,

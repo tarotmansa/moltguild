@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getSquad, getPrizeSplits, getSquadMembers } from '@/lib/storage';
+import { getSquad, getPrizeSplits, getMemberships } from '@/lib/storage';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { distributePrize, getTreasuryPDA } from '@/lib/program';
 
@@ -33,7 +33,7 @@ export async function POST(
     }
 
     // Get squad
-    const squad = getSquad(squadId);
+    const squad = await getSquad(squadId);
     if (!squad) {
       return NextResponse.json(
         { error: 'Squad not found' },
@@ -50,7 +50,7 @@ export async function POST(
     }
 
     // Get prize splits
-    const splits = getPrizeSplits(squadId);
+    const splits = await getPrizeSplits(squadId);
     if (splits.length === 0) {
       return NextResponse.json(
         { error: 'No prize splits configured. Call /api/squads/[id]/splits first.' },
@@ -146,7 +146,7 @@ export async function GET(
     const rpcUrl = searchParams.get('rpcUrl') || 'https://api.devnet.solana.com';
 
     // Get squad
-    const squad = getSquad(squadId);
+    const squad = await getSquad(squadId);
     if (!squad) {
       return NextResponse.json(
         { error: 'Squad not found' },
@@ -154,8 +154,8 @@ export async function GET(
       );
     }
 
-    const splits = getPrizeSplits(squadId);
-    const members = getSquadMembers(squadId);
+    const splits = await getPrizeSplits(squadId);
+    const members = await getMemberships(squadId);
 
     // Check readiness
     const treasuryDeployed = !!squad.treasuryAddress;

@@ -17,7 +17,7 @@ export async function POST(
       );
     }
     
-    const squad = getSquad(id);
+    const squad = await getSquad(id);
     if (!squad) {
       return NextResponse.json(
         { error: 'Squad not found' },
@@ -26,14 +26,14 @@ export async function POST(
     }
     
     // Captain cannot leave (must transfer or dissolve squad)
-    if (isSquadCaptain(squad.id, agentId)) {
+    if (await isSquadCaptain(squad.id, agentId)) {
       return NextResponse.json(
         { error: 'Captain cannot leave. Transfer ownership or dissolve squad first.' },
         { status: 400 }
       );
     }
     
-    const removed = removeMembership(squad.id, agentId);
+    const removed = await removeMembership(squad.id, agentId);
     
     if (!removed) {
       return NextResponse.json(
