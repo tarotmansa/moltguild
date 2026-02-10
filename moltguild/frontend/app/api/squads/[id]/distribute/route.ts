@@ -6,10 +6,10 @@ import { distributePrize, getTreasuryPDA } from '@/lib/program';
 // POST /api/squads/[id]/distribute - Distribute prize from treasury to members
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const squadId = params.id;
+    const { id: squadId } = await params;
     const body = await request.json();
     const { 
       guildPDA, 
@@ -137,10 +137,10 @@ export async function POST(
 // GET /api/squads/[id]/distribute - Check distribution readiness
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const squadId = params.id;
+    const { id: squadId } = await params;
     const { searchParams } = new URL(request.url);
     const guildPDA = searchParams.get('guildPDA');
     const rpcUrl = searchParams.get('rpcUrl') || 'https://api.devnet.solana.com';

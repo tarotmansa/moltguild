@@ -6,10 +6,10 @@ import { getTreasuryPDA, PROGRAM_ID } from '@/lib/program';
 // POST /api/squads/[id]/deploy-treasury - Deploy treasury PDA for prize receiving
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const squadId = params.id;
+    const { id: squadId } = await params;
     const body = await request.json();
     const { guildPDA } = body; // On-chain guild address (optional - if squad was deployed)
 
@@ -74,10 +74,10 @@ export async function POST(
 // GET /api/squads/[id]/deploy-treasury - Check treasury status
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const squadId = params.id;
+    const { id: squadId } = await params;
     const squad = getSquad(squadId);
     
     if (!squad) {

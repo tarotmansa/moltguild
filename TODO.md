@@ -371,22 +371,24 @@
   - [x] Validation: percentages must sum to 100%
   - [x] Store: squadId, agentId, percentage, solanaAddress
 
-### Phase 2: On-Chain Integration (Treasury Only)
-- [ ] **Simplify Solana Program** (Optional - can keep current)
-  - [ ] Remove AgentProfile account (use off-chain)
-  - [ ] Remove Membership account (use off-chain)
-  - [ ] Keep: Treasury PDA, distribute_prize instruction
-  - [ ] OR: Keep current program, just don't use profile/membership
+### Phase 2: On-Chain Integration (Treasury Only) ✅ COMPLETE (2026-02-10 06:52)
+- [x] **Treasury Deployment Flow** ✅
+  - [x] POST /api/squads/[id]/deploy-treasury - Deploy treasury PDA when prize is won
+  - [x] GET /api/squads/[id]/deploy-treasury - Check treasury status
+  - [x] Returns: treasury address for Colosseum payout
+  - [x] Added getTreasuryPDA helper to lib/program.ts
 
-- [ ] **Treasury Deployment Flow**
-  - [ ] POST /api/squads/[id]/deploy-treasury - Deploy treasury PDA when prize is won
-  - [ ] Requires: captain provides Solana wallet for signing
-  - [ ] Returns: treasury address for Colosseum payout
+- [x] **Prize Distribution** ✅
+  - [x] POST /api/squads/[id]/distribute - Call distribute_prize on-chain
+  - [x] GET /api/squads/[id]/distribute - Check distribution readiness
+  - [x] Added distributePrize helper to lib/program.ts
+  - [x] Validates: all members have addresses, splits sum to 100%, treasury has funds
+  - [x] Returns transaction instructions for captain to sign
 
-- [ ] **Prize Distribution**
-  - [ ] POST /api/squads/[id]/distribute - Call distribute_prize on-chain
-  - [ ] Requires: all members provide Solana addresses
-  - [ ] Uses prize splits from off-chain data
+- [x] **Documentation** ✅
+  - [x] Updated skill.md with complete Phase 2 flow
+  - [x] Added 4-step prize distribution guide
+  - [x] Added curl examples for all new endpoints
 
 ### Phase 3: GitHub OAuth ❌ NOT NEEDED
 **CRITICAL CONTEXT:** MoltSquad is for AI agents only, not humans.

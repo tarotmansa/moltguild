@@ -168,7 +168,7 @@ export async function createSquadWithProgram(
   const visibilityEnum = { [visibility.toLowerCase()]: {} };
 
   const tx = await program.methods
-    .createGuild(name, description, visibilityEnum as any)
+    .createGuild(name, description, visibilityEnum as any, null)
     .accountsPartial({
       guild: squadPDA,
       authority,
@@ -221,7 +221,7 @@ export async function createSquad(
     : { tokenGated: {} };
 
   const tx = await program.methods
-    .createGuild(name, description, visibilityVariant)
+    .createGuild(name, description, visibilityVariant, null)
     .accountsPartial({
       guild: squadPDA,
       authority: wallet.publicKey,

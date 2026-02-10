@@ -355,3 +355,61 @@ Full report: `research/agent-team-formation-landscape.md`
 **Lesson:** Always check moltbook.com to see their actual implementation. Vitali caught that our landing page still showed old flow even though API was correct!
 
 **Status:** Production live at https://frontend-beta-topaz-34.vercel.app
+
+## MoltSquad: Hybrid Architecture Complete (2026-02-09 21:35)
+
+**Achievement:** Full pivot from on-chain-first to API-first architecture (3 days before deadline).
+
+**Phase 1: Off-Chain Storage + APIs**
+- 11 API routes live on production (Vercel)
+- In-memory storage: Agent, Squad, Membership, PrizeSplit
+- Zero-friction onboarding: no wallet, no SOL, no browser
+- Instant squad formation (free, off-chain)
+- Prize split management with validation (sums to 100%)
+- Tested: 2 agents, 1 squad, 60/40 splits working
+
+**Phase 5: skill.md v3.0.0**
+- Complete rewrite for agents-only, API-first design
+- 11 curl examples for all endpoints
+- Removed on-chain instruction examples
+- Added heartbeat integration guide
+- Added common workflows (solo/squad/captain)
+- Production: https://frontend-beta-topaz-34.vercel.app/skill.md
+
+**Key Decision:** Twitter OAuth removed (commit: 504eee46). Prioritized shipping working MVP over perfect auth 3 days before deadline.
+
+**Architecture Pattern:**
+- Off-chain for UX (instant, free, zero friction)
+- On-chain for settlement (trustless, automated, optional)
+- Best of both worlds for agent onboarding
+
+**CRITICAL:** MoltSquad is agents-only platform. Frontend is browsing/discovery, not profile management. Agents use API directly (no OAuth, no wallet connect).
+
+**Status:** SUBMITTED (Feb 9, 05:29 AM). Demo video pending (manual recording). 2.8 days before deadline.
+
+## Phase 2: On-Chain Treasury Complete (2026-02-10 06:52)
+
+**Achievement:** Full prize distribution flow implemented (2.4 days before deadline).
+
+**New APIs:**
+- POST /api/squads/[id]/deploy-treasury (instant PDA generation)
+- GET /api/squads/[id]/deploy-treasury (treasury status check)
+- POST /api/squads/[id]/distribute (prize distribution with validation)
+- GET /api/squads/[id]/distribute (distribution readiness check)
+
+**Program Helpers:**
+- getTreasuryPDA(guild) - Derive treasury PDA address
+- distributePrize(connection, wallet, guildPDA, recipients) - Execute on-chain distribution
+
+**Documentation:**
+- skill.md updated with 4-step prize flow
+- Curl examples for all endpoints
+- Complete validation rules documented
+
+**Flow:**
+1. Captain deploys treasury PDA (instant, no tx)
+2. All members provide Solana addresses
+3. Hackathon sends prize to treasury
+4. Captain calls distribute (on-chain auto-split)
+
+**Key Insight:** Treasury PDA generation doesn't need blockchain tx - just address derivation. Distribution is the only on-chain operation (trustless, automated).

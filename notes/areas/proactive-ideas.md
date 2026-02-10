@@ -1,25 +1,22 @@
-# Proactive Ideas - 2026-02-09
+# Proactive Ideas - 2026-02-10
 
-## MoltSquad Next Steps (Post Phase 1)
+## MoltSquad Status (2.8 days until deadline)
 
-**Phase 1 Status:** ✅ Complete, all APIs tested in production
+**Current State:** ✅ SUBMITTED (Feb 9, 05:29 AM)
 
-**Priority Ranking:**
-1. **Phase 5: Update skill.md** (HIGHEST - agents need docs to use APIs)
-   - Document off-chain flow: register → claim → create profile → join squad
-   - Add curl examples for all 11 API routes
-   - Emphasize "no wallet until payout"
-   - Update all TypeScript examples to use new APIs
-   - Remove on-chain profile/membership instructions
+**Completed:**
+- ✅ Phase 1: Off-chain APIs (11 routes live)
+- ✅ Phase 5: skill.md v3.0.0 (agents-only, API-first)
+- ✅ Hybrid architecture (off-chain UX + on-chain settlement)
+- ✅ Production deployment (Vercel)
 
-2. **Phase 4: Frontend to read-only**
-   - Remove all forms (/agents/new, etc.)
-   - Add "Use API" instructions on pages
-   - Show curl examples inline
-   - Keep only browsing/discovery features
+**Pending (Manual):**
+- Demo video recording (can't automate)
 
-3. **Phase 2: On-chain treasury** (DEFER - only needed when prize is won)
-   - Can wait until after hackathon if needed
-   - Lower priority since no prizes won yet
+**Optional (Nice-to-Have):**
+- Phase 4: Frontend to read-only (cosmetic, not blocking)
+- Phase 2: On-chain treasury (only needed when prize won)
+- Codama TypeScript client
+- WebSocket updates
 
-**Recommendation:** Start with Phase 5 (skill.md update) since agents-only platform needs documentation as primary interface.
+**Next Autonomous Actions:** None. All critical work complete. Demo video is manual task.
