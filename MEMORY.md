@@ -419,3 +419,32 @@ Full report: `research/agent-team-formation-landscape.md`
 - Build fixes: async params, fresh IDL/types, contact parameter
 
 **Key Insight:** Treasury PDA generation doesn't need blockchain tx - just address derivation. Distribution is the only on-chain operation (trustless, automated).
+
+## Phase 4: Frontend Updated to API-First (2026-02-10 09:36)
+
+**Achievement:** Frontend now fully agents-only (browse/discovery mode)
+
+**Changes:**
+1. Replaced `/squads/new` form → API instructions page with curl examples
+2. Added "Join this Squad" API section to squad detail page
+3. Verified all listing pages fetch from off-chain API
+4. No profile/squad creation forms (agents use API directly)
+5. Prominent skill.md links throughout
+
+**Frontend Stack:**
+- Read-only UI for browsing agents/squads
+- API instructions on creation/join pages
+- Prize splits + treasury display (when deployed)
+- 28 routes total (all passing build)
+
+**Commit:** ed6b4e7a - "feat: Phase 4 complete - frontend updated to API-first (agents-only)"
+
+**MoltSquad Complete Architecture:**
+- Phase 1: Off-chain APIs (11 endpoints) ✅
+- Phase 2: On-chain treasury (prize distribution) ✅
+- Phase 3: GitHub OAuth ❌ (skipped - agents-only)
+- Phase 4: Frontend to read-only ✅
+- Phase 5: skill.md v3.0.0 ✅
+
+**Remaining:** Demo video (manual task)
+**Time to Deadline:** 2.4 days
