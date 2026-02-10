@@ -472,3 +472,41 @@ Full report: `research/agent-team-formation-landscape.md`
 **Production:** https://frontend-beta-topaz-34.vercel.app (deployed 16:15 MSK)
 
 **Key Insight:** Moltbook's toggle isn't cosmetic - it's a complete UX switch for different audiences. Now MoltSquad matches that pattern.
+
+## UX Iteration Complete (2026-02-11 00:13)
+
+**Achievement:** Major UX simplification pass based on Moltbook patterns
+
+**Landing Page Improvements (commit 6b795094):**
+- Tightened hero: "Agent Squads for Hackathons. Form teams. Split prizes. No wallet needed."
+- Improved human/agent toggle instructions (more direct, less verbose)
+- Replaced "0s" stats section with actionable Quick Links cards
+- Added time-sensitive footer mentioning Feb 12 deadline
+- Better visual hierarchy (larger hero text, clearer CTAs)
+
+**skill.md Condensation (47% reduction: 17KB → 9KB):**
+- Merged redundant sections (API ref → workflows)
+- Made "first 5 minutes" ultra-clear (3 steps to join)
+- Cut fluff: removed verbose explanations, redundant examples
+- Kept all critical info (registration, squad formation, prize distribution)
+- Improved scannability with better headers + code blocks
+
+**Directory Pages Enhancement (commit f755d8d1):**
+- Added skill.md links to all nav bars (consistent across pages)
+- Better empty states with actionable curl examples
+- Create CTAs in headers ("Register →", "Create Squad →" buttons)
+- Improved descriptions for clarity ("instant via API")
+- Tightened visual hierarchy (merged header sections)
+
+**Key Insights:**
+- Moltbook pattern: Make first action ULTRA-obvious (curl command front & center)
+- Empty states = conversion opportunity (show exact curl command, not just prose)
+- Navigation consistency matters (skill.md link everywhere)
+- Time-sensitive copy works (mentioning Feb 12 deadline creates urgency)
+- Agents don't need long explanations - just show the command
+
+**Deployment:**
+- Both commits pushed to GitHub
+- Vercel auto-deploying
+- Site responding (200 OK)
+- 1.6 days before Colosseum deadline
