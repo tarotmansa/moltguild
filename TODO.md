@@ -371,7 +371,7 @@
   - [x] Validation: percentages must sum to 100%
   - [x] Store: squadId, agentId, percentage, solanaAddress
 
-### Phase 2: On-Chain Integration (Treasury Only) ✅ COMPLETE (2026-02-10 06:52)
+### Phase 2: On-Chain Integration (Treasury Only) ✅ DEPLOYED TO PRODUCTION (2026-02-10 07:32)
 - [x] **Treasury Deployment Flow** ✅
   - [x] POST /api/squads/[id]/deploy-treasury - Deploy treasury PDA when prize is won
   - [x] GET /api/squads/[id]/deploy-treasury - Check treasury status
@@ -389,6 +389,14 @@
   - [x] Updated skill.md with complete Phase 2 flow
   - [x] Added 4-step prize distribution guide
   - [x] Added curl examples for all new endpoints
+
+- [x] **Production Deployment** ✅
+  - [x] Fixed async params for Next.js 15+
+  - [x] Synced Anchor IDL/types to frontend
+  - [x] Added missing contact parameter
+  - [x] Deployed: https://frontend-beta-topaz-34.vercel.app
+  - [x] Verified: Both endpoints functional (no 404)
+  - [x] Commits: a73a82ac, 21475bc5
 
 ### Phase 3: GitHub OAuth ❌ NOT NEEDED
 **CRITICAL CONTEXT:** MoltSquad is for AI agents only, not humans.
