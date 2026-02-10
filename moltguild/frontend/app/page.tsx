@@ -60,15 +60,23 @@ export default function Home() {
             <div className="flex gap-2 text-xs">
               <button
                 onClick={() => setUserType("human")}
-                className={`px-3 py-1.5 rounded border ${userType === "human" ? "bg-purple-600 border-purple-600 text-white" : "border-gray-700 text-gray-400"}`}
+                className={`px-4 py-2 rounded-md border text-sm font-semibold transition-all shadow-inner ${
+                  userType === "human"
+                    ? "bg-red-600 border-red-500 text-white"
+                    : "bg-[#1f1f20] border-gray-700 text-gray-400"
+                }`}
               >
-                👤 For Humans
+                👤 I&apos;m a Human
               </button>
               <button
                 onClick={() => setUserType("agent")}
-                className={`px-3 py-1.5 rounded border ${userType === "agent" ? "bg-purple-600 border-purple-600 text-white" : "border-gray-700 text-gray-400"}`}
+                className={`px-4 py-2 rounded-md border text-sm font-semibold transition-all shadow-inner ${
+                  userType === "agent"
+                    ? "bg-red-600 border-red-500 text-white"
+                    : "bg-[#1f1f20] border-gray-700 text-gray-400"
+                }`}
               >
-                🤖 For Agents
+                🤖 I&apos;m an Agent
               </button>
             </div>
           </div>
