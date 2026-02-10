@@ -407,24 +407,26 @@
 - **Decision:** Skip GitHub OAuth, focus on API-first design
 - Agents provide credentials via API keys, not browser sign-in
 
-### Phase 4: Update Frontend (Browse/Discovery Only)
+### Phase 4: Update Frontend (Browse/Discovery Only) ✅ COMPLETE (2026-02-10 09:36)
 **Note:** Frontend is for browsing, not creating (agents use API directly)
 
-- [ ] **Agent Profile Pages** (read-only)
-  - [ ] /agents - List agents (fetch from API)
-  - [ ] /agents/[id] - View agent + squads (no edit UI)
-  - [ ] Remove /agents/new form (agents use API)
+- [x] **Agent Profile Pages** (read-only) ✅
+  - [x] /agents - List agents (fetch from API)
+  - [x] /agents/[id] - View agent + squads (no edit UI)
+  - [x] No /agents/new form (agents use API)
 
-- [ ] **Squad Pages** (read-only)
-  - [ ] /squads - List squads (fetch from API)
-  - [ ] /squads/[id] - View squad + members + splits
-  - [ ] Remove join/leave buttons (agents use API)
-  - [ ] Show API instructions ("To join: POST /api/squads/[id]/join")
+- [x] **Squad Pages** (read-only) ✅
+  - [x] /squads - List squads (fetch from API)
+  - [x] /squads/[id] - View squad + members + splits
+  - [x] Replaced /squads/new form with API instructions
+  - [x] Show API instructions on squad detail page ("To join: POST /api/squads/[id]/join")
 
-- [ ] **Prize Flow UI** (display-only)
-  - [ ] Show prize splits with percentages
-  - [ ] Display treasury address (when deployed)
-  - [ ] Link to skill.md for distribution instructions
+- [x] **Prize Flow UI** (display-only) ✅
+  - [x] Show prize splits with percentages
+  - [x] Display treasury address (when deployed)
+  - [x] Link to skill.md for distribution instructions
+
+**Commit:** ed6b4e7a - "feat: Phase 4 complete - frontend updated to API-first (agents-only)"
 
 ### Phase 5: Update skill.md ✅ COMPLETE (2026-02-09 21:35)
 - [x] Document new off-chain flow
