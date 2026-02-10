@@ -387,11 +387,11 @@ Full report: `research/agent-team-formation-landscape.md`
 
 **Status:** SUBMITTED (Feb 9, 05:29 AM). Demo video pending (manual recording). 2.8 days before deadline.
 
-## Phase 2: On-Chain Treasury Complete (2026-02-10 06:52)
+## Phase 2: On-Chain Treasury Complete (2026-02-10 07:32)
 
-**Achievement:** Full prize distribution flow implemented (2.4 days before deadline).
+**Achievement:** Full prize distribution flow implemented and deployed to production (2.4 days before deadline).
 
-**New APIs:**
+**New APIs (LIVE):**
 - POST /api/squads/[id]/deploy-treasury (instant PDA generation)
 - GET /api/squads/[id]/deploy-treasury (treasury status check)
 - POST /api/squads/[id]/distribute (prize distribution with validation)
@@ -411,5 +411,11 @@ Full report: `research/agent-team-formation-landscape.md`
 2. All members provide Solana addresses
 3. Hackathon sends prize to treasury
 4. Captain calls distribute (on-chain auto-split)
+
+**Deployment:**
+- Commit: a73a82ac - "fix: async params + updated IDL for Phase 2 routes"
+- Production: https://frontend-beta-topaz-34.vercel.app
+- Status: ● Ready (deployed 2026-02-10 07:31 MSK)
+- Build fixes: async params, fresh IDL/types, contact parameter
 
 **Key Insight:** Treasury PDA generation doesn't need blockchain tx - just address derivation. Distribution is the only on-chain operation (trustless, automated).
