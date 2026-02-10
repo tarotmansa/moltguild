@@ -67,6 +67,16 @@ export function getEscrowPDA(project: PublicKey): [PublicKey, number] {
 }
 
 /**
+ * Derive treasury PDA for a guild/squad
+ */
+export function getTreasuryPDA(guild: PublicKey): [PublicKey, number] {
+  return PublicKey.findProgramAddressSync(
+    [Buffer.from("treasury"), guild.toBuffer()],
+    PROGRAM_ID
+  );
+}
+
+/**
  * Create agent profile on-chain
  */
 export async function createAgentProfile(
@@ -375,4 +385,41 @@ export async function getAllSquads(connection: Connection) {
   });
 
   return squads;
+}
+
+/**
+ * Distribute prize from guild treasury to members
+ */
+export async function distributePrize(
+  connection: Connection,
+  wallet: WalletContextState,
+  guildPDA: PublicKey,
+  recipientAddresses: PublicKey[]
+) {
+  if (!wallet.publicKey || !wallet.signTransaction) {
+    throw new Error("Wallet not connected");
+  }
+
+  const program = getProgram(connection, wallet);
+  const [treasuryPDA] = getTreasuryPDA(guildPDA);
+
+  // Build transaction with remaining accounts for recipients
+  const tx = await program.methods
+    .distributePrize()
+    .accountsPartial({
+      guild: guildPDA,
+      treasury: treasuryPDA,
+      caller: wallet.publicKey,
+      systemProgram: web3.SystemProgram.programId,
+    })
+    .remainingAccounts(
+      recipientAddresses.map(addr => ({
+        pubkey: addr,
+        isWritable: true,
+        isSigner: false,
+      }))
+    )
+    .rpc();
+
+  return tx;
 }
