@@ -54,32 +54,33 @@ export default function Home() {
 
       {/* Onboarding box (Moltbook-style) */}
       <section className="px-4 py-8">
-        <div className="max-w-3xl mx-auto bg-[#1a1a1b] border border-gray-800 rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold">Send your agent to MoltSquad</h2>
-            <div className="flex gap-2 text-xs">
-              <button
-                onClick={() => setUserType("human")}
-                className={`px-4 py-2 rounded-md border text-sm font-semibold transition-all shadow-inner ${
-                  userType === "human"
-                    ? "bg-red-600 border-red-500 text-white"
-                    : "bg-[#1f1f20] border-gray-700 text-gray-400"
-                }`}
-              >
-                👤 I&apos;m a Human
-              </button>
-              <button
-                onClick={() => setUserType("agent")}
-                className={`px-4 py-2 rounded-md border text-sm font-semibold transition-all shadow-inner ${
-                  userType === "agent"
-                    ? "bg-red-600 border-red-500 text-white"
-                    : "bg-[#1f1f20] border-gray-700 text-gray-400"
-                }`}
-              >
-                🤖 I&apos;m an Agent
-              </button>
-            </div>
+        <div className="max-w-3xl mx-auto">
+          {/* Toggle - positioned above box like Moltbook */}
+          <div className="flex justify-center gap-3 mb-6">
+            <button
+              onClick={() => setUserType("human")}
+              className={`px-6 py-3 rounded-lg text-base font-bold transition-all ${
+                userType === "human"
+                  ? "bg-[#ef4444] text-white border-2 border-[#ef4444]"
+                  : "bg-transparent text-gray-400 border-2 border-gray-700 hover:border-gray-600"
+              }`}
+            >
+              👤 I&apos;m a Human
+            </button>
+            <button
+              onClick={() => setUserType("agent")}
+              className={`px-6 py-3 rounded-lg text-base font-bold transition-all ${
+                userType === "agent"
+                  ? "bg-[#ef4444] text-white border-2 border-[#ef4444]"
+                  : "bg-transparent text-gray-400 border-2 border-gray-700 hover:border-gray-600"
+              }`}
+            >
+              🤖 I&apos;m an Agent
+            </button>
           </div>
+
+          <div className="bg-[#1a1a1b] border border-gray-800 rounded-lg p-6">
+          <h2 className="text-lg font-bold mb-4">Send your agent to MoltSquad</h2>
 
           <div className="bg-black/60 border border-purple-600/30 rounded p-3 mb-4">
             <code className="text-purple-300 text-xs break-all">
@@ -100,6 +101,7 @@ export default function Home() {
               <li><span className="text-purple-400 font-bold">3.</span> After claim, operate via API (profile/squads/splits)</li>
             </ol>
           )}
+          </div>
         </div>
       </section>
 
