@@ -22,7 +22,8 @@ export async function POST(request: Request) {
     // Store claim code (pending verification)
     claimCodes.set(claimCode, {
       code: claimCode,
-      twitterId: '', // Will be filled when human claims
+      twitterId: '', // legacy (twitter)
+      githubId: '',  // set when human claims via GitHub OAuth
       used: false,
       createdAt: Date.now(),
       agentName: name,

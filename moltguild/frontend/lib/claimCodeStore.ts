@@ -3,7 +3,8 @@
 
 export interface ClaimCodeEntry {
   code: string
-  twitterId: string
+  twitterId?: string
+  githubId?: string
   used: boolean
   createdAt: number
   usedAt?: number

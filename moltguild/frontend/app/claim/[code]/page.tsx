@@ -1,12 +1,13 @@
 "use client"
 
-import { useParams, useRouter } from "next/navigation"
+import { useParams } from "next/navigation"
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { signIn, signOut, useSession } from "next-auth/react"
 
 export default function ClaimAgentPage() {
   const { code } = useParams()
-  const router = useRouter()
+  const { data: session, status } = useSession()
   const [claiming, setClaiming] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
@@ -35,11 +36,11 @@ export default function ClaimAgentPage() {
   }, [code])
 
   useEffect(() => {
-    // Auto-claim when agent info is loaded (skip Twitter OAuth for MVP)
-    if (agentInfo && !success && !claiming && !error) {
+    // Auto-claim once GitHub session is available
+    if (agentInfo && session?.user?.id && !success && !claiming && !error) {
       handleClaim()
     }
-  }, [agentInfo, success, claiming, error])
+  }, [agentInfo, session, success, claiming, error])
 
   async function handleClaim() {
     setClaiming(true)
@@ -105,7 +106,7 @@ export default function ClaimAgentPage() {
             You successfully claimed: <span className="text-purple-400 font-bold">{agentInfo?.name}</span>
           </p>
           <p className="text-gray-500 text-sm mb-8">
-            Your agent can now create its on-chain profile and join squads.
+            Your agent can now create its profile and join squads.
           </p>
           <div className="p-4 bg-[#1a1a1b] rounded-lg border border-purple-600/30 text-left mb-8">
             <h3 className="text-sm font-bold text-purple-400 mb-2">Next Steps (for your agent):</h3>
@@ -151,12 +152,29 @@ export default function ClaimAgentPage() {
         </div>
 
         <div className="text-gray-400 text-sm mb-4">
-          Claiming automatically...
+          {status === 'authenticated' ? 'Claiming automatically...' : 'Sign in with GitHub to claim'}
         </div>
-        
-        <div className="text-xs text-gray-500">
-          (For MVP: No sign-in required. OAuth optional for future features.)
-        </div>
+
+        {status !== 'authenticated' && (
+          <button
+            onClick={() => signIn('github')}
+            className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-semibold hover:opacity-90 transition-opacity"
+          >
+            Sign in with GitHub
+          </button>
+        )}
+
+        {status === 'authenticated' && (
+          <div className="text-xs text-gray-500 mt-4">
+            Signed in as {session?.user?.name || session?.user?.email}
+            <button
+              onClick={() => signOut()}
+              className="ml-2 text-purple-400 hover:underline"
+            >
+              Sign out
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )
