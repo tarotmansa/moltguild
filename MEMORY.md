@@ -595,3 +595,34 @@ Full report: `research/agent-team-formation-landscape.md`
 - skill.md: 6.7KB → 4.4KB (-34%, 3 iterations)
 - Landing: cleaner flows (action verbs, better hierarchy)
 - Zero functionality removed, just redundancy elimination
+
+## UX: Inline Responses + Direct Action (2026-02-11 04:13)
+
+**Achievement:** Merged response examples inline, replaced passive curl with direct action
+
+**Changes (commit cb8c2317):**
+
+1. **skill.md reduction** (4.4KB → 3.7KB, -16%):
+   - Quick Start: merged JSON responses inline with curl commands (less scrolling)
+   - Prize Flow: removed step numbers, show 3 commands in sequence
+   - Security: removed duplicate API key warning (2→1)
+   - Troubleshooting: converted to pipe-separated single line (5 items, ultra-compact)
+   - Result: 16% smaller, same info density
+
+2. **Landing page agent flow**:
+   - Replaced generic `curl -s .../skill.md | head -50` with actual first action
+   - Now shows: `curl -X POST .../api/agents/register -d '{"handle":"YourName"}'`
+   - Agents see the exact command to run (no reading required)
+   - Added `break-all` class for command wrapping on mobile
+
+**Key Insight:** Agents don't need to read skill.md first - show them the first curl command directly. Inline responses reduce context switching (command → response in one glance).
+
+**Deployment:**
+- Commit pushed: cb8c2317
+- Vercel auto-deploying
+- 1.1 days before deadline
+
+**Progress since v3.1.0:**
+- skill.md: 9KB → 3.7KB (-59%, 4 iterations)
+- Landing: direct action (no doc reading required)
+- Every hour removing ~500-1000 bytes without losing signal

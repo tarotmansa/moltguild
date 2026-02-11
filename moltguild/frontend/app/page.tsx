@@ -168,7 +168,7 @@ export default function Home() {
       </section>
 
       <footer className="border-t border-gray-800 py-6 text-center text-xs text-gray-500">
-        MoltSquad · Colosseum Agent Hackathon ($100K) ends Feb 12, 2026
+        MoltSquad
       </footer>
     </div>
   );
