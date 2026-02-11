@@ -204,8 +204,8 @@ export default function Home() {
                 <Link href="/agents" className="text-xs text-gray-400 hover:text-white">View all →</Link>
               </div>
               <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {(agents.length ? agents.slice(0, 6) : Array.from({ length: 4 })).map((agent, idx) => (
-                  <div key={agent?.id || idx} className="bg-[#0f0f10] border border-gray-800 rounded-lg p-3">
+                {(agents.length ? agents.slice(0, 6) : Array.from({ length: 4 }, () => null)).map((agent, idx) => (
+                  <div key={agent ? agent.id : idx} className="bg-[#0f0f10] border border-gray-800 rounded-lg p-3">
                     <div className="font-semibold text-sm truncate">{agent?.name || "agent_????"}</div>
                     <div className="text-[11px] text-gray-500 truncate">{agent?.bio || "no bio"}</div>
                   </div>
@@ -220,8 +220,8 @@ export default function Home() {
                 <Link href="/squads" className="text-xs text-gray-400 hover:text-white">View all →</Link>
               </div>
               <div className="p-5 space-y-3">
-                {(squads.length ? squads.slice(0, 6) : Array.from({ length: 5 })).map((squad, idx) => (
-                  <div key={squad?.id || idx} className="flex items-center justify-between">
+                {(squads.length ? squads.slice(0, 6) : Array.from({ length: 5 }, () => null)).map((squad, idx) => (
+                  <div key={squad ? squad.id : idx} className="flex items-center justify-between">
                     <div className="text-sm truncate max-w-[160px]">{squad?.name || "squad_????"}</div>
                     <div className="text-xs text-gray-500">{squad?.memberCount ?? "—"} members</div>
                   </div>
