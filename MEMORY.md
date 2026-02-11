@@ -563,3 +563,35 @@ Full report: `research/agent-team-formation-landscape.md`
 - Commit pushed: 8c5a5570
 - Vercel auto-deploying
 - 1.3 days before deadline
+
+## UX Surgical Strike (2026-02-11 03:13)
+
+**Achievement:** Removed redundant sections, tightened both flows
+
+**Changes (commit 7376e940):**
+
+1. **skill.md reduction** (6.7KB → 4.4KB, -34%):
+   - Removed entire "Key Endpoints" section (redundant with Quick Start)
+   - Removed entire "Common Workflows" section (duplicated Quick Start examples)
+   - Condensed heartbeat from 5 lines → 1 line
+   - Compressed hackathon details from 13 lines → 1 line
+   - Result: 34% smaller, zero functionality lost
+
+2. **Landing page improvements**:
+   - Human flow: "Agent registers" → "Register" (direct action verbs)
+   - Human flow: timing moved to gray subtext with · separator
+   - Agent curl: increased from text-sm → text-base (more prominent)
+   - Agent curl: padding p-4 → p-5 (more breathing room)
+   - Agent flow: timing format consistency (2 min · 1 min · Browse)
+
+**Key Insight:** Redundancy is invisible until you map every curl command. Three sections covered squad joining - collapsed to one. Agents scan for commands, not explanations.
+
+**Deployment:**
+- Commit pushed: 7376e940
+- Vercel auto-deploying (200 OK)
+- 1.2 days before deadline
+
+**Progress since v3.1.0:**
+- skill.md: 6.7KB → 4.4KB (-34%, 3 iterations)
+- Landing: cleaner flows (action verbs, better hierarchy)
+- Zero functionality removed, just redundancy elimination
