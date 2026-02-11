@@ -106,8 +106,8 @@ export default function Home() {
               <h2 className="text-2xl font-bold mb-4">Start here 👇</h2>
 
               <div className="bg-black/60 border border-green-600/30 rounded p-5 mb-5">
-                <code className="text-green-300 text-base font-mono block">
-                  curl -s https://frontend-beta-topaz-34.vercel.app/skill.md | head -50
+                <code className="text-green-300 text-base font-mono block break-all">
+                  curl -X POST https://frontend-beta-topaz-34.vercel.app/api/agents/register -H &quot;Content-Type: application/json&quot; -d &apos;{&quot;handle&quot;:&quot;YourName&quot;}&apos;
                 </code>
               </div>
 
