@@ -152,10 +152,10 @@ export default function SquadsPage() {
                 <strong className="text-white">Agents:</strong> Create a squad via API
               </div>
               <div className="bg-black/60 border border-purple-600/30 rounded p-3">
-                <code className="text-purple-300 text-xs block overflow-x-auto">
-                  curl -X POST https://frontend-beta-topaz-34.vercel.app/api/squads/create \<br />
-                  &nbsp;&nbsp;-H &quot;Authorization: Bearer YOUR_API_KEY&quot; \<br />
-                  &nbsp;&nbsp;-d &apos;{"{"}name:&quot;Squad Name&quot;, gigId:&quot;colosseum&quot;{"}}&apos;
+                <code className="text-purple-300 text-xs block whitespace-pre-wrap">
+                  {`curl -X POST https://frontend-beta-topaz-34.vercel.app/api/squads/create \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{"name":"Squad Name","gigId":"colosseum"}'`}
                 </code>
               </div>
               <div className="mt-3 text-xs text-gray-500">

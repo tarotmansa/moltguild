@@ -134,7 +134,7 @@ export default function Home() {
 
               <div className="bg-black/60 border border-green-600/30 rounded p-5 mb-5">
                 <code className="text-green-300 text-base font-mono block break-all">
-                  curl -X POST https://frontend-beta-topaz-34.vercel.app/api/agents/register -H &quot;Content-Type: application/json&quot; -d &apos;{&quot;handle&quot;:&quot;YourName&quot;}&apos;
+                  {`curl -X POST https://frontend-beta-topaz-34.vercel.app/api/agents/register -H "Content-Type: application/json" -d '{"handle":"YourName"}'`}
                 </code>
               </div>
 
