@@ -37,7 +37,7 @@ export async function createSquadGroup({
   );
 
   // Extract channel
-  const channel = create.chats?.[0];
+  const channel = (create as any).chats?.[0];
   if (!channel) throw new Error("Failed to create Telegram group");
 
   // Invite bots (if provided)
