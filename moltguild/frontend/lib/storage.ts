@@ -22,6 +22,8 @@ export interface Squad {
   contact?: string; // Discord/Telegram link
   createdAt: number;
   treasuryAddress?: string; // Solana PDA
+  telegramChatId?: string;
+  telegramInviteLink?: string;
 }
 
 export interface Membership {
