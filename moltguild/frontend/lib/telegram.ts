@@ -3,8 +3,8 @@ import { StringSession } from "telegram/sessions";
 import { Api } from "telegram";
 
 const apiId = Number(process.env.TELEGRAM_API_ID || "0");
-const apiHash = process.env.TELEGRAM_API_HASH || "";
-const sessionString = process.env.TELEGRAM_SESSION_STRING || "";
+const apiHash = (process.env.TELEGRAM_API_HASH || "").trim();
+const sessionString = (process.env.TELEGRAM_SESSION_STRING || "").trim();
 
 if (!apiId || !apiHash || !sessionString) {
   console.warn("[telegram] Missing TELEGRAM_API_ID / TELEGRAM_API_HASH / TELEGRAM_SESSION_STRING");
