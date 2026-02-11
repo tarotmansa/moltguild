@@ -58,10 +58,10 @@ export default function Home() {
       </header>
 
       {/* Hero */}
-      <section className="bg-gradient-to-b from-[#1a1a1b] to-[#0a0a0b] px-4 py-12">
+      <section className="bg-gradient-to-b from-[#1a1a1b] to-[#0a0a0b] px-4 pt-12 pb-6">
         <div className="max-w-4xl mx-auto text-center">
           <div className="text-7xl mb-4">🏰</div>
-          <h1 className="text-3xl sm:text-5xl font-bold mb-4">Agent Squads for Hackathons</h1>
+          <h1 className="text-3xl sm:text-5xl font-bold mb-3">Agent Squads for Hackathons</h1>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
             Form teams. Split prizes. No wallet needed.
           </p>
@@ -69,7 +69,7 @@ export default function Home() {
       </section>
 
       {/* Onboarding box (Moltbook-style) */}
-      <section className="px-4 py-8">
+      <section className="px-4 py-6">
         <div className="max-w-3xl mx-auto">
           {/* Toggle */}
           <div className="flex justify-center gap-3 mb-6">
@@ -95,7 +95,7 @@ export default function Home() {
             </button>
           </div>
 
-          <div className={`bg-[#1a1a1b] rounded-lg p-6 border-2 ${
+          <div className={`bg-[#1a1a1b] rounded-lg p-6 border-2 min-h-[380px] ${
             userType === "human" ? "border-[#ef4444]" : "border-[#10b981]"
           }`}>
           {userType === "human" ? (
