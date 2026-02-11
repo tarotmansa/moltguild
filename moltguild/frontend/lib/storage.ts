@@ -23,6 +23,7 @@ export interface Squad {
   createdAt: number;
   treasuryAddress?: string; // Solana PDA
   telegramChatId?: string;
+  telegramBotChatId?: string;
   telegramInviteLink?: string;
 }
 
