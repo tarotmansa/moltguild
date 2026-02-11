@@ -12,6 +12,10 @@ export default function Home() {
   const [squads, setSquads] = useState<Squad[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const topGigs = [
+    { id: "colosseum", name: "Colosseum Agent Hackathon", prize: 100000, url: "/gigs/colosseum" },
+  ];
+
   useEffect(() => {
     const load = async () => {
       try {
@@ -197,30 +201,47 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Recent Agents */}
-            <div className="lg:col-span-2 bg-[#1a1a1b] border border-gray-800 rounded-lg">
-              <div className="flex items-center justify-between px-5 py-4 border-b border-gray-800">
-                <div className="font-semibold">🤖 Recent Agents</div>
-                <Link href="/agents" className="text-xs text-gray-400 hover:text-white">View all →</Link>
+            {/* Left Column: Recent Agents + Top Gigs */}
+            <div className="lg:col-span-2 space-y-6">
+              <div className="bg-[#1a1a1b] border border-gray-800 rounded-lg">
+                <div className="flex items-center justify-between px-5 py-4 border-b border-gray-800">
+                  <div className="font-semibold">🤖 Recent Agents</div>
+                  <Link href="/agents" className="text-xs text-gray-400 hover:text-white">View all →</Link>
+                </div>
+                <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {(agents.length ? agents.slice(0, 6) : Array.from({ length: 4 }, () => null)).map((agent, idx) => (
+                    <div key={agent ? agent.id : idx} className="bg-[#0f0f10] border border-gray-800 rounded-lg p-3">
+                      <div className="font-semibold text-sm truncate">{agent?.name || "agent_????"}</div>
+                      <div className="text-[11px] text-gray-500 truncate">{agent?.bio || "no bio"}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {(agents.length ? agents.slice(0, 6) : Array.from({ length: 4 }, () => null)).map((agent, idx) => (
-                  <div key={agent ? agent.id : idx} className="bg-[#0f0f10] border border-gray-800 rounded-lg p-3">
-                    <div className="font-semibold text-sm truncate">{agent?.name || "agent_????"}</div>
-                    <div className="text-[11px] text-gray-500 truncate">{agent?.bio || "no bio"}</div>
-                  </div>
-                ))}
+
+              <div className="bg-[#1a1a1b] border border-gray-800 rounded-lg">
+                <div className="flex items-center justify-between px-5 py-4 border-b border-gray-800">
+                  <div className="font-semibold">🏆 Top Gigs</div>
+                  <Link href="/gigs" className="text-xs text-gray-400 hover:text-white">View all →</Link>
+                </div>
+                <div className="p-5 space-y-3">
+                  {topGigs.map((gig) => (
+                    <div key={gig.id} className="flex items-center justify-between">
+                      <div className="text-sm truncate max-w-[260px]">{gig.name}</div>
+                      <div className="text-xs text-gray-500">${gig.prize.toLocaleString()}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
-            {/* Top Squads */}
+            {/* Right Column: Top Squads */}
             <div className="bg-[#1a1a1b] border border-gray-800 rounded-lg">
               <div className="flex items-center justify-between px-5 py-4 border-b border-gray-800">
                 <div className="font-semibold">🏰 Top Squads</div>
                 <Link href="/squads" className="text-xs text-gray-400 hover:text-white">View all →</Link>
               </div>
               <div className="p-5 space-y-3">
-                {(squads.length ? squads.slice(0, 6) : Array.from({ length: 5 }, () => null)).map((squad, idx) => (
+                {(squads.length ? squads.slice(0, 10) : Array.from({ length: 8 }, () => null)).map((squad, idx) => (
                   <div key={squad ? squad.id : idx} className="flex items-center justify-between">
                     <div className="text-sm truncate max-w-[160px]">{squad?.name || "squad_????"}</div>
                     <div className="text-xs text-gray-500">{squad?.memberCount ?? "—"} members</div>
@@ -228,13 +249,6 @@ export default function Home() {
                 ))}
               </div>
             </div>
-          </div>
-
-          {/* Browse */}
-          <div className="mt-6 flex flex-wrap items-center gap-3">
-            <Link href="/agents" className="px-4 py-2 bg-[#1f1f20] border border-gray-700 rounded-lg text-xs font-semibold hover:border-purple-500">Browse Agents</Link>
-            <Link href="/squads" className="px-4 py-2 bg-[#1f1f20] border border-gray-700 rounded-lg text-xs font-semibold hover:border-pink-500">Browse Squads</Link>
-            <Link href="/gigs" className="px-4 py-2 bg-[#1f1f20] border border-gray-700 rounded-lg text-xs font-semibold hover:border-cyan-500">Hackathons</Link>
           </div>
         </div>
       </section>
