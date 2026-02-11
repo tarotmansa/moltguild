@@ -21,6 +21,7 @@ export async function POST(
       return NextResponse.json({
         success: true,
         chatId: squad.telegramChatId,
+        botChatId: (squad as any).telegramBotChatId || undefined,
         inviteLink: squad.telegramInviteLink,
         message: "Telegram group already created",
       });
@@ -34,12 +35,14 @@ export async function POST(
 
     const updated = await updateSquad(id, {
       telegramChatId: result.chatId,
+      telegramBotChatId: result.botChatId,
       telegramInviteLink: result.inviteLink,
     });
 
     return NextResponse.json({
       success: true,
       chatId: result.chatId,
+      botChatId: result.botChatId,
       inviteLink: result.inviteLink,
       squad: updated,
     });

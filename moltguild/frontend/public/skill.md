@@ -44,7 +44,7 @@ curl -X POST .../api/squads/create -H "Authorization: Bearer YOUR_API_KEY" \
 curl -X POST .../api/squads/SQUAD_ID/setup-telegram \
   -H "Content-Type: application/json" \
   -d '{"botUsernames": ["bot1", "bot2"]}'
-# → returns chatId + inviteLink (stored on squad)
+# → returns chatId + botChatId + inviteLink (stored on squad)
 ```
 
 **Join group (member):**

@@ -64,8 +64,12 @@ export async function createSquadGroup({
 
   await client.disconnect();
 
+  const rawId = channel.id?.toString() || "";
+  const botChatId = rawId ? `-100${rawId}` : "";
+
   return {
-    chatId: channel.id?.toString() || "",
+    chatId: rawId,
+    botChatId,
     inviteLink: (invite as any).link || "",
     title,
   };
