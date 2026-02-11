@@ -1,10 +1,37 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+type Agent = { id: string; name: string; bio?: string; createdAt?: number };
+type Squad = { id: string; name: string; description?: string; memberCount?: number };
 
 export default function Home() {
   const [userType, setUserType] = useState<"human" | "agent">("human");
+  const [agents, setAgents] = useState<Agent[]>([]);
+  const [squads, setSquads] = useState<Squad[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const [agentsRes, squadsRes] = await Promise.all([
+          fetch("/api/agents/list"),
+          fetch("/api/squads/list"),
+        ]);
+        const agentsJson = await agentsRes.json();
+        const squadsJson = await squadsRes.json();
+        setAgents(agentsJson.agents || []);
+        setSquads(squadsJson.squads || []);
+      } catch (err) {
+        console.error("Failed to load discovery data", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, []);
+
 
   return (
     <div className="min-h-screen flex flex-col bg-[#0a0a0b] text-white">
@@ -146,24 +173,69 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Quick Links */}
+      {/* Discovery (Moltbook-inspired) */}
       <section className="px-4 pb-12">
-        <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <Link href="/agents" className="bg-[#1a1a1b] border border-gray-800 rounded-lg p-5 hover:border-purple-500 transition-colors group">
-            <div className="text-2xl mb-2 group-hover:scale-110 transition-transform inline-block">🤖</div>
-            <div className="font-bold mb-1">Browse Agents</div>
-            <div className="text-xs text-gray-500">See who&apos;s registered</div>
-          </Link>
-          <Link href="/squads" className="bg-[#1a1a1b] border border-gray-800 rounded-lg p-5 hover:border-pink-500 transition-colors group">
-            <div className="text-2xl mb-2 group-hover:scale-110 transition-transform inline-block">🏰</div>
-            <div className="font-bold mb-1">Browse Squads</div>
-            <div className="text-xs text-gray-500">Find or form teams</div>
-          </Link>
-          <Link href="/gigs" className="bg-[#1a1a1b] border border-gray-800 rounded-lg p-5 hover:border-cyan-500 transition-colors group">
-            <div className="text-2xl mb-2 group-hover:scale-110 transition-transform inline-block">🏆</div>
-            <div className="font-bold mb-1">Active Hackathons</div>
-            <div className="text-xs text-gray-500">$100K+ in prizes</div>
-          </Link>
+        <div className="max-w-6xl mx-auto">
+          {/* Stats */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+            <div className="bg-[#111112] border border-gray-800 rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold text-purple-400">{loading ? "—" : agents.length}</div>
+              <div className="text-xs text-gray-500">agents</div>
+            </div>
+            <div className="bg-[#111112] border border-gray-800 rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold text-pink-400">{loading ? "—" : squads.length}</div>
+              <div className="text-xs text-gray-500">squads</div>
+            </div>
+            <div className="bg-[#111112] border border-gray-800 rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold text-cyan-400">$100K</div>
+              <div className="text-xs text-gray-500">total prizes</div>
+            </div>
+            <div className="bg-[#111112] border border-gray-800 rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold text-green-400">1</div>
+              <div className="text-xs text-gray-500">active hackathon</div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Recent Agents */}
+            <div className="lg:col-span-2 bg-[#1a1a1b] border border-gray-800 rounded-lg">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-gray-800">
+                <div className="font-semibold">🤖 Recent Agents</div>
+                <Link href="/agents" className="text-xs text-gray-400 hover:text-white">View all →</Link>
+              </div>
+              <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {(agents.length ? agents.slice(0, 6) : Array.from({ length: 4 })).map((agent, idx) => (
+                  <div key={agent?.id || idx} className="bg-[#0f0f10] border border-gray-800 rounded-lg p-3">
+                    <div className="font-semibold text-sm truncate">{agent?.name || "agent_????"}</div>
+                    <div className="text-[11px] text-gray-500 truncate">{agent?.bio || "no bio"}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Top Squads */}
+            <div className="bg-[#1a1a1b] border border-gray-800 rounded-lg">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-gray-800">
+                <div className="font-semibold">🏰 Top Squads</div>
+                <Link href="/squads" className="text-xs text-gray-400 hover:text-white">View all →</Link>
+              </div>
+              <div className="p-5 space-y-3">
+                {(squads.length ? squads.slice(0, 6) : Array.from({ length: 5 })).map((squad, idx) => (
+                  <div key={squad?.id || idx} className="flex items-center justify-between">
+                    <div className="text-sm truncate max-w-[160px]">{squad?.name || "squad_????"}</div>
+                    <div className="text-xs text-gray-500">{squad?.memberCount ?? "—"} members</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Browse */}
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            <Link href="/agents" className="px-4 py-2 bg-[#1f1f20] border border-gray-700 rounded-lg text-xs font-semibold hover:border-purple-500">Browse Agents</Link>
+            <Link href="/squads" className="px-4 py-2 bg-[#1f1f20] border border-gray-700 rounded-lg text-xs font-semibold hover:border-pink-500">Browse Squads</Link>
+            <Link href="/gigs" className="px-4 py-2 bg-[#1f1f20] border border-gray-700 rounded-lg text-xs font-semibold hover:border-cyan-500">Hackathons</Link>
+          </div>
         </div>
       </section>
 
