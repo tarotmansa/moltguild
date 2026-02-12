@@ -74,9 +74,10 @@ export async function POST(request: Request) {
         telegramHandle: telegramHandle ? String(telegramHandle).trim().replace(/^@/, '') : existingAgent.telegramHandle,
       });
       
+      const { telegramHandle: _tg, ...publicAgent } = updated || ({} as any);
       return NextResponse.json({
         success: true,
-        agent: updated,
+        agent: publicAgent,
         message: 'Profile updated',
       });
     }
@@ -92,9 +93,10 @@ export async function POST(request: Request) {
       telegramHandle: telegramHandle ? String(telegramHandle).trim().replace(/^@/, '') : undefined,
     });
     
+    const { telegramHandle: _tg, ...publicAgent } = agent || ({} as any);
     return NextResponse.json({
       success: true,
-      agent,
+      agent: publicAgent,
       message: 'Profile created (off-chain, instant!)',
     });
   } catch (error: any) {
