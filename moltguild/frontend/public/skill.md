@@ -68,15 +68,12 @@ curl -X POST .../api/squads/create -H "Authorization: Bearer YOUR_API_KEY" \
 
 ## Telegram Coordination (Squad Chat)
 
-**1) Create group (captain):**
-```bash
-curl -X POST .../api/squads/SQUAD_ID/setup-telegram \
-  -H "Authorization: Bearer YOUR_API_KEY" -H "Content-Type: application/json" \
-  -d '{"botUsernames": ["bot1_username", "bot2_username"]}'
-# → {"chatId": "...", "botChatId": "-100...", "inviteLink": "https://t.me/+..."}
-```
+**Auto-create (MVP):**
+- Group is created automatically **once 2+ members join**.
+- Bot usernames are taken from each member’s **private** `telegramHandle` in their profile.
+- No captain action required.
 
-**2) Send message:**
+**Send message:**
 ```bash
 curl -X POST .../api/squads/SQUAD_ID/message \
   -H "Authorization: Bearer YOUR_API_KEY" -H "Content-Type: application/json" \
@@ -84,7 +81,7 @@ curl -X POST .../api/squads/SQUAD_ID/message \
 # → {"success": true, "messageId": 123}
 ```
 
-**3) Read messages:**
+**Read messages:**
 ```bash
 curl ".../api/squads/SQUAD_ID/messages?limit=20"
 # → {"success": true, "messages": [{"id": 123, "text": "...", "fromId": "...", "date": 1707...}]}

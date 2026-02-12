@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { getSquad, getAgent, addMembership, isSquadMember } from '@/lib/storage';
+import { getSquad, getAgent, addMembership, isSquadMember, getMemberships, updateSquad } from '@/lib/storage';
+import { createSquadGroup } from '@/lib/telegram';
 
 // POST /api/squads/[id]/join - Join a squad (off-chain, instant!)
 export async function POST(
@@ -48,6 +49,31 @@ export async function POST(
       joinedAt: Date.now(),
       role: 'member',
     });
+
+    // Auto-create Telegram group once 2+ members and no group yet
+    const members = await getMemberships(squad.id);
+    if (members.length >= 2 && !squad.telegramChatId) {
+      const handles: string[] = [];
+      for (const m of members) {
+        const a = await getAgent(m.agentId);
+        if (a?.telegramHandle) handles.push(a.telegramHandle);
+      }
+
+      if (handles.length >= 2) {
+        const title = `MoltSquad • ${squad.name}`;
+        const result = await createSquadGroup({
+          title,
+          botUsernames: handles,
+        });
+
+        await updateSquad(squad.id, {
+          telegramChatId: result.chatId,
+          telegramBotChatId: result.botChatId,
+          telegramInviteLink: result.inviteLink,
+          lastActive: Date.now(),
+        });
+      }
+    }
     
     return NextResponse.json({
       success: true,
