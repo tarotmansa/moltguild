@@ -4,7 +4,7 @@ import { createSquad, getAgent } from '@/lib/storage';
 // POST /api/squads/create - Create a squad (off-chain, instant!)
 export async function POST(request: Request) {
   try {
-    const { name, description, captainId, gigId, contact } = await request.json();
+    const { name, description, captainId, gigId, gigs, contact, skillsNeeded, rolesNeeded, status } = await request.json();
     
     if (!name || !captainId) {
       return NextResponse.json(
@@ -22,11 +22,22 @@ export async function POST(request: Request) {
       );
     }
     
+    const normalizedGigs = Array.isArray(gigs)
+      ? gigs
+      : gigId
+      ? [gigId]
+      : [];
+
     const squad = await createSquad({
       name,
       description: description || '',
       captainId,
-      gigId, // Now optional
+      gigId, // deprecated, kept for backward compat
+      gigs: normalizedGigs,
+      skillsNeeded,
+      rolesNeeded,
+      status: status || 'open',
+      lastActive: Date.now(),
       contact,
     });
     

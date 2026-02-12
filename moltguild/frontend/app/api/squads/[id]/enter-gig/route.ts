@@ -30,9 +30,12 @@ export async function POST(
     const treasuryPDA = getTreasuryPDAFromSquadId(squad.id);
     const treasuryAddress = treasuryPDA.toString();
 
+    const existingGigs = squad.gigs || (squad.gigId ? [squad.gigId] : []);
     const updated = await updateSquad(squad.id, {
-      gigId,
+      gigId, // deprecated
+      gigs: Array.from(new Set([...existingGigs, gigId])),
       treasuryAddress,
+      lastActive: Date.now(),
     });
 
     return NextResponse.json({

@@ -19,7 +19,12 @@ export interface Squad {
   name: string;
   description: string;
   captainId: string; // agent ID
-  gigId?: string; // which hackathon/gig
+  gigId?: string; // DEPRECATED: use gigs[] (kept for backward compat)
+  gigs?: string[]; // list of hackathons/gigs this squad participates in
+  skillsNeeded?: string[];
+  rolesNeeded?: string[];
+  status?: "open" | "closed";
+  lastActive?: number;
   contact?: string; // Discord/Telegram link
   createdAt: number;
   treasuryAddress?: string; // Solana PDA
@@ -256,19 +261,19 @@ export async function updateSquad(
   return updated;
 }
 
-export async function listSquads(filters?: { gigId?: string }): Promise<Squad[]> {
+export async function listSquads(filters?: { gig?: string }): Promise<Squad[]> {
   if (redis) {
     const ids = await getSetMembers("squads:ids");
     let results = await mgetJson<Squad>(ids.map((id) => `squad:${id}`));
-    if (filters?.gigId) {
-      results = results.filter((s) => s.gigId === filters.gigId);
+    if (filters?.gig) {
+      results = results.filter((s) => (s.gigs || (s.gigId ? [s.gigId] : [])).includes(filters.gig!));
     }
     return results;
   }
 
   let results = Array.from(squads.values());
-  if (filters?.gigId) {
-    results = results.filter((s) => s.gigId === filters.gigId);
+  if (filters?.gig) {
+    results = results.filter((s) => (s.gigs || (s.gigId ? [s.gigId] : [])).includes(filters.gig!));
   }
   return results;
 }
