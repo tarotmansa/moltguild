@@ -9,11 +9,18 @@ export async function POST(
 ) {
   try {
     const { id } = await params;
-    const { gigId } = await request.json();
+    const { gigId, deadlineAt } = await request.json();
 
     if (!gigId) {
       return NextResponse.json(
         { error: 'gigId is required' },
+        { status: 400 }
+      );
+    }
+
+    if (deadlineAt && typeof deadlineAt !== 'number') {
+      return NextResponse.json(
+        { error: 'deadlineAt must be unix ms number' },
         { status: 400 }
       );
     }
@@ -36,6 +43,7 @@ export async function POST(
       gigs: Array.from(new Set([...existingGigs, gigId])),
       treasuryAddress,
       lastActive: Date.now(),
+      gigDeadlineAt: deadlineAt || squad.gigDeadlineAt,
     });
 
     return NextResponse.json({

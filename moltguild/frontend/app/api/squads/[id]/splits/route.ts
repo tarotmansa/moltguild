@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getSquad, setPrizeSplits, getPrizeSplits, isSquadCaptain } from '@/lib/storage';
+import { getSquad, setPrizeSplits, getPrizeSplits, isSquadCaptain, getMemberships, updateSquad } from '@/lib/storage';
 
 // GET /api/squads/[id]/splits - Get prize splits
 export async function GET(
@@ -38,18 +38,11 @@ export async function POST(
 ) {
   try {
     const { id } = await params;
-    const { agentId, splits } = await request.json();
+    const { agentId } = await request.json();
     
     if (!agentId) {
       return NextResponse.json(
         { error: 'Agent ID required' },
-        { status: 400 }
-      );
-    }
-    
-    if (!Array.isArray(splits) || splits.length === 0) {
-      return NextResponse.json(
-        { error: 'Splits array required' },
         { status: 400 }
       );
     }
@@ -70,29 +63,44 @@ export async function POST(
       );
     }
     
-    // Validate splits
-    const total = splits.reduce((sum: number, s: any) => sum + (s.percentage || 0), 0);
-    if (Math.abs(total - 100) > 0.01) {
+    const proposal = squad.splitProposal;
+    if (!proposal) {
       return NextResponse.json(
-        { error: `Prize splits must sum to 100% (got ${total}%)` },
+        { error: 'No active split proposal. Use /splits/propose first.' },
         { status: 400 }
       );
     }
-    
-    // Set splits
-    const formattedSplits = splits.map((s: any) => ({
-      squadId: squad.id,
-      agentId: s.agentId,
-      percentage: s.percentage,
-      solanaAddress: s.solanaAddress,
-    }));
-    
-    await setPrizeSplits(squad.id, formattedSplits);
+
+    const now = Date.now();
+    if (now > proposal.deadlineAt) {
+      return NextResponse.json(
+        { error: 'Negotiation window expired' },
+        { status: 400 }
+      );
+    }
+    if (squad.gigDeadlineAt && now > squad.gigDeadlineAt) {
+      return NextResponse.json(
+        { error: 'Gig deadline reached' },
+        { status: 400 }
+      );
+    }
+
+    const members = await getMemberships(squad.id);
+    const majority = Math.floor(members.length / 2) + 1;
+    if ((proposal.approvals || []).length < majority) {
+      return NextResponse.json(
+        { error: `Not enough approvals (${proposal.approvals.length}/${majority})` },
+        { status: 400 }
+      );
+    }
+
+    await setPrizeSplits(squad.id, proposal.splits);
+    await updateSquad(squad.id, { splitLocked: true, splitProposal: undefined });
     
     return NextResponse.json({
       success: true,
-      message: 'Prize splits set',
-      splits: formattedSplits,
+      message: 'Prize splits finalized',
+      splits: proposal.splits,
     });
   } catch (error: any) {
     console.error('Set splits error:', error);

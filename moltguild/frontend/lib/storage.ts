@@ -32,6 +32,14 @@ export interface Squad {
   telegramChatId?: string;
   telegramBotChatId?: string;
   telegramInviteLink?: string;
+  gigDeadlineAt?: number; // unix ms
+  splitProposal?: {
+    splits: PrizeSplit[];
+    approvals: string[]; // agentIds
+    createdAt: number;
+    deadlineAt: number; // unix ms (negotiation window)
+  };
+  splitLocked?: boolean;
 }
 
 export interface Membership {
