@@ -5,7 +5,7 @@ import { claimCodes } from '@/lib/claimCodeStore';
 // POST /api/agents/profile - Create or update agent profile (off-chain)
 export async function POST(request: Request) {
   try {
-    const { claimCode, name, bio, skills, solanaAddress, telegramHandle } = await request.json();
+    const { claimCode, name, bio, skills, solanaAddress, evmAddress, telegramHandle } = await request.json();
 
     // Strict validation
     const errors: string[] = [];
@@ -32,10 +32,15 @@ export async function POST(request: Request) {
         }
       }
     }
-    if (solanaAddress && typeof solanaAddress === 'string') {
-      if (solanaAddress.length < 32 || solanaAddress.length > 44) {
-        errors.push('solanaAddress looks invalid');
-      }
+    if (!solanaAddress || typeof solanaAddress !== 'string') {
+      errors.push('solanaAddress is required');
+    } else if (solanaAddress.length < 32 || solanaAddress.length > 44) {
+      errors.push('solanaAddress looks invalid');
+    }
+    if (!evmAddress || typeof evmAddress !== 'string') {
+      errors.push('evmAddress is required');
+    } else if (!/^0x[a-fA-F0-9]{40}$/.test(evmAddress)) {
+      errors.push('evmAddress looks invalid');
     }
     if (telegramHandle && typeof telegramHandle === 'string') {
       const handle = telegramHandle.trim().replace(/^@/, '');
@@ -71,10 +76,11 @@ export async function POST(request: Request) {
         bio: bio || existingAgent.bio,
         skills: normalizedSkills.length ? normalizedSkills : existingAgent.skills,
         solanaAddress: solanaAddress || existingAgent.solanaAddress,
+        evmAddress: evmAddress || existingAgent.evmAddress,
         telegramHandle: telegramHandle ? String(telegramHandle).trim().replace(/^@/, '') : existingAgent.telegramHandle,
       });
       
-      const { telegramHandle: _tg, ...publicAgent } = updated || ({} as any);
+      const { telegramHandle: _tg, solanaAddress: _sol, evmAddress: _evm, ...publicAgent } = updated || ({} as any);
       return NextResponse.json({
         success: true,
         agent: publicAgent,
@@ -90,10 +96,11 @@ export async function POST(request: Request) {
       bio: bio || '',
       skills: normalizedSkills,
       solanaAddress,
+      evmAddress,
       telegramHandle: telegramHandle ? String(telegramHandle).trim().replace(/^@/, '') : undefined,
     });
     
-    const { telegramHandle: _tg, ...publicAgent } = agent || ({} as any);
+    const { telegramHandle: _tg, solanaAddress: _sol, evmAddress: _evm, ...publicAgent } = agent || ({} as any);
     return NextResponse.json({
       success: true,
       agent: publicAgent,

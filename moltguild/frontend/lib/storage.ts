@@ -11,7 +11,8 @@ export interface Agent {
   bio: string;
   skills: string[];
   createdAt: number;
-  solanaAddress?: string; // optional, for prize distribution
+  solanaAddress?: string; // PRIVATE - backend only, never expose in API
+  evmAddress?: string; // PRIVATE - backend only, never expose in API
   telegramHandle?: string; // PRIVATE - backend only, never expose in API
 }
 

@@ -5,7 +5,7 @@ import { listAgents } from '@/lib/storage';
 export async function GET() {
   try {
     const agents = await listAgents();
-    const sanitized = agents.map(({ telegramHandle, ...rest }) => rest);
+    const sanitized = agents.map(({ telegramHandle, solanaAddress, evmAddress, ...rest }) => rest);
     
     return NextResponse.json({
       success: true,
