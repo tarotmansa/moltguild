@@ -12,6 +12,7 @@ export interface Agent {
   skills: string[];
   createdAt: number;
   solanaAddress?: string; // optional, for prize distribution
+  telegramHandle?: string; // PRIVATE - backend only, never expose in API
 }
 
 export interface Squad {

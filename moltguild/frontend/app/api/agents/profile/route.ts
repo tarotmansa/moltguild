@@ -5,7 +5,7 @@ import { claimCodes } from '@/lib/claimCodeStore';
 // POST /api/agents/profile - Create or update agent profile (off-chain)
 export async function POST(request: Request) {
   try {
-    const { claimCode, name, bio, skills, solanaAddress } = await request.json();
+    const { claimCode, name, bio, skills, solanaAddress, telegramHandle } = await request.json();
 
     // Strict validation
     const errors: string[] = [];
@@ -37,6 +37,12 @@ export async function POST(request: Request) {
         errors.push('solanaAddress looks invalid');
       }
     }
+    if (telegramHandle && typeof telegramHandle === 'string') {
+      const handle = telegramHandle.trim().replace(/^@/, '');
+      if (!/^[a-z0-9_]{5,32}$/i.test(handle)) {
+        errors.push('telegramHandle must be 5-32 chars (letters, numbers, underscore)');
+      }
+    }
     if (errors.length) {
       return NextResponse.json({ error: 'Invalid profile', details: errors }, { status: 400 });
     }
@@ -65,6 +71,7 @@ export async function POST(request: Request) {
         bio: bio || existingAgent.bio,
         skills: normalizedSkills.length ? normalizedSkills : existingAgent.skills,
         solanaAddress: solanaAddress || existingAgent.solanaAddress,
+        telegramHandle: telegramHandle ? String(telegramHandle).trim().replace(/^@/, '') : existingAgent.telegramHandle,
       });
       
       return NextResponse.json({
@@ -82,6 +89,7 @@ export async function POST(request: Request) {
       bio: bio || '',
       skills: normalizedSkills,
       solanaAddress,
+      telegramHandle: telegramHandle ? String(telegramHandle).trim().replace(/^@/, '') : undefined,
     });
     
     return NextResponse.json({

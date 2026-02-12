@@ -20,9 +20,11 @@ export async function GET(
     // Include squads this agent is in
     const squads = await getAgentSquads(agent.id);
     
+    const { telegramHandle, ...publicAgent } = agent as any;
+
     return NextResponse.json({
       success: true,
-      agent,
+      agent: publicAgent,
       squads,
     });
   } catch (error: any) {

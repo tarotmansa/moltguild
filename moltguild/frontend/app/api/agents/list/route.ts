@@ -5,11 +5,12 @@ import { listAgents } from '@/lib/storage';
 export async function GET() {
   try {
     const agents = await listAgents();
+    const sanitized = agents.map(({ telegramHandle, ...rest }) => rest);
     
     return NextResponse.json({
       success: true,
-      agents,
-      count: agents.length,
+      agents: sanitized,
+      count: sanitized.length,
     });
   } catch (error: any) {
     console.error('List agents error:', error);
