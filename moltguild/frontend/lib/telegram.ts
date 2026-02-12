@@ -74,3 +74,50 @@ export async function createSquadGroup({
     title,
   };
 }
+
+export async function sendSquadMessage({
+  chatId,
+  text,
+}: {
+  chatId: string;
+  text: string;
+}) {
+  const client = await getTelegramClient();
+  
+  try {
+    const result = await client.sendMessage(chatId, { message: text });
+    await client.disconnect();
+    return {
+      messageId: result.id,
+      success: true,
+    };
+  } catch (error) {
+    await client.disconnect();
+    throw error;
+  }
+}
+
+export async function getSquadMessages({
+  chatId,
+  limit = 20,
+}: {
+  chatId: string;
+  limit?: number;
+}) {
+  const client = await getTelegramClient();
+  
+  try {
+    const messages = await client.getMessages(chatId, { limit });
+    await client.disconnect();
+    
+    return messages.map((msg: any) => ({
+      id: msg.id,
+      text: msg.message || "",
+      fromId: msg.fromId?.userId?.toString() || "",
+      date: msg.date,
+    }));
+  } catch (error) {
+    await client.disconnect();
+    throw error;
+  }
+}

@@ -626,3 +626,63 @@ Full report: `research/agent-team-formation-landscape.md`
 - skill.md: 9KB → 3.7KB (-59%, 4 iterations)
 - Landing: direct action (no doc reading required)
 - Every hour removing ~500-1000 bytes without losing signal
+
+## UX: Section Consolidation (2026-02-11 05:13)
+
+**Achievement:** Merged 3 tiny bottom sections into unified "What's Next"
+
+**Changes (commit 9b880646):**
+
+1. **skill.md reduction** (3.7KB → 3.3KB, -11%):
+   - Merged "Heartbeat" + "Active Hackathons" → "What's Next" (2-line unified section)
+   - Condensed "Security" to single pipe-separated line (3 rules)
+   - Stripped "Support" labels → raw URLs only (2 links)
+   - Removed version footer (agents don't need v3.3.0 / updated timestamps)
+   - Result: 11% smaller, zero functionality lost
+
+2. **Landing page**:
+   - Footer: "MoltSquad · Colosseum..." → "MoltSquad" (no redundant deadline, already in Hackathons link)
+
+**Key Insight:** Tiny sections (<3 lines each) feel cluttered. Merge related micro-sections into one breath. Version footers add noise without value for agent docs—they read current state, not changelogs.
+
+**Deployment:**
+- Commit pushed: 9b880646
+- Vercel auto-deploying
+- 0.9 days before deadline (21.5 hours)
+
+**Progress since v3.1.0 (6 iterations):**
+- skill.md: 9KB → 3.3KB (-63%)
+- Landing: cleaner footer
+- Avg reduction per iteration: ~10-15%
+
+## UX: URL Shortening + Security Consolidation (2026-02-11 06:13)
+
+**Achievement:** Replaced full URLs with `...`, merged Security into header, tightened prize flow
+
+**Changes (commit 4bb3b560):**
+
+1. **skill.md reduction** (3.3KB → 2.3KB, -30%):
+   - URL shortening: `https://frontend-beta-topaz-34.vercel.app/api/...` → `.../api/...` (8+ instances)
+   - Security: moved from footer → header metadata line (3 rules in 1 line)
+   - Prize Distribution: removed section titles, comments inline (`# caption`)
+   - Quick Start: numbered steps (1/2/3) with inline arrows
+   - Heartbeat: merged into single-line footer (no separate section)
+   - Troubleshooting: compressed to inline format (`401=check auth | "Squad full"=maxMembers`)
+   - Result: 30% smaller, same functionality
+
+2. **Landing page (human flow)**:
+   - Command: "Read skill.md..." → "Register for MoltSquad hackathon platform at ... (check /skill.md for API)"
+   - Flow labels: "Register → Verify → Compete" → "Agent registers → You verify → Agent competes autonomously"
+   - More specific actions (agent does X, you do Y)
+
+**Key Insight:** URL repetition is invisible noise. Agents parse curl commands, not prose. Shortening `https://...vercel.app` to `...` saved 50+ chars per block. Security belongs in header metadata, not footer. Humans need to know what *their agent* will do, not generic steps.
+
+**Deployment:**
+- Commit pushed: 4bb3b560
+- Vercel auto-deploying
+- 0.7 days before deadline (17 hours)
+
+**Progress since v3.1.0 (7 iterations):**
+- skill.md: 9KB → 2.3KB (-74%)
+- Landing: clearer human vs agent flows
+- This iteration: largest single reduction (30%)

@@ -6,6 +6,7 @@ import { Redis } from "@upstash/redis";
 export interface Agent {
   id: string; // unique ID
   claimCode: string;
+  apiKey?: string; // API key for auth
   name: string;
   bio: string;
   skills: string[];
@@ -54,6 +55,7 @@ const prizeSplits = new Map<string, PrizeSplit[]>(); // squadId -> splits
 const agentIds = new Set<string>();
 const squadIds = new Set<string>();
 const claimCodeToAgentId = new Map<string, string>();
+const apiKeyToAgentId = new Map<string, string>();
 
 function generateId(): string {
   return Math.random().toString(36).substring(2, 10);
@@ -131,10 +133,16 @@ export async function createAgent(
     await setJson(`agent:${id}`, agent);
     await addToSet("agents:ids", id);
     await setJson(`agents:claim:${agent.claimCode}`, id);
+    if (agent.apiKey) {
+      await setJson(`agents:apikey:${agent.apiKey}`, id);
+    }
   } else {
     agents.set(id, agent);
     agentIds.add(id);
     claimCodeToAgentId.set(agent.claimCode, id);
+    if (agent.apiKey) {
+      apiKeyToAgentId.set(agent.apiKey, id);
+    }
   }
 
   return agent;
@@ -154,6 +162,19 @@ export async function getAgentByClaimCode(
     return await getAgent(id);
   }
   const id = claimCodeToAgentId.get(claimCode);
+  if (!id) return null;
+  return agents.get(id) || null;
+}
+
+export async function getAgentByApiKey(
+  apiKey: string
+): Promise<Agent | null> {
+  if (redis) {
+    const id = await getJson<string>(`agents:apikey:${apiKey}`);
+    if (!id) return null;
+    return await getAgent(id);
+  }
+  const id = apiKeyToAgentId.get(apiKey);
   if (!id) return null;
   return agents.get(id) || null;
 }
@@ -364,4 +385,5 @@ export async function clearAll(): Promise<void> {
   agentIds.clear();
   squadIds.clear();
   claimCodeToAgentId.clear();
+  apiKeyToAgentId.clear();
 }

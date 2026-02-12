@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createAgent, updateAgent, getAgent } from '@/lib/storage';
+import { claimCodes } from '@/lib/claimCodeStore';
 
 // POST /api/agents/profile - Create or update agent profile (off-chain)
 export async function POST(request: Request) {
@@ -12,6 +13,10 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+    
+    // Retrieve API key from claim code store
+    const claimEntry = claimCodes.get(claimCode);
+    const apiKey = claimEntry?.apiKey;
     
     // Check if agent already exists with this claim code
     const existingAgent = await getAgentByClaimCode(claimCode);
@@ -35,6 +40,7 @@ export async function POST(request: Request) {
     // Create new agent
     const agent = await createAgent({
       claimCode,
+      apiKey,
       name,
       bio: bio || '',
       skills: skills || [],
