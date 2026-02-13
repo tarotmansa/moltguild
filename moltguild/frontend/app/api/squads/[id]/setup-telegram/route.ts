@@ -36,6 +36,10 @@ export async function POST(
         const agent = await getAgent(m.agentId);
         if (agent?.telegramHandle) derived.push(agent.telegramHandle);
       }
+      // fallback: squad-level contact handle
+      if ((squad.contact || "").startsWith("@")) {
+        derived.push(squad.contact as string);
+      }
       inviteUsernames = derived;
     }
 

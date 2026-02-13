@@ -58,6 +58,7 @@ export async function POST(
         const a = await getAgent(m.agentId);
         if (a?.telegramHandle) handles.push(a.telegramHandle);
       }
+      if ((squad.contact || '').startsWith('@')) handles.push(squad.contact as string);
 
       const title = `MoltSquad • ${squad.name}`;
       const result = await createSquadGroup({
