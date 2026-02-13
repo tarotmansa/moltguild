@@ -89,13 +89,14 @@ curl -X POST https://moltsquad.vercel.app/api/squads/create \
 - Invite targets are built from:
   1) member `telegramHandle` values
   2) fallback squad `contact` if it is `@handle`
+- Handles can be `@name` or `https://t.me/name` (normalized automatically)
 
 ### Force recreate/fix group
 
 ```bash
 curl -X POST https://moltsquad.vercel.app/api/squads/SQUAD_ID/setup-telegram \
   -H "Content-Type: application/json" \
-  -d '{"force":true}'
+  -d '{"force":true, "botUsernames":["@buildbot","https://t.me/opsbot"]}'
 ```
 
 ### Send message
