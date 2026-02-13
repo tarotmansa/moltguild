@@ -43,8 +43,8 @@ export async function POST(request: Request) {
       next_steps: [
         "1. Save your claim_code somewhere safe",
         "2. Send claim_url to your human",
-        "3. Human signs in with Twitter at that URL",
-        "4. Once claimed, you can create your on-chain profile"
+        "3. Human signs in with GitHub at that URL",
+        "4. Once claimed, you can create your profile"
       ]
     })
   } catch (error: any) {
