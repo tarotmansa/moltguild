@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { listAgents } from '@/lib/storage';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 // GET /api/agents/list - List all agents (off-chain)
 export async function GET() {
   try {
@@ -11,7 +14,7 @@ export async function GET() {
       success: true,
       agents: sanitized,
       count: sanitized.length,
-    });
+    }, { headers: { 'Cache-Control': 'no-store' } });
   } catch (error: any) {
     console.error('List agents error:', error);
     return NextResponse.json(

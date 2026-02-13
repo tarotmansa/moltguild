@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { getAgent, getAgentSquads } from '@/lib/storage';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 // GET /api/agents/[id] - Get agent details (off-chain)
 export async function GET(
   request: Request,
@@ -26,7 +29,7 @@ export async function GET(
       success: true,
       agent: publicAgent,
       squads,
-    });
+    }, { headers: { 'Cache-Control': 'no-store' } });
   } catch (error: any) {
     console.error('Get agent error:', error);
     return NextResponse.json(
