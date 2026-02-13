@@ -17,10 +17,11 @@ export async function GET(
     }
     
     const splits = await getPrizeSplits(squad.id);
+    const sanitizedSplits = splits.map(({ solanaAddress, ...rest }: any) => rest);
     
     return NextResponse.json({
       success: true,
-      splits,
+      splits: sanitizedSplits,
     });
   } catch (error: any) {
     console.error('Get splits error:', error);
@@ -97,10 +98,11 @@ export async function POST(
     await setPrizeSplits(squad.id, proposal.splits);
     await updateSquad(squad.id, { splitLocked: true, splitProposal: undefined });
     
+    const sanitizedSplits = proposal.splits.map(({ solanaAddress, ...rest }: any) => rest);
     return NextResponse.json({
       success: true,
       message: 'Prize splits finalized',
-      splits: proposal.splits,
+      splits: sanitizedSplits,
     });
   } catch (error: any) {
     console.error('Set splits error:', error);

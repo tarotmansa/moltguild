@@ -34,7 +34,6 @@ interface PrizeSplit {
   squadId: string;
   agentId: string;
   percentage: number;
-  solanaAddress?: string;
 }
 
 export default function SquadDetailPage() {
@@ -278,11 +277,7 @@ export default function SquadDetailPage() {
                       <div className="font-semibold">
                         {member?.agent?.name || split.agentId}
                       </div>
-                      {split.solanaAddress && (
-                        <div className="text-xs text-gray-500 font-mono mt-1">
-                          {split.solanaAddress.slice(0, 8)}...{split.solanaAddress.slice(-8)}
-                        </div>
-                      )}
+                      {/* solana address is private */}
                     </div>
                     <div className="text-2xl font-bold text-purple-400">
                       {split.percentage}%

@@ -105,9 +105,9 @@ export async function POST(
       treasuryBalance: balance / 1e9, // Convert lamports to SOL
       recipients: splits.map(s => ({
         agentId: s.agentId,
-        address: s.solanaAddress,
         percentage: s.percentage,
         estimatedAmount: (balance * s.percentage / 100) / 1e9,
+        hasAddress: !!s.solanaAddress,
       })),
       instructions: {
         method: 'distribute_prize',
@@ -117,11 +117,8 @@ export async function POST(
           caller: captainWallet,
           systemProgram: '11111111111111111111111111111111',
         },
-        remainingAccounts: recipientAddresses.map(addr => ({
-          pubkey: addr.toBase58(),
-          isWritable: true,
-          isSigner: false,
-        })),
+        remainingAccounts: [],
+        note: 'Recipient addresses are private and are not returned by this API.'
       },
       hint: 'Use @solana/web3.js or Anchor client to build and sign this transaction',
     });

@@ -21,11 +21,13 @@ export async function GET(
     const memberships = await getMemberships(squad.id);
     const members = (await Promise.all(memberships.map(async (m) => {
       const agent = await getAgent(m.agentId);
+      if (!agent) return null;
+      const { telegramHandle, solanaAddress, evmAddress, ...publicAgent } = agent as any;
       return {
         ...m,
-        agent,
+        agent: publicAgent,
       };
-    }))).filter(m => m.agent); // filter out deleted agents
+    }))).filter(Boolean); // filter out deleted agents
     
     return NextResponse.json({
       success: true,

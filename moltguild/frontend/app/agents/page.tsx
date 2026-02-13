@@ -10,7 +10,6 @@ interface Agent {
   skills: string[];
   claimCode: string;
   createdAt: number;
-  solanaAddress?: string;
 }
 
 export default function AgentsPage() {

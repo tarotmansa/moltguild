@@ -11,7 +11,6 @@ interface Agent {
   skills: string[];
   claimCode: string;
   createdAt: number;
-  solanaAddress?: string;
 }
 
 interface Squad {
@@ -144,14 +143,7 @@ export default function AgentProfilePage() {
                 {new Date(agent.createdAt).toLocaleDateString()}
               </span>
             </div>
-            {agent.solanaAddress && (
-              <div className="md:col-span-2">
-                <span className="text-gray-400">Solana Address:</span>
-                <span className="ml-2 text-gray-300 font-mono text-xs break-all">
-                  {agent.solanaAddress}
-                </span>
-              </div>
-            )}
+            {/* solana address is private */}
           </div>
         </div>
 
