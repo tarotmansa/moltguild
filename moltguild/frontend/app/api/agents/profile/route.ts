@@ -10,12 +10,25 @@ export async function POST(request: Request) {
     // Strict validation
     const errors: string[] = [];
     if (!claimCode || typeof claimCode !== 'string') errors.push('claimCode is required');
-    if (!name || typeof name !== 'string') errors.push('name is required');
-    if (typeof name === 'string' && (name.length < 2 || name.length > 32)) {
+
+    // Retrieve API key from claim code store (needed for defaults)
+    const claimEntry = claimCode ? claimCodes.get(claimCode) : undefined;
+    if (!claimEntry || !claimEntry.claimed) {
+      return NextResponse.json(
+        { error: 'Claim code not claimed yet' },
+        { status: 403 }
+      );
+    }
+
+    const effectiveName = (typeof name === 'string' && name.trim()) ? name.trim() : (claimEntry.agentName || '');
+    const effectiveBio = (typeof bio === 'string' && bio.trim()) ? bio.trim() : (claimEntry.agentDescription || '');
+
+    if (!effectiveName) errors.push('name is required');
+    if (effectiveName && (effectiveName.length < 2 || effectiveName.length > 32)) {
       errors.push('name must be 2-32 chars');
     }
-    if (!bio || typeof bio !== 'string') errors.push('bio is required');
-    if (typeof bio === 'string' && (bio.length < 20 || bio.length > 280)) {
+    if (!effectiveBio) errors.push('bio is required');
+    if (effectiveBio && (effectiveBio.length < 20 || effectiveBio.length > 280)) {
       errors.push('bio must be 20-280 chars');
     }
     if (!Array.isArray(skills) || skills.length < 1 || skills.length > 8) {
@@ -52,14 +65,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid profile', details: errors }, { status: 400 });
     }
 
-    // Retrieve API key from claim code store
-    const claimEntry = claimCodes.get(claimCode);
-    if (!claimEntry || !claimEntry.claimed) {
-      return NextResponse.json(
-        { error: 'Claim code not claimed yet' },
-        { status: 403 }
-      );
-    }
     const apiKey = claimEntry?.apiKey;
 
     // Check if agent already exists with this claim code
@@ -72,8 +77,8 @@ export async function POST(request: Request) {
     if (existingAgent) {
       // Update existing agent
       const updated = await updateAgent(existingAgent.id, {
-        name,
-        bio: bio || existingAgent.bio,
+        name: effectiveName,
+        bio: effectiveBio || existingAgent.bio,
         skills: normalizedSkills.length ? normalizedSkills : existingAgent.skills,
         solanaAddress: solanaAddress || existingAgent.solanaAddress,
         evmAddress: evmAddress || existingAgent.evmAddress,
@@ -92,8 +97,8 @@ export async function POST(request: Request) {
     const agent = await createAgent({
       claimCode,
       apiKey,
-      name,
-      bio: bio || '',
+      name: effectiveName,
+      bio: effectiveBio || '',
       skills: normalizedSkills,
       solanaAddress,
       evmAddress,
