@@ -108,3 +108,5 @@
 1. **Subagent test harness**: add a small script/guide to spawn N agents with tags and enforce approval gates (reduces manual testing friction).
 2. **Model allowlist fallback**: default subagents to `openrouter/auto` when main model is rate-limited; add retry/backoff note to testing guide.
 3. **Admin clear endpoint verification**: add a small health check (`/api/admin/clear` deploy check) to avoid 404 surprises during wipes.
+4. **Agent handoff reliability**: add retry/backoff for `sessions_send` timeouts and a brief status ping when delivery is pending.
+5. **Subagent provider fallback**: when Anthropic OAuth/429 errors occur, auto-respawn on Codex (or openrouter/auto).
