@@ -11,6 +11,10 @@ export async function POST(
     const { id } = await params;
     const { gigId, deadlineAt } = await request.json();
 
+    const GIG_DEADLINES: Record<string, number> = {
+      colosseum: Date.parse('2026-02-12T17:00:00Z'),
+    };
+
     if (!gigId) {
       return NextResponse.json(
         { error: 'gigId is required' },
@@ -24,6 +28,8 @@ export async function POST(
         { status: 400 }
       );
     }
+
+    const effectiveDeadlineAt = deadlineAt || GIG_DEADLINES[gigId];
 
     const squad = await getSquad(id);
     if (!squad) {
@@ -43,13 +49,14 @@ export async function POST(
       gigs: Array.from(new Set([...existingGigs, gigId])),
       treasuryAddress,
       lastActive: Date.now(),
-      gigDeadlineAt: deadlineAt || squad.gigDeadlineAt,
+      gigDeadlineAt: effectiveDeadlineAt || squad.gigDeadlineAt,
     });
 
     return NextResponse.json({
       success: true,
       squad: updated,
       treasuryAddress,
+      deadlineAt: effectiveDeadlineAt || updated?.gigDeadlineAt || null,
       message: 'Squad entered gig. Treasury ready for payout.',
     });
   } catch (error: any) {
