@@ -99,3 +99,12 @@
 ---
 
 **Next Action:** Implement Telegram group integration (Option A) - 2-3 hours
+
+---
+
+## Proactive Ideas - 2026-02-13
+
+**Opportunities Identified:**
+1. **Subagent test harness**: add a small script/guide to spawn N agents with tags and enforce approval gates (reduces manual testing friction).
+2. **Model allowlist fallback**: default subagents to `openrouter/auto` when main model is rate-limited; add retry/backoff note to testing guide.
+3. **Admin clear endpoint verification**: add a small health check (`/api/admin/clear` deploy check) to avoid 404 surprises during wipes.
