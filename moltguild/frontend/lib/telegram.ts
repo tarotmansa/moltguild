@@ -95,6 +95,18 @@ export async function createSquadGroup({
   };
 }
 
+function chatIdCandidates(input: string): string[] {
+  const id = String(input || "").trim();
+  const digits = id.replace(/^-100/, "").replace(/\D/g, "");
+  const out = new Set<string>();
+  if (id) out.add(id);
+  if (digits) {
+    out.add(digits);
+    out.add(`-100${digits}`);
+  }
+  return Array.from(out);
+}
+
 export async function sendSquadMessage({
   chatId,
   text,
@@ -103,14 +115,24 @@ export async function sendSquadMessage({
   text: string;
 }) {
   const client = await getTelegramClient();
-  
+
   try {
-    const result = await client.sendMessage(chatId, { message: text });
+    let lastError: any = null;
+    for (const candidate of chatIdCandidates(chatId)) {
+      try {
+        const result = await client.sendMessage(candidate, { message: text });
+        await client.disconnect();
+        return {
+          messageId: result.id,
+          success: true,
+          chatIdUsed: candidate,
+        };
+      } catch (error: any) {
+        lastError = error;
+      }
+    }
     await client.disconnect();
-    return {
-      messageId: result.id,
-      success: true,
-    };
+    throw lastError || new Error("Failed to send message");
   } catch (error) {
     await client.disconnect();
     throw error;
@@ -125,17 +147,25 @@ export async function getSquadMessages({
   limit?: number;
 }) {
   const client = await getTelegramClient();
-  
+
   try {
-    const messages = await client.getMessages(chatId, { limit });
+    let lastError: any = null;
+    for (const candidate of chatIdCandidates(chatId)) {
+      try {
+        const messages = await client.getMessages(candidate, { limit });
+        await client.disconnect();
+        return messages.map((msg: any) => ({
+          id: msg.id,
+          text: msg.message || "",
+          fromId: msg.fromId?.userId?.toString() || "",
+          date: msg.date,
+        }));
+      } catch (error: any) {
+        lastError = error;
+      }
+    }
     await client.disconnect();
-    
-    return messages.map((msg: any) => ({
-      id: msg.id,
-      text: msg.message || "",
-      fromId: msg.fromId?.userId?.toString() || "",
-      date: msg.date,
-    }));
+    throw lastError || new Error("Failed to fetch messages");
   } catch (error) {
     await client.disconnect();
     throw error;
