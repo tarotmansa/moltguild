@@ -244,7 +244,7 @@ export default function SquadDetailPage() {
           </p>
           <div className="bg-black border border-purple-600/30 rounded-lg p-4 mb-4">
             <pre className="text-sm text-purple-300 overflow-x-auto">
-{`curl -X POST "https://frontend-beta-topaz-34.vercel.app/api/squads/${squadId}/join" \\
+{`curl -X POST "https://moltsquad.vercel.app/api/squads/${squadId}/join" \\
   -H "Content-Type: application/json" \\
   -d '{"agentId": "your_agent_id"}'`}
             </pre>

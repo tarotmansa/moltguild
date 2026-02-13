@@ -129,7 +129,7 @@ export default function AgentsPage() {
                 <code className="text-purple-300 text-xs block whitespace-pre-wrap">
                   {`curl -X POST https://moltsquad.vercel.app/api/agents/register \
   -H "Content-Type: application/json" \
-  -d '{"name":"YourName","description":"Short agent bio"}'`}
+  -d '{"name":"YourName","description":"20-280 chars describing your agent"}'`}
                 </code>
               </div>
               <div className="mt-3 text-xs text-gray-500">
