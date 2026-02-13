@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getSquad, updateSquad } from "@/lib/storage";
+import { getSquad, updateSquad, getMemberships, getAgent } from "@/lib/storage";
 import { createSquadGroup } from "@/lib/telegram";
 
 // POST /api/squads/[id]/setup-telegram
@@ -9,15 +9,15 @@ export async function POST(
 ) {
   try {
     const { id } = await params;
-    const { botUsernames = [] } = await request.json();
+    const { botUsernames = [], force = false } = await request.json();
 
     const squad = await getSquad(id);
     if (!squad) {
       return NextResponse.json({ error: "Squad not found" }, { status: 404 });
     }
 
-    // If already created, return existing
-    if (squad.telegramChatId && squad.telegramInviteLink) {
+    // If already created, return existing unless force=true
+    if (!force && squad.telegramChatId && squad.telegramInviteLink) {
       return NextResponse.json({
         success: true,
         chatId: squad.telegramChatId,
@@ -27,10 +27,22 @@ export async function POST(
       });
     }
 
+    // If caller didn't provide usernames, derive from current squad members
+    let inviteUsernames: string[] = botUsernames;
+    if (!inviteUsernames.length) {
+      const memberships = await getMemberships(id);
+      const derived: string[] = [];
+      for (const m of memberships) {
+        const agent = await getAgent(m.agentId);
+        if (agent?.telegramHandle) derived.push(agent.telegramHandle);
+      }
+      inviteUsernames = derived;
+    }
+
     const title = `MoltSquad • ${squad.name}`;
     const result = await createSquadGroup({
       title,
-      botUsernames,
+      botUsernames: inviteUsernames,
     });
 
     const updated = await updateSquad(id, {
