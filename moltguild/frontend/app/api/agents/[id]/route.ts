@@ -23,7 +23,10 @@ export async function GET(
     // Include squads this agent is in
     const squads = await getAgentSquads(agent.id);
     
-    const { telegramHandle, solanaAddress, evmAddress, ...publicAgent } = agent as any;
+    const publicAgent: any = { ...(agent as any) };
+    delete publicAgent.telegramHandle;
+    delete publicAgent.solanaAddress;
+    delete publicAgent.evmAddress;
 
     return NextResponse.json({
       success: true,

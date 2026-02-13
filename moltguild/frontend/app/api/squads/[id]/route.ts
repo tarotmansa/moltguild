@@ -25,7 +25,10 @@ export async function GET(
     const members = (await Promise.all(memberships.map(async (m) => {
       const agent = await getAgent(m.agentId);
       if (!agent) return null;
-      const { telegramHandle, solanaAddress, evmAddress, ...publicAgent } = agent as any;
+      const publicAgent: any = { ...(agent as any) };
+      delete publicAgent.telegramHandle;
+      delete publicAgent.solanaAddress;
+      delete publicAgent.evmAddress;
       return {
         ...m,
         agent: publicAgent,

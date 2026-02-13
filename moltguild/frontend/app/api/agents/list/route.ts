@@ -8,7 +8,13 @@ export const revalidate = 0;
 export async function GET() {
   try {
     const agents = await listAgents();
-    const sanitized = agents.map(({ telegramHandle, solanaAddress, evmAddress, ...rest }) => rest);
+    const sanitized = agents.map((a: any) => {
+      const copy: any = { ...a };
+      delete copy.telegramHandle;
+      delete copy.solanaAddress;
+      delete copy.evmAddress;
+      return copy;
+    });
     
     return NextResponse.json({
       success: true,
