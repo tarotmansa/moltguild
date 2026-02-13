@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sides GTM Matrix — Impact × Probability</title>
+  <style>
+    :root {
+      --bg: #0a0a0b;
+      --panel: #111214;
+      --card: #17191d;
+      --text: #f5f7fb;
+      --muted: #a0a7b4;
+      --border: #262a31;
+      --green: #1bb56f;
+      --yellow: #d6a400;
+      --red: #cc4d4d;
+      --purple: #8b6cff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(180deg, #0a0a0b 0%, #0f1013 100%);
+      color: var(--text);
+      padding: 24px;
+    }
+    .wrap { max-width: 1180px; margin: 0 auto; }
+    h1 { margin: 0 0 10px; font-size: clamp(28px, 4vw, 42px); }
+    .sub { color: var(--muted); margin-bottom: 22px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .q {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--panel);
+      min-height: 290px;
+      overflow: hidden;
+    }
+    .q h2 {
+      margin: 0;
+      padding: 12px 14px;
+      font-size: 15px;
+      border-bottom: 1px solid var(--border);
+      background: #12151a;
+    }
+    .q ul { margin: 0; padding: 14px 18px 16px 32px; color: #dbe2ee; }
+    .q li { margin: 8px 0; line-height: 1.35; }
+
+    .hh { border-color: #1f4f38; }
+    .hh h2 { color: #8ef2bf; }
+    .hl { border-color: #4f3f18; }
+    .hl h2 { color: #ffd76f; }
+    .lh { border-color: #2b2551; }
+    .lh h2 { color: #bba9ff; }
+    .ll { border-color: #4d2323; }
+    .ll h2 { color: #ff9a9a; }
+
+    .priority {
+      margin-top: 14px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--card);
+      padding: 14px;
+    }
+    .priority h3 { margin: 0 0 8px; font-size: 15px; color: #b7c2d8; }
+    .priority ol { margin: 0; padding-left: 22px; color: #e6ecf8; }
+    .priority li { margin: 6px 0; }
+
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>Telegram Polymarket Bot — GTM Matrix</h1>
+    <p class="sub">Framed by <b>Impact</b> × <b>Probability of Success</b>.</p>
+
+    <section class="grid">
+      <article class="q hh">
+        <h2>High Impact / High Probability (do first)</h2>
+        <ul>
+          <li><b>Migration Program:</b> import external volume proof → unlock points by trading inside the bot.</li>
+          <li><b>Group Captain Program:</b> admin rev-share + leaderboard + group growth tooling.</li>
+          <li><b>Activation Quests:</b> first order, first limit, first shared call, 7-day streak.</li>
+          <li><b>Event Campaigns:</b> run campaigns around high-volatility events (CPI/elections/sports).</li>
+        </ul>
+      </article>
+
+      <article class="q hl">
+        <h2>High Impact / Low Probability (selective bets)</h2>
+        <ul>
+          <li><b>Whale Concierge Poaching:</b> personalized migration, fee incentives, private support lane.</li>
+          <li><b>Verified PnL Social Layer:</b> public caller boards + trust badges (hard verification problem).</li>
+        </ul>
+      </article>
+
+      <article class="q lh">
+        <h2>Low Impact / High Probability (supporting engine)</h2>
+        <ul>
+          <li><b>Referral UX Simplification:</b> transparent earnings by level + live dashboard.</li>
+          <li><b>Case Study Cadence:</b> weekly proof posts from real users/groups.</li>
+          <li><b>Reactivation Loops:</b> nudges for inactive users + personalized market prompts.</li>
+        </ul>
+      </article>
+
+      <article class="q ll">
+        <h2>Low Impact / Low Probability (deprioritize)</h2>
+        <ul>
+          <li>Broad paid ads before retention/product loops are proven.</li>
+          <li>Complex gamification disconnected from trading utility.</li>
+          <li>General influencer buys without conversion attribution.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="priority">
+      <h3>Execution priority (next 30 days)</h3>
+      <ol>
+        <li>Migration program</li>
+        <li>Group captain program</li>
+        <li>Activation quests</li>
+        <li>Event campaigns</li>
+        <li>Whale concierge pilot</li>
+      </ol>
+    </section>
+  </main>
+</body>
+</html>
