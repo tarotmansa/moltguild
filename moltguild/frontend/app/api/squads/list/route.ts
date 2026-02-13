@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { listSquads, getMemberships } from '@/lib/storage';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 // GET /api/squads/list?gig=colosseum&skills=solana,frontend&status=open&sort=bestMatch
 export async function GET(request: Request) {
   try {
@@ -46,11 +49,13 @@ export async function GET(request: Request) {
       sorted.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
     }
 
+    const sanitized = sorted.map(({ telegramChatId, telegramBotChatId, telegramInviteLink, ...rest }: any) => rest);
+
     return NextResponse.json({
       success: true,
-      squads: sorted,
-      count: sorted.length,
-    });
+      squads: sanitized,
+      count: sanitized.length,
+    }, { headers: { 'Cache-Control': 'no-store' } });
   } catch (error: any) {
     console.error('List squads error:', error);
     return NextResponse.json(

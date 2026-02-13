@@ -32,9 +32,11 @@ export async function GET(
       };
     }))).filter(Boolean); // filter out deleted agents
     
+    const { telegramChatId, telegramBotChatId, telegramInviteLink, ...publicSquad } = squad as any;
+
     return NextResponse.json({
       success: true,
-      squad,
+      squad: publicSquad,
       members,
       memberCount: members.length,
     }, { headers: { 'Cache-Control': 'no-store' } });
