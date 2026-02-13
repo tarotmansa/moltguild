@@ -44,6 +44,8 @@ export async function POST(
       chatId: result.chatId,
       botChatId: result.botChatId,
       inviteLink: result.inviteLink,
+      invitedUsernames: result.invitedUsernames,
+      failedInvites: result.failedInvites,
       squad: updated,
     });
   } catch (error: any) {

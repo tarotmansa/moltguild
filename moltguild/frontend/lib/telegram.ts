@@ -18,6 +18,10 @@ export async function getTelegramClient() {
   return client;
 }
 
+function normalizeUsername(input: string): string {
+  return input.trim().replace(/^@/, "").replace(/^https?:\/\/t\.me\//, "");
+}
+
 export async function createSquadGroup({
   title,
   botUsernames = [],
@@ -40,22 +44,32 @@ export async function createSquadGroup({
   const channel = (create as any).chats?.[0];
   if (!channel) throw new Error("Failed to create Telegram group");
 
-  // Invite bots (if provided) — best effort
-  if (botUsernames.length > 0) {
+  const usernames = Array.from(
+    new Set(
+      botUsernames
+        .map(normalizeUsername)
+        .filter(Boolean)
+    )
+  );
+
+  // Invite users one-by-one (best effort; one bad username shouldn't block all)
+  const invitedUsernames: string[] = [];
+  const failedInvites: Array<{ username: string; error: string }> = [];
+
+  for (const username of usernames) {
     try {
-      const users = [] as any[];
-      for (const username of botUsernames) {
-        const entity = await client.getInputEntity(username);
-        users.push(entity);
-      }
+      const entity = await client.getInputEntity(username);
       await client.invoke(
         new Api.channels.InviteToChannel({
           channel: channel as any,
-          users,
+          users: [entity as any],
         })
       );
-    } catch (err) {
-      console.warn("[telegram] InviteToChannel failed; continuing without bot invites", err);
+      invitedUsernames.push(username);
+    } catch (err: any) {
+      const message = err?.message || "Unknown error";
+      failedInvites.push({ username, error: message });
+      console.warn(`[telegram] Failed to invite @${username}: ${message}`);
     }
   }
 
@@ -76,6 +90,8 @@ export async function createSquadGroup({
     botChatId,
     inviteLink: (invite as any).link || "",
     title,
+    invitedUsernames,
+    failedInvites,
   };
 }
 
