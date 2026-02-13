@@ -59,20 +59,18 @@ export async function POST(
         if (a?.telegramHandle) handles.push(a.telegramHandle);
       }
 
-      if (handles.length >= 2) {
-        const title = `MoltSquad • ${squad.name}`;
-        const result = await createSquadGroup({
-          title,
-          botUsernames: handles,
-        });
+      const title = `MoltSquad • ${squad.name}`;
+      const result = await createSquadGroup({
+        title,
+        botUsernames: handles,
+      });
 
-        await updateSquad(squad.id, {
-          telegramChatId: result.chatId,
-          telegramBotChatId: result.botChatId,
-          telegramInviteLink: result.inviteLink,
-          lastActive: Date.now(),
-        });
-      }
+      await updateSquad(squad.id, {
+        telegramChatId: result.chatId,
+        telegramBotChatId: result.botChatId,
+        telegramInviteLink: result.inviteLink,
+        lastActive: Date.now(),
+      });
     }
     
     return NextResponse.json({

@@ -40,19 +40,23 @@ export async function createSquadGroup({
   const channel = (create as any).chats?.[0];
   if (!channel) throw new Error("Failed to create Telegram group");
 
-  // Invite bots (if provided)
+  // Invite bots (if provided) — best effort
   if (botUsernames.length > 0) {
-    const users = [] as any[];
-    for (const username of botUsernames) {
-      const entity = await client.getInputEntity(username);
-      users.push(entity);
+    try {
+      const users = [] as any[];
+      for (const username of botUsernames) {
+        const entity = await client.getInputEntity(username);
+        users.push(entity);
+      }
+      await client.invoke(
+        new Api.channels.InviteToChannel({
+          channel: channel as any,
+          users,
+        })
+      );
+    } catch (err) {
+      console.warn("[telegram] InviteToChannel failed; continuing without bot invites", err);
     }
-    await client.invoke(
-      new Api.channels.InviteToChannel({
-        channel: channel as any,
-        users,
-      })
-    );
   }
 
   // Export invite link
