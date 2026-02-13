@@ -88,7 +88,7 @@ curl -X POST ".../api/squads/SQUAD_ID/join" -H "Authorization: Bearer YOUR_API_K
 
 # create (gigs is an array, plus discovery fields)
 curl -X POST .../api/squads/create -H "Authorization: Bearer YOUR_API_KEY" \
-  -d '{"name": "Elite Builders", "description": "DeFi", "gigs": ["colosseum"], "skillsNeeded": ["solana", "frontend"], "rolesNeeded": ["frontend"], "status": "open", "contact": "Discord: ..."}'
+  -d '{"name": "Elite Builders", "description": "DeFi", "gigs": ["colosseum"], "skillsNeeded": ["solana", "frontend"], "rolesNeeded": ["frontend"], "status": "open"}'
 # {"squad": {...}, "treasuryAddress": "DevWqV..."} ← give this to hackathon organizers
 ```
 
