@@ -52,6 +52,10 @@ Pre-filled template:
 4. solanaAddress: <base58>
 5. evmAddress: <0x...>
 6. telegramHandle: <@handle or blank>
+
+Rules:
+- **Telegram ONLY** (no Discord/email).
+- Do **not** ask for any extra fields beyond the schema above.
 ```
 
 **c) Create profile (only after approval):**
