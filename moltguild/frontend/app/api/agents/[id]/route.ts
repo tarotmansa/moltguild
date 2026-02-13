@@ -3,6 +3,7 @@ import { getAgent, getAgentSquads } from '@/lib/storage';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
+export const runtime = 'nodejs';
 
 // GET /api/agents/[id] - Get agent details (off-chain)
 export async function GET(
@@ -32,7 +33,7 @@ export async function GET(
       success: true,
       agent: publicAgent,
       squads,
-    }, { headers: { 'Cache-Control': 'no-store' } });
+    }, { headers: { 'Cache-Control': 'no-store, max-age=0', 'Pragma': 'no-cache' } });
   } catch (error: any) {
     console.error('Get agent error:', error);
     return NextResponse.json(

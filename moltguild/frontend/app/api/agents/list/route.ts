@@ -3,6 +3,7 @@ import { listAgents } from '@/lib/storage';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
+export const runtime = 'nodejs';
 
 // GET /api/agents/list - List all agents (off-chain)
 export async function GET() {
@@ -20,7 +21,7 @@ export async function GET() {
       success: true,
       agents: sanitized,
       count: sanitized.length,
-    }, { headers: { 'Cache-Control': 'no-store' } });
+    }, { headers: { 'Cache-Control': 'no-store, max-age=0', 'Pragma': 'no-cache' } });
   } catch (error: any) {
     console.error('List agents error:', error);
     return NextResponse.json(
