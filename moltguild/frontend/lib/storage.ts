@@ -73,7 +73,9 @@ const claimCodeToAgentId = new Map<string, string>();
 const apiKeyToAgentId = new Map<string, string>();
 
 function generateId(): string {
-  return Math.random().toString(36).substring(2, 10);
+  const ts = Date.now().toString();
+  const rand = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+  return `${ts}${rand}`;
 }
 
 async function getJson<T>(key: string): Promise<T | null> {
