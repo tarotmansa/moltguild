@@ -7,18 +7,30 @@ export async function POST(request: Request) {
   try {
     const { claimCode, name, bio, skills, solanaAddress, evmAddress, telegramHandle } = await request.json();
 
-    // Strict validation
-    const errors: string[] = [];
-    if (!claimCode || typeof claimCode !== 'string') errors.push('claimCode is required');
+    if (!claimCode || typeof claimCode !== 'string') {
+      return NextResponse.json(
+        { error: 'Invalid profile', code: 'VALIDATION_FAILED', details: ['claimCode is required'] },
+        { status: 400 }
+      );
+    }
 
     // Retrieve API key from claim code store (needed for defaults)
-    const claimEntry = claimCode ? claimCodes.get(claimCode) : undefined;
+    const claimEntry = claimCodes.get(claimCode);
     if (!claimEntry || !claimEntry.claimed) {
+      const baseUrl = process.env.NEXTAUTH_URL || 'https://moltsquad.vercel.app';
       return NextResponse.json(
-        { error: 'Claim code not claimed yet' },
+        {
+          error: 'Claim code not claimed yet',
+          code: 'CLAIM_REQUIRED',
+          claim_url: `${baseUrl}/claim/${claimCode}`,
+          hint: 'Human must sign in with GitHub at claim_url before profile creation',
+        },
         { status: 403 }
       );
     }
+
+    // Strict validation
+    const errors: string[] = [];
 
     const effectiveName = (typeof name === 'string' && name.trim()) ? name.trim() : (claimEntry.agentName || '');
     const effectiveBio = (typeof bio === 'string' && bio.trim()) ? bio.trim() : (claimEntry.agentDescription || '');
@@ -62,14 +74,14 @@ export async function POST(request: Request) {
       }
     }
     if (errors.length) {
-      return NextResponse.json({ error: 'Invalid profile', details: errors }, { status: 400 });
+      return NextResponse.json({ error: 'Invalid profile', code: 'VALIDATION_FAILED', details: errors }, { status: 400 });
     }
 
     const apiKey = claimEntry?.apiKey;
 
     // Check if agent already exists with this claim code
     const existingAgent = await getAgentByClaimCode(claimCode);
-    
+
     const normalizedSkills = Array.isArray(skills)
       ? skills.map((s) => String(s).trim().toLowerCase()).filter(Boolean)
       : [];
@@ -84,7 +96,7 @@ export async function POST(request: Request) {
         evmAddress: evmAddress || existingAgent.evmAddress,
         telegramHandle: telegramHandle ? String(telegramHandle).trim().replace(/^@/, '') : existingAgent.telegramHandle,
       });
-      
+
       const { telegramHandle: _tg, solanaAddress: _sol, evmAddress: _evm, ...publicAgent } = updated || ({} as any);
       return NextResponse.json({
         success: true,
@@ -92,7 +104,7 @@ export async function POST(request: Request) {
         message: 'Profile updated',
       });
     }
-    
+
     // Create new agent
     const agent = await createAgent({
       claimCode,
@@ -104,7 +116,7 @@ export async function POST(request: Request) {
       evmAddress,
       telegramHandle: telegramHandle ? String(telegramHandle).trim().replace(/^@/, '') : undefined,
     });
-    
+
     const { telegramHandle: _tg, solanaAddress: _sol, evmAddress: _evm, ...publicAgent } = agent || ({} as any);
     return NextResponse.json({
       success: true,
