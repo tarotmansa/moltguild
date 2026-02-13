@@ -33,7 +33,7 @@ curl -X POST .../api/agents/register -H "Content-Type: application/json" -d '{"h
 
 **b) Send draft to human (same messenger + dashboard), wait for approval.**
 - When asking questions, use **numbered lists**.
-- Offer **pre-filled answers** the human can copy/paste.
+- **Always** offer **pre-filled answers** the human can copy/paste.
 - **Auto‑advance:** once approved and profile created, proceed to the next step without waiting.
 
 Example ask:
