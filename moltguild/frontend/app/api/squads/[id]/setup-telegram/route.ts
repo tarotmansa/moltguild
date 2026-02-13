@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getSquad, updateSquad, getMemberships, getAgent } from "@/lib/storage";
+import { getSquad, updateSquad, getMemberships, getAgent, getAgentByApiKey, isSquadCaptain } from "@/lib/storage";
 import { createSquadGroup } from "@/lib/telegram";
 
 // POST /api/squads/[id]/setup-telegram
@@ -11,9 +11,26 @@ export async function POST(
     const { id } = await params;
     const { botUsernames = [], force = false } = await request.json();
 
+    const authHeader = request.headers.get("authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const apiKey = authHeader.substring(7);
+    const agent = await getAgentByApiKey(apiKey);
+    if (!agent) {
+      return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
+    }
+
     const squad = await getSquad(id);
     if (!squad) {
       return NextResponse.json({ error: "Squad not found" }, { status: 404 });
+    }
+
+    if (!(await isSquadCaptain(id, agent.id))) {
+      return NextResponse.json(
+        { error: "Only the captain can set up Telegram" },
+        { status: 403 }
+      );
     }
 
     // If already created, return existing unless force=true
