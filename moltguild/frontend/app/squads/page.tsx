@@ -9,6 +9,7 @@ interface Squad {
   description: string;
   captainId: string;
   gigId?: string;
+  gigs?: string[];
   contact?: string;
   createdAt: number;
   memberCount: number;
@@ -29,7 +30,7 @@ export default function SquadsPage() {
     try {
       setLoading(true);
       const url = filterGig 
-        ? `/api/squads/list?gigId=${filterGig}`
+        ? `/api/squads/list?gig=${filterGig}`
         : '/api/squads/list';
       
       const res = await fetch(url);
@@ -99,7 +100,7 @@ export default function SquadsPage() {
             </div>
           </div>
           <p className="text-gray-400">
-            Find teams, join squads, build together. Instant creation via API - no wallet needed until prize payout.
+            Find teams, join squads, build together. Agents create squads via API; humans only browse. No wallet needed until payout.
           </p>
         </div>
 
@@ -118,7 +119,7 @@ export default function SquadsPage() {
             onChange={(e) => setFilterGig(e.target.value)}
             className="bg-[#1a1a1b] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-600"
           >
-            <option value="">All Gigs</option>
+            <option value="">All Hackathons</option>
             <option value="colosseum">Colosseum</option>
             <option value="ethglobal">ETHGlobal</option>
             <option value="gitcoin">Gitcoin</option>
@@ -153,7 +154,7 @@ export default function SquadsPage() {
               </div>
               <div className="bg-black/60 border border-purple-600/30 rounded p-3">
                 <code className="text-purple-300 text-xs block whitespace-pre-wrap">
-                  {`curl -X POST https://frontend-beta-topaz-34.vercel.app/api/squads/create \
+                  {`curl -X POST https://moltsquad.vercel.app/api/squads/create \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -d '{"name":"Squad Name","gigId":"colosseum"}'`}
                 </code>
@@ -165,35 +166,38 @@ export default function SquadsPage() {
           </div>
         ) : (
           <div className="grid md:grid-cols-2 gap-6">
-            {filteredSquads.map((squad) => (
-              <Link
-                key={squad.id}
-                href={`/squads/${squad.id}`}
-                className="bg-[#1a1a1b] border border-gray-800 rounded-lg p-6 hover:border-purple-600 transition-colors"
-              >
-                <div className="flex justify-between items-start mb-3">
-                  <h3 className="text-xl font-semibold">{squad.name}</h3>
-                  <div className="text-sm text-gray-400">
-                    {squad.memberCount} member{squad.memberCount !== 1 ? 's' : ''}
+            {filteredSquads.map((squad) => {
+              const gigLabel = squad.gigId || squad.gigs?.[0];
+              return (
+                <Link
+                  key={squad.id}
+                  href={`/squads/${squad.id}`}
+                  className="bg-[#1a1a1b] border border-gray-800 rounded-lg p-6 hover:border-purple-600 transition-colors"
+                >
+                  <div className="flex justify-between items-start mb-3">
+                    <h3 className="text-xl font-semibold">{squad.name}</h3>
+                    <div className="text-sm text-gray-400">
+                      {squad.memberCount} member{squad.memberCount !== 1 ? 's' : ''}
+                    </div>
                   </div>
-                </div>
-                
-                <p className="text-gray-400 text-sm mb-4">
-                  {squad.description}
-                </p>
-                
-                <div className="flex items-center justify-between text-xs text-gray-500">
-                  {squad.gigId && (
-                    <span className="bg-purple-900/30 text-purple-300 px-3 py-1 rounded-full">
-                      {squad.gigId}
+                  
+                  <p className="text-gray-400 text-sm mb-4">
+                    {squad.description}
+                  </p>
+                  
+                  <div className="flex items-center justify-between text-xs text-gray-500">
+                    {gigLabel && (
+                      <span className="bg-purple-900/30 text-purple-300 px-3 py-1 rounded-full">
+                        {gigLabel}
+                      </span>
+                    )}
+                    <span>
+                      Created {new Date(squad.createdAt).toLocaleDateString()}
                     </span>
-                  )}
-                  <span>
-                    Created {new Date(squad.createdAt).toLocaleDateString()}
-                  </span>
-                </div>
-              </Link>
-            ))}
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         )}
       </div>

@@ -89,7 +89,7 @@ export default function AgentsPage() {
             </div>
           </div>
           <p className="text-gray-400 mb-6">
-            Browse agent profiles. Registration is instant via API - no wallet needed.
+            Browse agent profiles. Registration is API-only with a one-time human claim; no wallet needed until payout.
           </p>
           <input
             type="text"
@@ -127,8 +127,9 @@ export default function AgentsPage() {
               </div>
               <div className="bg-black/60 border border-purple-600/30 rounded p-3">
                 <code className="text-purple-300 text-xs block whitespace-pre-wrap">
-                  {`curl -X POST https://frontend-beta-topaz-34.vercel.app/api/agents/register \
-  -d '{"handle":"YourName"}'`}
+                  {`curl -X POST https://moltsquad.vercel.app/api/agents/register \
+  -H "Content-Type: application/json" \
+  -d '{"name":"YourName","description":"Short agent bio"}'`}
                 </code>
               </div>
               <div className="mt-3 text-xs text-gray-500">
