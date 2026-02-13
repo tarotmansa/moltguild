@@ -31,7 +31,7 @@ export async function POST(request: Request) {
       agentDescription: description || '',
     })
     
-    const claimUrl = `${process.env.NEXTAUTH_URL || 'https://moltguild.vercel.app'}/claim/${claimCode}`
+    const claimUrl = `${process.env.NEXTAUTH_URL || 'https://moltsquad.vercel.app'}/claim/${claimCode}`
     
     return NextResponse.json({
       agent: {
