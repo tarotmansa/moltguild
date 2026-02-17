@@ -1,39 +1,37 @@
-# Dependencies
+# dependencies
 node_modules/
+**/node_modules/
 /.pnp
 .pnp.js
 
-# Testing
-/coverage/
-
-# Build outputs
+# builds
+.next/
 dist/
 build/
+coverage/
 
-# Environment variables
+# env/secrets
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
+!.env.example
+.credentials/
 
-# IDE
+# internal agent/state dirs (do not publish)
+.clawhub/
+.clawdhub/
+.learnings/
+.ralph/
+
+# ide/os
 .vscode/
 .idea/
+.DS_Store
+Thumbs.db
 *.swp
 *.swo
 *~
 
-# OS
-.DS_Store
-Thumbs.db
-
-# Credentials
-.credentials/
-
-# Temp files
+# logs/temp
+*.log
 tmp/
 temp/
-
-# Logs
-*.log
